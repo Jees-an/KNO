@@ -10,11 +10,12 @@
 </head>
 <body>
   <nav class="top-nav">
-    <a href="{{ '/' | relative_url }}" class="nav-logo">K-NOVA</a>
+    <a href="{{ '/' | relative_url }}" class="nav-logo">K-NOVA: 한국어 신어 관측 시스템</a>
     <div class="nav-links">
       <a href="{{ '/' | relative_url }}">홈</a>
-      <a href="{{ '/reports/' | relative_url }}">관측 보고</a>
-      <a href="{{ '/about/' | relative_url }}">소개</a>
+      <a href="{{ '/reports/' | relative_url }}">신어 관측 보고</a>
+      <a href="{{ '/data.html' | relative_url }}">신어 관측 데이터</a>
+      <a href="{{ '/about/' | relative_url }}">프로젝트 소개</a>
       <a href="https://github.com/Jees-an/K-NOVA" target="_blank">GitHub</a>
     </div>
   </nav>
@@ -24,7 +25,7 @@
   </main>
 
   <footer class="site-footer">
-    <p>&copy; {{ 'now' | date: "%Y" }} K-NOVA · Korean Neologism Observatory and Visual Analytics</p>
+    <p>&copy; {{ 'now' | date: "%Y" }} K-NOVA · Korean Neologism Observatory and Visual Analytics · 안진산(san@knu.ac.kr)</p>
   </footer>
 </body>
 </html>
