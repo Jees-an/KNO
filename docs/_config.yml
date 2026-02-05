@@ -1,0 +1,25 @@
+title: K-NOVA
+description: Korean Neologism Observatory and Visual Analytics
+url: "https://jees-an.github.io"
+baseurl: "/K-NOVA"
+
+markdown: kramdown
+permalink: /reports/:year/:month/:title/
+
+collections:
+  reports:
+    output: true
+    sort_by: date
+
+defaults:
+  - scope:
+      path: ""
+      type: "reports"
+    values:
+      layout: "report"
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE

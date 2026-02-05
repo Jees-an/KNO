@@ -1,0 +1,43 @@
+---
+layout: default
+title: K-NOVA
+---
+
+<div class="hero">
+  <img src="{{ '/img/K-NOVA.jpg' | relative_url }}" alt="K-NOVA" class="hero-logo">
+  <h1>K-NOVA</h1>
+  <p>한국어 신어의 출현과 확산을 관측하는 시스템</p>
+</div>
+
+<div class="section">
+  <h2>📡 최근 관측 보고</h2>
+
+  {% assign reports = site.reports | sort: 'date' | reverse %}
+  {% if reports.size > 0 %}
+  <ul class="report-list">
+    {% for report in reports limit:5 %}
+    <li>
+      <a href="{{ report.url | relative_url }}" class="report-card">
+        <span class="card-date">{{ report.date | date: "%Y.%m.%d." }}</span>
+        <div class="card-title">{{ report.title }}</div>
+        {% if report.summary %}
+        <div class="card-summary">{{ report.summary }}</div>
+        {% endif %}
+        <div class="card-tags">
+          {% if report.period %}<span class="tag">📅 {{ report.period }}</span>{% endif %}
+          {% if report.genre %}<span class="tag">📂 {{ report.genre }}</span>{% endif %}
+          {% if report.neologism_count %}<span class="tag">✨ {{ report.neologism_count }}건</span>{% endif %}
+        </div>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% if reports.size > 5 %}
+  <a href="{{ '/reports/' | relative_url }}" class="view-all">전체 보기 &rarr;</a>
+  {% endif %}
+  {% else %}
+  <div class="empty-state">
+    <p>🔭 관측 준비 중...</p>
+  </div>
+  {% endif %}
+</div>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title | default: site.title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+<body>
+  <nav class="top-nav">
+    <a href="{{ '/' | relative_url }}" class="nav-logo">K-NOVA</a>
+    <div class="nav-links">
+      <a href="{{ '/' | relative_url }}">홈</a>
+      <a href="{{ '/reports/' | relative_url }}">관측 보고</a>
+      <a href="{{ '/about/' | relative_url }}">소개</a>
+      <a href="https://github.com/Jees-an/K-NOVA" target="_blank">GitHub</a>
+    </div>
+  </nav>
+
+  <main>
+    {{ content }}
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; {{ 'now' | date: "%Y" }} K-NOVA · Korean Neologism Observatory and Visual Analytics</p>
+  </footer>
+</body>
+</html>

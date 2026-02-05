@@ -1,0 +1,25 @@
+---
+layout: default
+---
+<article class="report-article">
+  <header class="report-header">
+    <span class="report-date">{{ page.date | date: "%Y.%m.%d." }}</span>
+    <h1>{{ page.title }}</h1>
+    {% if page.summary %}
+    <p class="report-summary">{{ page.summary }}</p>
+    {% endif %}
+    <div class="report-meta">
+      {% if page.period %}<span class="tag">📅 {{ page.period }}</span>{% endif %}
+      {% if page.genre %}<span class="tag">📂 {{ page.genre }}</span>{% endif %}
+      {% if page.neologism_count %}<span class="tag">✨ 신어 {{ page.neologism_count }}건</span>{% endif %}
+    </div>
+  </header>
+
+  <div class="report-body">
+    {{ content }}
+  </div>
+
+  <footer class="report-footer">
+    <a href="{{ '/reports/' | relative_url }}">&larr; 전체 관측 보고 목록</a>
+  </footer>
+</article>
