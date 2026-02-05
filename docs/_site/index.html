@@ -107,14 +107,19 @@ function renderFeatured(containerId, d) {
   const container = document.getElementById(containerId);
   const totalFreq = d['월별 상대빈도'].reduce((a, b) => a + b, 0);
 
+  const maxVal = Math.max(...d['월별 상대빈도']);
+  const maxIdx = d['월별 상대빈도'].indexOf(maxVal);
+  const maxLabel = '최고 빈도(' + MONTHS[maxIdx] + '): <span style="color:#60a5fa;font-weight:600">' + maxVal.toLocaleString() + '회</span>';
+
   container.innerHTML = `
     <div class="featured-neo-header">
       <a href="${d['기사문 URL']}" target="_blank" class="featured-neo-title">${d['신어']}</a>
       <span class="featured-neo-meta">최초 출현일: ${d['최초 출현일']} · 총빈도: ${totalFreq.toLocaleString()}</span>
     </div>
     <div class="featured-neo-charts">
-      <div class="featured-chart-box">
+      <div class="featured-chart-box" style="position:relative">
         <h4>📈 월별 상대빈도</h4>
+        <div style="position:absolute;top:0.8rem;right:1rem;font-size:0.75rem;color:var(--text-secondary);text-align:right">${maxLabel}</div>
         <canvas id="${containerId}ChartTF"></canvas>
       </div>
       <div class="featured-chart-box">

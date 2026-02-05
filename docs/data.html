@@ -157,6 +157,17 @@
     .chart-section h3 {
       font-size:0.9rem; font-weight:500; color:var(--accent-glow); margin-bottom:0.8rem;
     }
+    .tf-max-label {
+      position:absolute; top:0.8rem; right:1rem;
+      font-size:0.75rem; color:var(--text-secondary); text-align:right;
+    }
+    .tf-max-label span { color:#60a5fa; font-weight:600; }
+    .pmw-rank {
+      position:absolute; top:0.8rem; right:1rem;
+      font-size:0.75rem; color:var(--text-secondary); text-align:right; line-height:1.6;
+      display:none;
+    }
+    .pmw-rank span { color:var(--accent-warm); font-weight:600; }
     .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-bottom:1.5rem; align-items:start; }
     .chart-box { background:var(--bg-deep); border-radius:8px; padding:1.5rem; height:350px; display:flex; flex-direction:column; overflow:hidden; }
     .chart-box .chart-section { flex:1; display:flex; flex-direction:column; min-height:0; }
@@ -297,15 +308,17 @@
     <h2 id="modalTitle"></h2>
     <div class="modal-meta" id="modalMeta"></div>
     <div class="chart-row">
-      <div class="chart-box">
+      <div class="chart-box" style="position:relative;">
         <div class="chart-section">
           <h3>📈 월별 상대빈도</h3>
+          <div id="chartTFMax" class="tf-max-label"></div>
           <canvas id="chartTF"></canvas>
         </div>
       </div>
-      <div class="chart-box chart-box-doughnut">
+      <div class="chart-box chart-box-doughnut" style="position:relative;">
         <div class="chart-section">
           <h3>📊 주제별 상대빈도</h3>
+          <div id="chartPMWRank" class="pmw-rank"></div>
           <canvas id="chartPMW"></canvas>
         </div>
       </div>
@@ -423,6 +436,13 @@ function openModal(d) {
     '<span>🗂️ 출현 주제 수 ' + d['출현 주제 수'] + '개</span>' +
     '<span>📁 출현 장르 수 ' + d['출현 장르 수'] + '개</span>';
 
+  // 최고 빈도 표시
+  var monthlyFreq = d['월별 상대빈도'];
+  var maxVal = Math.max.apply(null, monthlyFreq);
+  var maxIdx = monthlyFreq.indexOf(maxVal);
+  document.getElementById('chartTFMax').innerHTML =
+    '최고 빈도(' + MONTHS[maxIdx] + '): <span>' + maxVal.toLocaleString() + '회</span>';
+
   if (chartTF) chartTF.destroy();
   chartTF = new Chart(document.getElementById('chartTF'), {
     type: 'line',
@@ -485,9 +505,22 @@ function openModal(d) {
     .slice(0, 3)
     .map(item => item.idx);
 
+  // 모바일: 우측 상단에 Top 3 텍스트 표시
+  var rankEl = document.getElementById('chartPMWRank');
+  if (isMobile) {
+    var top3 = sortedIndices.map(function(idx, i) {
+      var pct = pmwTotal > 0 ? ((pmwData[idx] / pmwTotal) * 100).toFixed(1) : 0;
+      return (i + 1) + '. ' + SECTIONS[idx] + ' <span>' + pct + '%</span>';
+    });
+    rankEl.innerHTML = top3.join('<br>');
+    rankEl.style.display = 'block';
+  } else {
+    rankEl.style.display = 'none';
+  }
+
   chartPMW = new Chart(document.getElementById('chartPMW'), {
     type: 'doughnut',
-    plugins: [ChartDataLabels],
+    plugins: isMobile ? [] : [ChartDataLabels],
     data: {
       labels: SECTIONS,
       datasets: [{
@@ -502,7 +535,7 @@ function openModal(d) {
       maintainAspectRatio: false,
       layout: {
         padding: isMobile
-          ? { top: 10, bottom: 5, left: 10, right: 10 }
+          ? { top: 5, bottom: 5, left: 5, right: 5 }
           : { top: 30, bottom: 10, left: 30, right: 30 }
       },
       plugins: {
@@ -528,7 +561,7 @@ function openModal(d) {
         },
         datalabels: {
           color: '#fff',
-          font: { size: isMobile ? 9 : 11, weight: 'bold' },
+          font: { size: 11, weight: 'bold' },
           anchor: 'end',
           align: 'end',
           offset: 8,
