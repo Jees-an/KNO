@@ -140,6 +140,7 @@ function renderFeatured(containerId, d) {
   // 주제별 분포 차트
   const pmwData = SECTIONS.map(s => d['주제별 상대빈도'][s] || 0);
   const pmwTotal = pmwData.reduce((a, b) => a + b, 0);
+  const isMobile = window.innerWidth <= 768;
 
   new Chart(document.getElementById(`${containerId}ChartPMW`), {
     type: 'doughnut',
@@ -156,17 +157,18 @@ function renderFeatured(containerId, d) {
       responsive: true,
       maintainAspectRatio: false,
       layout: {
-        padding: { left: 0, right: 0 }
+        padding: isMobile ? { left: 40, right: 40, top: 5, bottom: 0 } : { left: 0, right: 0 }
       },
       plugins: {
         legend: {
-          position: 'right',
+          position: isMobile ? 'bottom' : 'right',
           align: 'center',
+          maxWidth: isMobile ? 280 : undefined,
           labels: {
             color: '#fff',
-            font: { size: 11 },
-            padding: 12,
-            boxWidth: 12,
+            font: { size: isMobile ? 10 : 11 },
+            padding: isMobile ? 10 : 12,
+            boxWidth: isMobile ? 10 : 12,
             usePointStyle: true,
           }
         },

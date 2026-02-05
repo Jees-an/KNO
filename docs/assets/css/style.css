@@ -393,6 +393,26 @@ th {
   border-radius: 8px;
 }
 
+/* ── HAMBURGER (hidden on desktop) ── */
+.nav-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 101;
+}
+
+.nav-hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text-secondary);
+  margin: 5px 0;
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
 /* ── FEATURED NEOLOGISM ── */
 .featured-neo {
   background: var(--bg-card);
@@ -453,12 +473,6 @@ th {
   height: 240px !important;
 }
 
-@media (max-width: 640px) {
-  .featured-neo-charts {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* ── COMING SOON ── */
 .coming-soon {
   text-align: center;
@@ -490,13 +504,225 @@ th {
   margin-top: auto;
 }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 640px) {
-  .top-nav { padding: 1rem 1.2rem; }
-  .nav-links { gap: 1rem; }
-  .nav-links a { font-size: 0.8rem; }
-  main { padding: 2rem 1.2rem; }
-  .hero { padding: 2rem 0; }
-  .hero h1 { font-size: 1.2rem; }
-  .report-header h1 { font-size: 1.3rem; }
+/* ═══════ MOBILE: TABLET AND BELOW ═══════ */
+@media (max-width: 768px) {
+
+  /* ── NAV: Hamburger visible, links become vertical dropdown ── */
+  .nav-hamburger {
+    display: block;
+  }
+
+  .nav-hamburger.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .nav-hamburger.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-hamburger.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(10, 14, 26, 0.97);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    gap: 0;
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-links.nav-open {
+    display: flex;
+  }
+
+  .nav-links a {
+    font-size: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(30, 45, 74, 0.4);
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-links a:last-child {
+    border-bottom: none;
+  }
+
+  .top-nav {
+    padding: 1rem 1.2rem;
+  }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    padding: 2rem 1.2rem;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 1.5rem 0 1rem;
+  }
+
+  .hero-logo {
+    max-width: 100%;
+  }
+
+  .hero h1 {
+    font-size: 1.2rem;
+  }
+
+  .hero p {
+    font-size: 0.95rem;
+  }
+
+  .hero-stat {
+    font-size: 1rem;
+  }
+
+  .hero-stat #neoCount {
+    font-size: 1.2rem;
+  }
+
+  /* ── FEATURED NEOLOGISM CARDS ── */
+  .featured-neo {
+    padding: 1.2rem 1rem 1.5rem;
+    overflow: hidden;
+  }
+
+  .featured-neo-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .featured-neo-title {
+    font-size: 1.15rem;
+  }
+
+  .featured-neo-meta {
+    font-size: 0.75rem;
+  }
+
+  .featured-neo-charts {
+    grid-template-columns: 1fr;
+    min-width: 0;
+  }
+
+  .featured-chart-box {
+    padding: 1rem 1rem 1.2rem;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .featured-chart-box canvas {
+    height: 260px !important;
+  }
+
+  /* ── SECTION HEADINGS ── */
+  .section h2 {
+    font-size: 1rem;
+  }
+
+  .hint-tip {
+    display: block;
+    margin-left: 0;
+    margin-top: 0.3rem;
+  }
+
+  /* ── REPORT CARDS ── */
+  .report-card {
+    padding: 1.1rem 1.2rem;
+  }
+
+  .report-card .card-title {
+    font-size: 0.95rem;
+  }
+
+  /* ── REPORT ARTICLE ── */
+  .report-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .report-body table {
+    font-size: 0.8rem;
+  }
+
+  .report-body th,
+  .report-body td {
+    padding: 0.5rem 0.6rem;
+  }
+
+  /* ── COMING SOON (about page) ── */
+  .coming-soon {
+    padding: 2rem 1rem;
+  }
+
+  .coming-soon-logo {
+    max-width: 100%;
+  }
+
+  .coming-soon-text {
+    font-size: 1.2rem;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header h1 {
+    font-size: 1.2rem;
+  }
+}
+
+/* ═══════ MOBILE: PHONES ONLY ═══════ */
+@media (max-width: 480px) {
+
+  .top-nav {
+    padding: 0.8rem 1rem;
+  }
+
+  main {
+    padding: 1.5rem 1rem;
+  }
+
+  .hero {
+    padding: 1rem 0;
+  }
+
+  .hero h1 {
+    font-size: 1.05rem;
+  }
+
+  .hero-stat {
+    font-size: 0.9rem;
+  }
+
+  .hero-stat #neoCount {
+    font-size: 1.05rem;
+  }
+
+  .hero p {
+    font-size: 0.85rem;
+  }
+
+  .featured-neo {
+    padding: 1rem 0.8rem;
+  }
+
+  .featured-neo-title {
+    font-size: 1.05rem;
+  }
+
+  .featured-chart-box canvas {
+    height: 230px !important;
+  }
+
+  .section h2 {
+    font-size: 0.9rem;
+  }
+
+  .report-card {
+    padding: 1rem;
+  }
 }

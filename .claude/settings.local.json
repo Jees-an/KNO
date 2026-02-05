@@ -4,7 +4,9 @@
       "Bash(timeout:*)",
       "Bash(jekyll:*)",
       "Bash(bundle exec jekyll serve:*)",
-      "Bash(start http://127.0.0.1:4000/K-NOVA/)"
+      "Bash(start http://127.0.0.1:4000/K-NOVA/)",
+      "Bash(git -C \"c:\\\\Users\\\\USER\\\\Documents\\\\GitHub\\\\K-NOVA\" log --oneline -20)",
+      "Bash(git -C \"c:\\\\Users\\\\USER\\\\Documents\\\\GitHub\\\\K-NOVA\" remote -v)"
     ]
   }
 }

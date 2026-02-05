@@ -14,6 +14,11 @@
 <body>
   <nav class="top-nav">
     <a href="{{ '/' | relative_url }}" class="nav-logo">🔭 K-NOVA: 한국어 신어 관측 시스템</a>
+    <button class="nav-hamburger" id="navHamburger" aria-label="메뉴 열기" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <div class="nav-links">
       <a href="{{ '/' | relative_url }}">홈</a>
       <a href="{{ '/reports/' | relative_url }}">신어 관측 보고</a>
@@ -30,5 +35,25 @@
   <footer class="site-footer">
     <p>&copy; {{ 'now' | date: "%Y" }} K-NOVA · Korean Neologism Observatory and Visual Analytics</p>
   </footer>
+  <script>
+  (function() {
+    var btn = document.getElementById('navHamburger');
+    if (!btn) return;
+    var nav = btn.nextElementSibling;
+    btn.addEventListener('click', function() {
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
+      btn.classList.toggle('active');
+      nav.classList.toggle('nav-open');
+    });
+    nav.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        btn.setAttribute('aria-expanded', 'false');
+        btn.classList.remove('active');
+        nav.classList.remove('nav-open');
+      });
+    });
+  })();
+  </script>
 </body>
 </html>
