@@ -4,11 +4,13 @@
 
 ## 1. 개요
 
-![K-NOVA](img/K-NOVA.png)
+![K-NOVA](img/K-NOVA.jpg)
 
 'NOVA'는 새롭게 나타나는 별을 말합니다.
+
 **언어의 새로운 형태와 의미** 역시 특정 시점에 출현하여 빠르게 확산되거나 소멸된다는 점에서 천문학의 신성(新星) 현상과 닮아 있습니다.
-이에 **한국어 신어 관측 시스템**의 이름을 'K-NOVA(Korean Neologism Obsevatory and Visual Analytics)'로 명명하게 되었습니다.
+
+이에 **한국어 신어 관측 시스템**의 이름을 'K-NOVA(Korean Neologism Observatory and Visual Analytics)'로 명명하게 되었습니다.
 
 ---
 
@@ -25,7 +27,7 @@
 
 ## 3. 한국어 신어 수집 및 분석의 과정
 
-![신어 수집·분석 파이프라인](img/Korean_Neologism_Extractor.png)
+![신어 수집·분석 파이프라인](img/Korean_Neologism_Extractor.jpg)
 
 | 모듈 | 기능 |
 |------|---------|
