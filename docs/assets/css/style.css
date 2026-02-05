@@ -459,6 +459,27 @@ th {
   }
 }
 
+/* ── COMING SOON ── */
+.coming-soon {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.coming-soon-logo {
+  max-width: 480px;
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 2.5rem;
+}
+
+.coming-soon-text {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-nova);
+  letter-spacing: 0.05em;
+}
+
 /* ── FOOTER ── */
 .site-footer {
   text-align: center;
