@@ -4,7 +4,7 @@
 
 ## 1. 개요
 
-![K-NOVA](img/K-NOVA.jpg)
+![K-NOVA](/docs/img/K-NOVA.jpg)
 
 'NOVA'는 새롭게 나타나는 별을 말합니다.
 
@@ -27,7 +27,7 @@
 
 ## 3. 한국어 신어 수집 및 분석의 과정
 
-![신어 수집·분석 파이프라인](img/Korean_Neologism_Extractor.jpg)
+![신어 수집·분석 파이프라인](/docs/img/Korean_Neologism_Extractor.jpg)
 
 | 모듈 | 기능 |
 |------|---------|

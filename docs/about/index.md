@@ -1,17 +1,12 @@
 ---
-layout: default
-title: 소개
+layout: page
+title: K-NOVA 소개
 ---
-
-<div class="page-header">
-  <h1>K-NOVA 소개</h1>
-</div>
-
-<div class="about-content">
 
 ## 개요
 
 'NOVA'는 새롭게 나타나는 별, 신성(新星)을 뜻합니다.
+
 **언어의 새로운 형태와 의미** 역시 특정 시점에 출현하여 빠르게 확산되거나 소멸된다는 점에서 천문학의 신성 현상과 닮아 있습니다.
 
 이에 **한국어 신어 관측 시스템**의 이름을 'K-NOVA(Korean Neologism Observatory and Visual Analytics)'로 명명하게 되었습니다.
@@ -38,5 +33,3 @@ title: 소개
 **안진산**<br>
 경북대학교 국어국문학과 외래교수 | 언어정보연구센터 연구원<br>
 📧 [san@knu.ac.kr](mailto:san@knu.ac.kr)
-
-</div>
