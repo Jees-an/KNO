@@ -1,6 +1,5 @@
-# 💫 K-NOVA: Korean Neologism Observatory and Visual Analytics 🔭
-- 📂 Side Project
-- 🏆 [KNBD: Korean Neologisms Benchmark Dataset](https://github.com/Jees-an/Korean-neologisms-benchmark-dataset)
+# 💫 K-NOVA: Korean Neologism Observatory and Visual Analytics
+- 🔭 [한국어 신어 관측 결과 바로가기](https://jees-an.github.io/K-NOVA/)
 
 ## 1. 개요
 
