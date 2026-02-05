@@ -46,6 +46,10 @@
       font-family:'Pretendard', sans-serif; font-weight:700; font-size:1.3rem;
       color:var(--accent-nova); text-decoration:none; letter-spacing:0;
     }
+    .nav-toggle {
+      display:none; background:none; border:none;
+      color:var(--text-primary); font-size:1.5rem; cursor:pointer; padding:0.2rem;
+    }
     .nav-links { display:flex; gap:2rem; }
     .nav-links a {
       color:var(--text-secondary); text-decoration:none; font-size:0.9rem;
@@ -167,20 +171,36 @@
       color:var(--text-muted); font-size:0.8rem; margin-top:3rem;
     }
     @media (max-width:768px) {
-      .top-nav { padding:1rem; }
-      .nav-links { gap:1rem; }
-      .nav-links a { font-size:0.8rem; }
+      .nav-toggle { display:block; }
+      .top-nav { flex-wrap:wrap; padding:1rem; }
+      .nav-links {
+        display:none; flex-direction:column; width:100%; gap:0;
+        margin-top:0.8rem; border-top:1px solid var(--border); padding-top:0.8rem;
+      }
+      .nav-links.open { display:flex; }
+      .nav-links a {
+        font-size:0.9rem; padding:0.6rem 0;
+        border-bottom:1px solid rgba(30,45,74,0.3);
+      }
+      .nav-links a:last-child { border-bottom:none; }
       .container { padding:1rem; }
+      .page-header h1 { font-size:1.1rem; }
+      .page-header p { font-size:0.85rem; }
       .chart-row { grid-template-columns:1fr; }
-      .modal { width:95%; padding:1.2rem; }
+      .chart-box { height:280px; }
+      .modal { width:98%; padding:1rem; max-height:90vh; overflow-y:auto; }
+      .modal h2 { font-size:1.1rem; }
+      .modal-meta { font-size:0.78rem; }
+      .modal-meta span { display:block; margin-right:0; margin-bottom:0.3rem; }
     }
   </style>
 </head>
 <body>
 
 <nav class="top-nav">
-  <a href="./" class="nav-logo">K-NOVA: 한국어 신어 관측 시스템</a>
-  <div class="nav-links">
+  <a href="./" class="nav-logo">🔭 K-NOVA</a>
+  <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기">☰</button>
+  <div class="nav-links" id="navLinks">
     <a href="./">홈</a>
     <a href="./reports/">신어 관측 보고</a>
     <a href="./data.html" style="color:var(--accent-nova)">신어 관측 데이터</a>
@@ -188,6 +208,11 @@
     <a href="https://github.com/Jees-an/K-NOVA" target="_blank">GitHub</a>
   </div>
 </nav>
+<script>
+  document.getElementById('navToggle').addEventListener('click', function() {
+    document.getElementById('navLinks').classList.toggle('open');
+  });
+</script>
 
 <div class="container">
   <div class="page-header">
