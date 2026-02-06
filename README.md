@@ -3,7 +3,7 @@
 
 ## 1. 개요
 
-![K-NOVA](/docs/img/K-NOVA.jpg)
+![K-NOVA](/docs/img/K-NOVA.png)
 
 'NOVA'는 새롭게 나타나는 별, 신성(新星)을 뜻합니다.
 
