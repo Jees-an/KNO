@@ -26,7 +26,7 @@
 
 ## 3. 한국어 신어 수집 및 분석의 과정
 
-![신어 수집·분석 파이프라인](/docs/img/Korean_Neologism_Extractor.jpg)
+![신어 수집·분석 파이프라인](/docs/img/Korean_Neologism_Extraction_Pipeline.png)
 
 | 모듈 | 기능 |
 |------|---------|
