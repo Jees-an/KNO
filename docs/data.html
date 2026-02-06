@@ -159,15 +159,15 @@
     }
     .tf-max-label {
       position:absolute; top:0.8rem; right:1rem;
-      font-size:0.75rem; color:var(--text-secondary); text-align:right;
+      font-size:0.75rem; color:var(--accent-nova); text-align:right;
     }
-    .tf-max-label span { color:#60a5fa; font-weight:600; }
+    .tf-max-label span { color:#fff; font-weight:600; }
     .pmw-rank {
       position:absolute; top:0.8rem; right:1rem;
-      font-size:0.75rem; color:var(--text-secondary); text-align:right; line-height:1.6;
+      font-size:0.75rem; color:var(--accent-nova); text-align:right; line-height:1.8;
       display:none;
     }
-    .pmw-rank span { color:var(--accent-warm); font-weight:600; }
+    .pmw-rank span { color:#fff; font-weight:600; }
     .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-bottom:1.5rem; align-items:start; }
     .chart-box { background:var(--bg-deep); border-radius:8px; padding:1.5rem; height:350px; display:flex; flex-direction:column; overflow:hidden; }
     .chart-box .chart-section { flex:1; display:flex; flex-direction:column; min-height:0; }
@@ -441,7 +441,7 @@ function openModal(d) {
   var maxVal = Math.max.apply(null, monthlyFreq);
   var maxIdx = monthlyFreq.indexOf(maxVal);
   document.getElementById('chartTFMax').innerHTML =
-    '최고 빈도(' + MONTHS[maxIdx] + '): <span>' + maxVal.toLocaleString() + '회</span>';
+    '월 최고 빈도 (' + MONTHS[maxIdx] + '): <span>' + maxVal.toLocaleString() + '회</span>';
 
   if (chartTF) chartTF.destroy();
   chartTF = new Chart(document.getElementById('chartTF'), {
@@ -509,7 +509,7 @@ function openModal(d) {
   var rankEl = document.getElementById('chartPMWRank');
   var top3 = sortedIndices.map(function(idx, i) {
     var pct = pmwTotal > 0 ? ((pmwData[idx] / pmwTotal) * 100).toFixed(1) : 0;
-    return (i + 1) + '. ' + SECTIONS[idx] + ' <span>' + pct + '%</span>';
+    return (i + 1) + '위 ' + SECTIONS[idx] + ' <span>' + pct + '%</span>';
   });
   rankEl.innerHTML = top3.join('<br>');
   rankEl.style.display = 'block';
