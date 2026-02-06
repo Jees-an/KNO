@@ -69,8 +69,8 @@ title: K-NOVA 소개
 <br>
 ### 참고문헌
 
-- 안진산(2026a), 「실시간 신어 추출 파이프라인의 설계와 검증」, (*forthcoming*).
-- 안진산(2026b), 「거대언어모델을 활용한 신어 집필의 가능성과 쟁점」, (*forthcoming*).
+- 안진산(2026a), 「실시간 신어 추출 파이프라인의 설계와 검증」, (*forthcoming*)
+- 안진산(2026b), 「거대언어모델을 활용한 신어 집필의 가능성과 쟁점」, (*forthcoming*)
 - [남길임·안진산·이수진(2025), 「말뭉치, LLMs, 인간 전문가의 협업을 통한 한국어 신어의 탐지」, 『한국어학』 108호.](https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART003232209)
 - [남길임 외(2025), 『신어 2024』, 한국문화사.](https://product.kyobobook.co.kr/detail/S000218853741)
 - [남길임 외(2024), 『신어 2023』, 한국문화사.](https://product.kyobobook.co.kr/detail/S000215101540)
