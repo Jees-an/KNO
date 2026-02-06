@@ -268,7 +268,7 @@
   <div class="nav-links">
     <a href="./">홈</a>
     <a href="./reports/">신어 관측 보고</a>
-    <a href="./data.html" style="color:var(--accent-nova)">신어 관측 데이터</a>
+    <a href="./data.html" style="color:var(--accent-nova)">신어별 관측 데이터</a>
     <a href="./about/">프로젝트 소개</a>
     <a href="https://github.com/Jees-an/K-NOVA" target="_blank">GitHub</a>
   </div>
@@ -277,7 +277,7 @@
 <div class="container">
   <div class="page-header">
     <h1>📋 한국어 신어 목록</h1>
-    <p>네이버 뉴스 말뭉치에서 수집된 한국어 신어 목록입니다. 각 신어를 클릭하면 뜻풀이, 의미 범주, 상세 관측 결과를 확인하실 수 있습니다.</p>
+    <p>신어 수집·분석용 균형 말뭉치에서 수집된 한국어 신어 목록입니다. 각 신어를 클릭하면 뜻풀이, 의미 범주, 상세 관측 결과를 확인하실 수 있습니다.</p>
   </div>
 
   <div id="loadingArea" class="loading">
@@ -331,7 +331,7 @@
 </footer>
 
 <script>
-const MONTHS = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+const MONTHS = ['2025년 1월','2025년 2월','2025년 3월','2025년 4월','2025년 5월','2025년 6월','2025년 7월','2025년 8월','2025년 9월','2025년 10월','2025년 11월','2025년 12월'];
 const SECTIONS = ['정치','경제','사회','생활/문화','IT/과학','세계','연예','스포츠'];
 let NEO_DATA = [];
 
@@ -483,7 +483,7 @@ function openModal(d) {
         }
       },
       scales: {
-        x: { ticks: { color: '#8896b0', font: { size: isMobile ? 9 : 11 } }, grid: { color: 'rgba(30,45,74,0.5)' } },
+        x: { ticks: { color: '#8896b0', font: { size: isMobile ? 9 : 11 }, maxRotation: 90, minRotation: 90 }, grid: { color: 'rgba(30,45,74,0.5)' } },
         y: { ticks: { color: '#8896b0', font: { size: isMobile ? 9 : 11 } }, grid: { color: 'rgba(30,45,74,0.5)' }, beginAtZero: true }
       }
     }
