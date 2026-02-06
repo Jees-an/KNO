@@ -77,6 +77,7 @@ title: K-NOVA 소개
 - [남길임 외(2023), 『신어 2022』, 한국문화사.](https://product.kyobobook.co.kr/detail/S000211731664)
 - [남길임 외(2022), 『신어 2021』, 한국문화사.](https://product.kyobobook.co.kr/detail/S000200563843)
 - [남길임 외(2021), 『신어 2020』, 한국문화사.](https://product.kyobobook.co.kr/detail/S000001848151)
+- [Johnson, S. (1755/2004). Preface to a dictionary of the English language., *Project Gutenberg*](https://www.gutenberg.org/ebooks/5430)
 <br>
 <br>
 <hr>
