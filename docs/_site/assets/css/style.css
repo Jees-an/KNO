@@ -473,25 +473,33 @@ th {
   height: 240px !important;
 }
 
-/* ── COMING SOON ── */
-.coming-soon {
+/* ── INTRO HEADER (ABOUT) ── */
+.intro-header {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 2rem 2rem 1rem;
 }
 
-.coming-soon-logo {
+.intro-logo {
   max-width: 480px;
   width: 100%;
   border-radius: 12px;
-  margin-bottom: 2.5rem;
 }
 
-.coming-soon-text {
-  font-family: 'Pretendard', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--accent-nova);
-  letter-spacing: 0.05em;
+main {
+  text-align: justify;
+  word-break: keep-all;
+}
+
+main h1, main h2, main h3 {
+  text-align: left;
+}
+
+main img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5rem auto;
+  border-radius: 8px;
 }
 
 /* ── FOOTER ── */
@@ -656,17 +664,44 @@ th {
     padding: 0.5rem 0.6rem;
   }
 
-  /* ── COMING SOON (about page) ── */
-  .coming-soon {
-    padding: 2rem 1rem;
+  /* ── ABOUT PAGE ── */
+  main {
+    text-align: left;
   }
 
-  .coming-soon-logo {
-    max-width: 100%;
+  main ul {
+    padding-left: 1.2rem;
   }
 
-  .coming-soon-text {
-    font-size: 1.2rem;
+  .intro-header {
+    padding: 1.5rem 1rem 0.5rem;
+  }
+
+  .intro-logo {
+    max-width: 320px;
+  }
+
+  main h2 {
+    font-size: 1.1rem;
+  }
+
+  main h3 {
+    font-size: 1rem;
+  }
+
+  main table {
+    font-size: 0.78rem !important;
+    max-width: 100% !important;
+  }
+
+  main table th,
+  main table td {
+    padding: 0.4rem 0.5rem;
+  }
+
+  main img[style*="max-width:60%"],
+  main img[style*="max-width:80%"] {
+    max-width: 95% !important;
   }
 
   /* ── PAGE HEADER ── */
@@ -724,5 +759,23 @@ th {
 
   .report-card {
     padding: 1rem;
+  }
+
+  /* ── ABOUT PAGE (phones) ── */
+  .intro-logo {
+    max-width: 240px;
+  }
+
+  main h2 {
+    font-size: 1rem;
+  }
+
+  main table {
+    font-size: 0.72rem !important;
+  }
+
+  main table th,
+  main table td {
+    padding: 0.3rem 0.4rem;
   }
 }
