@@ -15,7 +15,7 @@ title: K-NOVA 소개
 
 - 사전을 만드는 일은 생각보다 훨씬 더 고된 작업입니다. 18세기 영국의 시인이자 평론가였던 새뮤얼 존슨은 <span style="color:#7ee8fa; font-size:1.05em; font-weight:500;">인류가 사전 편찬자를 '학문의 제자'가 아닌 '학문의 노예'로 대한다고 말하며</span> 스스로를 '겸손한 노역자(humble drudge)'라 칭한 뒤, 6명의 조수와 함께 8년 10개월에 걸쳐 4만 2천여 개의 표제어로 구성된 영어 사전을 완성했습니다. 그마저도 서문에서 "언어를 고정하려는 시도는 바람을 채찍질하는 것과 같다."라고 고백해야 했습니다(Johnson 1755/2004). 270년이 지난 지금도 사정은 크게 다르지 않아서, 사전, 특히 신어사전 편찬에는 막대한 시간과 비용, 인력이 필요합니다.<br><br>
 
-- 이에 본 프로젝트에서는 한국어 어휘 체계의 역동성을 관측하기 위해 <span style="color:#7ee8fa; font-size:1.05em; font-weight:500;">'말뭉치', '거대 언어 모델', '사전학 전문가'의 삼각측량(triangulation)에 기반한 신어 수집·분석 파이프라인</span>을 설계·개발했습니다. 신어 조사의 생산성과 효율성, 정확성을 높이면서도, 말뭉치 기반 언어 연구의 재현 가능성과 반증 가능성을 확보하는 것이 목표입니다(안진산 2026a).<br><br>
+- 이에 본 프로젝트에서는 한국어 어휘 체계의 역동성을 관측하기 위해 <span style="color:#7ee8fa; font-size:1.05em; font-weight:500;">'말뭉치', '거대 언어 모델', '사전학 전문가'의 방법론적 삼각측량(methodological triangulation)에 기반한 신어 수집·분석 파이프라인</span>을 설계·개발했습니다. 신어 조사의 생산성과 효율성, 정확성을 높이면서도, 말뭉치 기반 언어 연구의 재현 가능성과 반증 가능성을 확보하는 것이 목표입니다(안진산 2026a).<br><br>
 
 <img src="{{ '/img/Korean_Neologism_Extraction_Pipeline.png' | relative_url }}" alt="파이프라인" style="max-width:60%;">
 
@@ -23,7 +23,7 @@ title: K-NOVA 소개
 
 ## 첫 번째 질문, LLM이 신어를 판별할 수 있을까요?<br>
 
-- 남길임·안진산·이수진(2025)에 따르면, LLM을 활용하여 『신어 2023』의 '기존 신어 목록(325개)'을 '확장 신어 목록(368개)'으로 약 13% 확장할 수 있었습니다. 인간이 놓친 43개의 신어를 LLM이 추가로 찾아낸 셈이죠. 물론 LLM도 완벽하지는 않아서, 신어를 비신어로 잘못 판단하거나 그 반대의 실수를 저지르기도 합니다.<br><br>
+- 남길임·안진산·이수진(2025)에서는 LLM을 활용하여 『신어 2023』의 '기존 신어 목록(325개)'을 '확장 신어 목록(368개)'으로 약 13% 확장한 바 있습니다. 인간이 놓친 43개의 신어를 LLM을 활용하여 추가로 찾아낸 셈이죠. 물론 LLM도 완벽하지는 않아서, 신어를 비신어로 잘못 판단하거나 그 반대의 실수를 저지르기도 합니다.<br><br>
 
 <table style="font-size:0.85rem; max-width:600px; margin:0 auto;">
 <thead>
@@ -33,13 +33,14 @@ title: K-NOVA 소개
 <tr><td>1차 신어 판별(인간)</td><td style="text-align:right;">6,301</td><td style="text-align:right;">91</td><td style="text-align:right;">43</td><td style="text-align:right;">0</td><td style="text-align:right;">6,167</td><td style="text-align:right;">0.80899</td></tr>
 <tr><td>1차 신어 판별(GPT-4o)</td><td style="text-align:right;">6,301</td><td style="text-align:right;">85</td><td style="text-align:right;">49</td><td style="text-align:right;">288</td><td style="text-align:right;">5,879</td><td style="text-align:right;">0.33516</td></tr>
 <tr><td>최종 신어 판별(인간)</td><td style="text-align:right;">-</td><td style="text-align:right;">134</td><td style="text-align:right;">-</td><td style="text-align:right;">-</td><td style="text-align:right;">-</td><td style="text-align:right;">-</td></tr>
+<tr><td>계열어 등 추가 수집</td><td style="text-align:right;">-</td><td style="text-align:right;">368<br>(+234)</td><td style="text-align:right;">-</td><td style="text-align:right;">-</td><td style="text-align:right;">-</td><td style="text-align:right;">-</td></tr>
 </tbody>
 </table>
 <br>
 <br>
 ## 두 번째 질문, LLM이 신어를 집필할 수 있을까요?<br>
 
-- 안진산(2026b)의 실험은 이 질문에 대한 한 가지 답을 보여줍니다.<br>
+- 안진산(2026b)에서는 이 질문에 대한 실험 결과를 제시합니다.<br>
 
 <img src="{{ '/img/example_1.png' | relative_url }}" alt="산점도" style="max-width:60%;">
 
