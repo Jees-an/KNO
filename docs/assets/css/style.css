@@ -151,7 +151,11 @@ main {
 }
 
 /* ── REPORT CARDS (index list) ── */
-.report-list { list-style: none; }
+.report-list {
+  list-style: none;
+  max-width: 720px;
+  margin: 0 auto;
+}
 
 .report-card {
   display: block;
@@ -432,6 +436,11 @@ main {
 td.num {
   text-align: right !important;
   font-variant-numeric: tabular-nums;
+}
+
+.step-desc {
+  font-size: 0.78em;
+  color: var(--text-muted);
 }
 
 .report-body th {

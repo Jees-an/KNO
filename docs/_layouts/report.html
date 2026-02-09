@@ -91,8 +91,19 @@ layout: default
         </thead>
         <tbody>
           {%- for step in pipeline -%}
-          <tr{% if step["정제 단계"] == "M4-인간 최종 판별" %} class="highlight-row"{% endif %}>
-            <td>{{ step["정제 단계"] }}</td>
+          {%- assign sn = step["정제 단계"] -%}
+          {%- assign sd = "" -%}
+          {%- if sn == "M3-1" -%}{%- assign sd = "한글/로마자 외 문자 포함 어형 제거" -%}
+          {%- elsif sn == "M3-2" -%}{%- assign sd = "2023년 이전 출현 어절 어형 제거" -%}
+          {%- elsif sn == "M3-3" -%}{%- assign sd = "『표준국어대사전』 표제어 어형 제거" -%}
+          {%- elsif sn == "M3-4" -%}{%- assign sd = "『개체명 사전』 표제어 어형 제거" -%}
+          {%- elsif sn == "M3-5" -%}{%- assign sd = "『위키피디아』 표제어 어형 제거" -%}
+          {%- elsif sn == "M3-6" -%}{%- assign sd = "굴절형 추정 어형 제거" -%}
+          {%- elsif sn == "M3-7" -%}{%- assign sd = "복수형 추정 어형 제거" -%}
+          {%- elsif sn == "M3-8" -%}{%- assign sd = "기간 외 출현 어형 제거" -%}
+          {%- endif -%}
+          <tr{% if sn == "M4-인간 최종 판별" %} class="highlight-row"{% endif %}>
+            <td>{{ sn }}{% if sd != "" %} <span class="step-desc">({{ sd }})</span>{% endif %}</td>
             <td class="num fmt-num">{{ step["정제 후 항목 수"] }}</td>
             <td class="num fmt-pct">{{ step["정제 후 항목 비율"] }}</td>
           </tr>
