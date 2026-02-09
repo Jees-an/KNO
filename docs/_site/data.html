@@ -277,7 +277,7 @@
 <div class="container">
   <div class="page-header">
     <h1>📋 한국어 신어 목록</h1>
-    <p>신어 수집·분석용 균형 말뭉치에서 수집된 한국어 신어 목록입니다. 각 신어를 클릭하면 상세 관측 결과를 확인하실 수 있습니다.</p>
+    <p>신어 수집·분석용 균형 말뭉치에서 수집된 한국어 신어 목록입니다. 각 신어를 클릭하면 뜻풀이, 의미 범주, 상세 관측 결과를 확인하실 수 있습니다.</p>
   </div>
 
   <div id="loadingArea" class="loading">
@@ -292,7 +292,7 @@
         <th>표제어</th>
         <th>최초 출현 기사문</th>
         <th>총빈도</th>
-        <th>출현 매체</th><th>출현 주제</th><th>출현 장르</th>
+        <th>출현 매체 수</th><th>출현 주제 수</th><th>출현 장르 수</th>
         <th>2025년 1월</th><th>2025년 2월</th><th>2025년 3월</th><th>2025년 4월</th>
         <th>2025년 5월</th><th>2025년 6월</th><th>2025년 7월</th><th>2025년 8월</th>
         <th>2025년 9월</th><th>2025년 10월</th><th>2025년 11월</th><th>2025년 12월</th>
@@ -327,7 +327,7 @@
 </div>
 
 <footer class="site-footer">
-  <p>&copy; 2026 K-NOVA · Korean Neologism Observatory and Visual Analytics</p>
+  <p>&copy; 2025 K-NOVA · Korean Neologism Observatory and Visual Analytics</p>
 </footer>
 
 <script>
@@ -354,7 +354,7 @@ function truncate(s, n) {
 
 function initTable() {
   const tableData = NEO_DATA.map(d => {
-    const monthlyFreq = d['월별 상대빈도'];
+    const monthlyFreq = d['월별 상대빈도'].map(v => Math.round(v));
     const maxMonthly = Math.max(...monthlyFreq);
     const tfCells = monthlyFreq.map(v => {
       if (v === 0) return '<span class="tf-cell">0</span>';
@@ -366,14 +366,14 @@ function initTable() {
         ? '<a href="' + d['기사문 URL'] + '" target="_blank" class="url-link">' + truncate(d['최초 출현 기사문'], 30) + '</a>'
         : truncate(d['최초 출현 기사문'], 30))
       : '';
-    const totalFreq = monthlyFreq.reduce((a, b) => a + b, 0);
+    const totalFreq = d['단어빈도_전체'];
     return [
       d['최초 출현일'],
       '<span class="neo-link" data-neo="' + d['표제어'] + '">' + d['표제어'] + '</span>',
       titleText,
       '<span class="tf-total">' + totalFreq.toLocaleString() + '</span>',
-      '<span class="tf-meta">' + d['출현 매체 수'] + ' (' + d['출현 매체 비율'] + '%)</span>',
-      '<span class="tf-meta">' + d['출현 주제 수'] + ' (' + d['출현 주제 비율'] + '%)</span>',
+      '<span class="tf-meta">' + d['출현 매체 수'] + '</span>',
+      '<span class="tf-meta">' + d['출현 주제 수'] + '</span>',
       '<span class="tf-meta">' + d['출현 장르 수'] + '</span>',
       ...tfCells,
     ];
@@ -434,10 +434,10 @@ function openModal(d) {
     '<span>📅 최초 출현일: ' + d['최초 출현일'] + '</span>' +
     '<span>📰 출현 매체 ' + d['출현 매체 수'] + '개 (' + d['출현 매체 비율'] + '%)</span>' +
     '<span>🗂️ 출현 주제 ' + d['출현 주제 수'] + '개 (' + d['출현 주제 비율'] + '%)</span>' +
-    '<span>📁 출현 장르 ' + d['출현 장르 수'] + '개</span>';
+    '<span>📁 출현 장르 ' + d['출현 장르 수'] + '개 (' + (d['출현 장르 수'] * 50) + '%)</span>';
 
   // 최고 빈도 표시
-  var monthlyFreq = d['월별 상대빈도'];
+  var monthlyFreq = d['월별 상대빈도'].map(function(v) { return Math.round(v); });
   var maxVal = Math.max.apply(null, monthlyFreq);
   var maxIdx = monthlyFreq.indexOf(maxVal);
   document.getElementById('chartTFMax').innerHTML =
@@ -450,7 +450,7 @@ function openModal(d) {
       labels: MONTHS,
       datasets: [{
         label: '사용 빈도(TF)',
-        data: d['월별 상대빈도'],
+        data: monthlyFreq,
         backgroundColor: 'rgba(126,232,250,0.15)',
         borderColor: '#7ee8fa',
         borderWidth: 2,

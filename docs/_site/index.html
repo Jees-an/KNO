@@ -74,7 +74,7 @@ const pieColors = [
 // 관측자 추천 신어 (수동 설정)
 const OBSERVER_PICK = '디지털 월세';
 
-fetch('/K-NOVA/assets/data/neo_data.json')
+fetch('/K-NOVA/assets/data/neo_data_712.json')
   .then(r => r.json())
   .then(data => {
     // 가장 높은 빈도
@@ -90,7 +90,7 @@ fetch('/K-NOVA/assets/data/neo_data.json')
     })[0];
 
     // 관측자 추천
-    const pick = data.find(d => d['신어'] === OBSERVER_PICK) || data[0];
+    const pick = data.find(d => d['표제어'] === OBSERVER_PICK) || data[0];
 
     renderFeatured('featuredHighFreq', highFreq);
     renderFeatured('featuredRecent', recent);
@@ -110,7 +110,7 @@ function renderFeatured(containerId, d) {
 
   container.innerHTML = `
     <div class="featured-neo-header">
-      <a href="${d['기사문 URL']}" target="_blank" class="featured-neo-title">${d['신어']}</a>
+      <a href="${d['기사문 URL'] || '#'}" target="_blank" class="featured-neo-title">${d['표제어']}</a>
       <span class="featured-neo-meta">최초 출현일: ${d['최초 출현일']} · 총빈도: ${totalFreq.toLocaleString()}</span>
     </div>
     <div class="featured-neo-charts">
