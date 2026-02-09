@@ -239,6 +239,7 @@
       display:flex; flex-direction:column; overflow:hidden; position:relative;
     }
     .chart-box canvas { flex:1; max-height:280px; }
+    .chart-topic { height:440px; }
     .chart-topic canvas { max-height:none; }
     .tf-max-label {
       position:absolute; top:0.8rem; right:1rem;
@@ -372,6 +373,7 @@
       .network-container { height:380px; }
       .chart-box { height:280px; padding:1rem; }
       .chart-box canvas { max-height:200px; }
+      .chart-topic { height:350px; }
       .modal-section h3 { font-size:0.82rem; }
     }
     /* ═══════ MOBILE: PHONES ONLY ═══════ */
@@ -384,6 +386,7 @@
       .network-container { height:320px; }
       .chart-box { height:250px; padding:0.8rem; }
       .chart-box canvas { max-height:180px; }
+      .chart-topic { height:300px; }
       .dataTables_paginate .paginate_button {
         padding:0.3rem 0.5rem !important; margin:0 1px; min-width:32px; font-size:0.75rem !important;
       }
@@ -460,7 +463,7 @@
     <!-- 2) Topic Distribution -->
     <div class="modal-section">
       <h3>주제별 분포</h3>
-      <div class="chart-box chart-topic" style="height:440px;">
+      <div class="chart-box chart-topic">
         <div id="chartPMWRank" class="pmw-rank"></div>
         <canvas id="chartPMW"></canvas>
       </div>
