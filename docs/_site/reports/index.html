@@ -34,9 +34,36 @@
   <p>연구의 절차적 투명성을 위해 K-NOVA 신어 관측 결과를 시간순으로 기록합니다.</p>
 </div>
 
-
-
 <ul class="report-list">
+  <li>
+    <a href="/K-NOVA/reports/cumulative/" class="report-card cumulative-card">
+      <span class="card-date">📅 2025.01.01. ~ 2025.12.31.</span>
+      <div class="cumulative-title-row">
+        <div class="card-title">📊 누적 관측 결과</div>
+        <div class="summary-neo-badge">
+          <span class="neo-badge-count fmt-num">712</span>
+          <span class="neo-badge-unit">개 신어 관측!</span>
+        </div>
+      </div>
+      <div class="card-summary">12건의 관측 보고를 합산한 누적 결과입니다.</div>
+      <div class="cumulative-stats">
+        <div class="cum-stat">
+          <span class="cum-stat-value fmt-eok" data-total-words="1465789555">-</span>
+          <span class="cum-stat-label">분석 말뭉치</span>
+        </div>
+        <div class="cum-stat-divider"></div>
+        <div class="cum-stat">
+          <span class="cum-stat-value fmt-num">19581112</span>
+          <span class="cum-stat-label">누적 후보군</span>
+        </div>
+        <div class="cum-stat-divider"></div>
+        <div class="cum-stat">
+          <span class="cum-stat-value fmt-num">712</span>
+          <span class="cum-stat-label">누적 신어</span>
+        </div>
+      </div>
+    </a>
+  </li>
   <li>
     <a href="/K-NOVA/reports/202512_report/" class="report-card">
       <span class="card-date">2026.01.01.</span>
@@ -213,9 +240,23 @@
 document.querySelectorAll('.fmt-eok').forEach(function(el) {
   var w = parseInt(el.getAttribute('data-total-words'));
   if (!isNaN(w)) {
-    el.textContent = '📂 문어/웹 언어 ' + (w / 100000000).toFixed(2) + '억 어절';
+    // 카드 태그(.tag) 안에서는 접두사 포함, 배너에서는 값만
+    if (el.classList.contains('tag')) {
+      el.textContent = '📂 문어/웹 언어 ' + (w / 100000000).toFixed(2) + '억 어절';
+    } else {
+      el.textContent = (w / 100000000).toFixed(2) + '억 어절';
+    }
   }
 });
+
+document.querySelectorAll('.fmt-num').forEach(function(el) {
+  var text = el.textContent.trim();
+  var num = Number(text);
+  if (!isNaN(num) && text !== '') {
+    el.textContent = num.toLocaleString('ko-KR');
+  }
+});
+
 </script>
   </main>
 

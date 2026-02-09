@@ -44,6 +44,16 @@ title: K-NOVA
   </div>
 </div>
 
+<div class="section shooting-star-section">
+  <h2>🌠 신어를 발견해 보세요!</h2>
+  <div class="star-stage" id="starStage">
+    <button class="star-btn" id="starBtn" disabled>☄️ 별똥별 관측하기</button>
+    <div class="shooting-star" id="shootingStar"></div>
+    <div class="star-earth"></div>
+    <div id="discoveredNeo" class="discovered-neo"></div>
+  </div>
+</div>
+
 <script>
 const MONTHS = ['2025년 1월','2025년 2월','2025년 3월','2025년 4월','2025년 5월','2025년 6월','2025년 7월','2025년 8월','2025년 9월','2025년 10월','2025년 11월','2025년 12월'];
 const SECTIONS = ['정치','경제','사회','생활/문화','IT/과학','세계','연예','스포츠'];
@@ -54,6 +64,8 @@ const pieColors = [
 
 // 관측자 추천 신어 (수동 설정)
 const OBSERVER_PICK = '디지털 월세';
+
+let neoPool = [];
 
 fetch('{{ "/assets/data/neo_data_712.json" | relative_url }}')
   .then(r => r.json())
@@ -66,6 +78,12 @@ fetch('{{ "/assets/data/neo_data_712.json" | relative_url }}')
       { id: 'featuredRecent', d: recent },
       { id: 'featuredPick', d: pick },
     ].forEach(f => renderFeatured(f.id, f.d));
+
+    // 별똥별용 풀: 빈도 상위 100개 중 기존 3개 제외
+    const excluded = new Set([highFreq['표제어'], recent['표제어'], pick['표제어']]);
+    const sorted = [...data].sort((a, b) => b['단어빈도_전체'] - a['단어빈도_전체']);
+    neoPool = sorted.filter(d => !excluded.has(d['표제어'])).slice(0, 100);
+    document.getElementById('starBtn').disabled = false;
   })
   .catch(err => {
     console.error('데이터 로딩 실패:', err);
@@ -185,6 +203,81 @@ function renderFeatured(containerId, d) {
   });
 
 }
+
+// 별똥별 클릭 이벤트
+document.getElementById('starBtn').addEventListener('click', function() {
+  var btn = this;
+  if (btn.disabled || neoPool.length === 0) return;
+  btn.disabled = true;
+
+  var star = document.getElementById('shootingStar');
+  var neo = document.getElementById('discoveredNeo');
+
+  // 이전 결과 숨김
+  neo.classList.remove('visible');
+  neo.innerHTML = '';
+
+  // 별똥별 애니메이션 시작
+  star.classList.remove('active');
+  void star.offsetWidth; // reflow
+  star.classList.add('active');
+
+  // 착지 임팩트 (별똥별 70% 지점 = 1.2s * 0.70 = 840ms)
+  setTimeout(function() {
+    var stage = document.getElementById('starStage');
+
+    // 화면 흔들림
+    stage.classList.remove('shake');
+    void stage.offsetWidth;
+    stage.classList.add('shake');
+    setTimeout(function() { stage.classList.remove('shake'); }, 280);
+
+    // burst 빛 효과
+    var burst = document.createElement('div');
+    burst.className = 'star-burst';
+    stage.appendChild(burst);
+    setTimeout(function() { burst.remove(); }, 600);
+
+    // 충격파 링
+    var wave = document.createElement('div');
+    wave.className = 'star-shockwave';
+    stage.appendChild(wave);
+    setTimeout(function() { wave.remove(); }, 600);
+
+    // 파편 생성
+    for (var i = 0; i < 12; i++) {
+      var d = document.createElement('div');
+      d.className = 'star-debris';
+      var angle = (Math.PI * 0.1) + (Math.random() * Math.PI * 0.8);
+      var dist = 50 + Math.random() * 80;
+      d.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+      d.style.setProperty('--dy', -Math.sin(angle) * dist + 'px');
+      d.style.setProperty('--dur', (0.35 + Math.random() * 0.35) + 's');
+      d.style.bottom = '85px';
+      d.style.left = '35%';
+      d.style.transform = 'translateX(-50%)';
+      d.style.width = (3 + Math.random() * 3) + 'px';
+      d.style.height = d.style.width;
+      stage.appendChild(d);
+      (function(el) { setTimeout(function() { el.remove(); }, 750); })(d);
+    }
+  }, 840);
+
+  // 착지 직후 카드 표시 (fade-in)
+  setTimeout(function() {
+    star.classList.remove('active');
+
+    // 랜덤 신어 선택
+    var idx = Math.floor(Math.random() * neoPool.length);
+    var chosen = neoPool[idx];
+
+    // featured-neo 래퍼 생성 후 renderFeatured 재사용
+    neo.innerHTML = '<div class="featured-neo" id="discoveredNeoCard"></div>';
+    renderFeatured('discoveredNeoCard', chosen);
+    neo.classList.add('visible');
+    btn.disabled = false;
+  }, 900);
+});
 
 document.querySelectorAll('.fmt-num').forEach(function(el) {
   var text = el.textContent.trim();

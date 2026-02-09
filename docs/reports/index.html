@@ -8,9 +8,92 @@ title: 신어 관측 보고
   <p>연구의 절차적 투명성을 위해 K-NOVA 신어 관측 결과를 시간순으로 기록합니다.</p>
 </div>
 
+{%- comment -%}── 누적 통계 계산 ──{%- endcomment -%}
+{%- assign total_neo = 0 -%}
+{%- assign total_reports = 0 -%}
+{%- assign first_period = "" -%}
+{%- assign last_period = "" -%}
+{%- assign sorted_reports = site.reports | sort: 'date' -%}
+{%- for report in sorted_reports -%}
+  {%- assign total_reports = total_reports | plus: 1 -%}
+  {%- if report.neologism_count -%}
+    {%- assign total_neo = total_neo | plus: report.neologism_count -%}
+  {%- endif -%}
+  {%- if first_period == "" and report.period -%}
+    {%- assign first_period = report.period | split: "~" | first | strip -%}
+  {%- endif -%}
+  {%- if report.period -%}
+    {%- assign last_period = report.period | split: "~" | last | strip -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- assign cum_s_words = 0 -%}
+{%- assign cum_s_articles = 0 -%}
+{%- for item in site.data.sampled_corpus_size_monthly -%}
+  {%- unless item.Topic == "-" -%}
+    {%- assign cum_s_words = cum_s_words | plus: item["N of Words"] -%}
+    {%- assign cum_s_articles = cum_s_articles | plus: item["N of Articles"] -%}
+  {%- endunless -%}
+{%- endfor -%}
+
+{%- assign cum_d_words = 0 -%}
+{%- assign cum_d_articles = 0 -%}
+{%- for item in site.data.discourse_marker_corpus_size_monthly -%}
+  {%- unless item["Discourse Marker"] == "-" -%}
+    {%- assign cum_d_words = cum_d_words | plus: item["N of Words"] -%}
+    {%- assign cum_d_articles = cum_d_articles | plus: item["N of Articles"] -%}
+  {%- endunless -%}
+{%- endfor -%}
+
+{%- assign cum_total_words = cum_s_words | plus: cum_d_words -%}
+{%- assign cum_total_articles = cum_s_articles | plus: cum_d_articles -%}
+
+{%- comment -%}── 파이프라인 누적: 후보군·최종 신어만 합산 ──{%- endcomment -%}
+{%- assign cum_candidates = 0 -%}
+{%- assign cum_final_neo = 0 -%}
+{%- for pair in site.data.filter_and_judge_log_monthly -%}
+  {%- assign steps = pair[1] -%}
+  {%- for step in steps -%}
+    {%- assign sn = step["정제 단계"] -%}
+    {%- assign sv = step["정제 후 항목 수"] -%}
+    {%- if sn == "신어 후보군" -%}{%- assign cum_candidates = cum_candidates | plus: sv -%}
+    {%- elsif sn == "M4-인간 최종 판별" -%}{%- assign cum_final_neo = cum_final_neo | plus: sv -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endfor -%}
+
 {% assign reports = site.reports | sort: 'date' | reverse %}
 {% if reports.size > 0 %}
 <ul class="report-list">
+  <li>
+    <a href="{{ '/reports/cumulative/' | relative_url }}" class="report-card cumulative-card">
+      <span class="card-date">📅 {{ first_period }} ~ {{ last_period }}</span>
+      <div class="cumulative-title-row">
+        <div class="card-title">📊 누적 관측 결과</div>
+        <div class="summary-neo-badge">
+          <span class="neo-badge-count fmt-num">{{ cum_final_neo }}</span>
+          <span class="neo-badge-unit">개 신어 관측!</span>
+        </div>
+      </div>
+      <div class="card-summary">{{ total_reports }}건의 관측 보고를 합산한 누적 결과입니다.</div>
+      <div class="cumulative-stats">
+        <div class="cum-stat">
+          <span class="cum-stat-value fmt-eok" data-total-words="{{ cum_total_words }}">-</span>
+          <span class="cum-stat-label">분석 말뭉치</span>
+        </div>
+        <div class="cum-stat-divider"></div>
+        <div class="cum-stat">
+          <span class="cum-stat-value fmt-num">{{ cum_candidates }}</span>
+          <span class="cum-stat-label">누적 후보군</span>
+        </div>
+        <div class="cum-stat-divider"></div>
+        <div class="cum-stat">
+          <span class="cum-stat-value fmt-num">{{ cum_final_neo }}</span>
+          <span class="cum-stat-label">누적 신어</span>
+        </div>
+      </div>
+    </a>
+  </li>
   {% for report in reports %}
   {%- assign rym = report.yyyymm -%}
   {%- assign r_d_words = 0 -%}
@@ -54,7 +137,21 @@ title: 신어 관측 보고
 document.querySelectorAll('.fmt-eok').forEach(function(el) {
   var w = parseInt(el.getAttribute('data-total-words'));
   if (!isNaN(w)) {
-    el.textContent = '📂 문어/웹 언어 ' + (w / 100000000).toFixed(2) + '억 어절';
+    // 카드 태그(.tag) 안에서는 접두사 포함, 배너에서는 값만
+    if (el.classList.contains('tag')) {
+      el.textContent = '📂 문어/웹 언어 ' + (w / 100000000).toFixed(2) + '억 어절';
+    } else {
+      el.textContent = (w / 100000000).toFixed(2) + '억 어절';
+    }
   }
 });
+
+document.querySelectorAll('.fmt-num').forEach(function(el) {
+  var text = el.textContent.trim();
+  var num = Number(text);
+  if (!isNaN(num) && text !== '') {
+    el.textContent = num.toLocaleString('ko-KR');
+  }
+});
+
 </script>
