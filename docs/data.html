@@ -144,6 +144,20 @@
       font-family:'Pretendard',sans-serif;
     }
     .press-bar small { color:var(--text-muted); }
+    .dp-bar {
+      position:relative; width:80px; height:20px;
+      background:var(--bg-deep); border-radius:4px; overflow:hidden;
+      display:inline-flex; align-items:center; justify-content:center;
+    }
+    .dp-bar-fill {
+      position:absolute; left:0; top:0; bottom:0;
+      background:linear-gradient(90deg, rgba(167,139,250,0.15), rgba(167,139,250,0.4));
+      border-radius:4px;
+    }
+    .dp-bar span {
+      position:relative; font-size:0.72rem; color:#a78bfa; z-index:1;
+      font-family:'Pretendard',sans-serif;
+    }
     .col-cell { display:flex; flex-wrap:wrap; gap:2px; min-width:100px; }
     .col-badge {
       display:inline-block; padding:0.1rem 0.35rem;
@@ -194,7 +208,7 @@
       font-size:0.85rem; color:var(--text-secondary);
       display:flex; flex-wrap:wrap; gap:0.5rem 1.5rem;
     }
-    .stat-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+    .stat-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
     .stat-card {
       background:var(--bg-deep); border-radius:8px; padding:1rem; text-align:center;
     }
@@ -411,8 +425,8 @@
         <th>최초 출현일</th>
         <th>표제어</th>
         <th>최초 출현 기사문</th>
-        <th>총빈도</th>
-        <th>출현 매체 수</th><th>출현 주제 수</th><th>출현 장르 수</th>
+        <th>총빈도</th><th>제목 빈도 비율</th>
+        <th>출현 매체 수</th><th>출현 주제 수</th><th>출현 장르 수</th><th>DP</th>
         <th>2025년 1월</th><th>2025년 2월</th><th>2025년 3월</th><th>2025년 4월</th>
         <th>2025년 5월</th><th>2025년 6월</th><th>2025년 7월</th><th>2025년 8월</th>
         <th>2025년 9월</th><th>2025년 10월</th><th>2025년 11월</th><th>2025년 12월</th>
@@ -549,9 +563,11 @@ function initTable() {
       '<span class="neo-link" data-neo="' + d['표제어'] + '">' + d['표제어'] + '</span>',
       titleText,
       '<span class="tf-total">' + totalFreq.toLocaleString() + '</span>',
+      '<span class="tf-meta">' + (d['단어빈도_제목_비율'] != null ? d['단어빈도_제목_비율'].toFixed(1) : '-') + '%</span>',
       '<div class="press-bar"><div class="press-bar-fill" style="width:' + (d['출현 매체 수'] / ALL_PRESS.length * 100).toFixed(1) + '%"></div><span>' + d['출현 매체 수'] + '<small>/' + ALL_PRESS.length + '</small></span></div>',
       '<span class="tf-meta">' + d['출현 주제 수'] + '</span>',
       '<span class="tf-meta">' + d['출현 장르 수'] + '</span>',
+      '<div class="dp-bar"><div class="dp-bar-fill" style="width:' + (d['DP'] != null ? (d['DP'] * 100).toFixed(1) : '0') + '%"></div><span>' + (d['DP'] != null ? d['DP'].toFixed(4) : '-') + '</span></div>',
       ...tfCells,
     ];
   });
@@ -570,10 +586,10 @@ function initTable() {
       zeroRecords: "일치하는 신어가 없습니다",
     },
     columnDefs: [
-      { targets: [3,5,6,7,8,9,10,11,12,13,14,15,16,17,18], className: 'tf-cell', orderable: true },
-      { targets: [4], type: 'html-num', orderable: true },
+      { targets: [3,4,6,7,9,10,11,12,13,14,15,16,17,18,19,20], className: 'tf-cell', orderable: true },
+      { targets: [5,8], type: 'html-num', orderable: true },
       { targets: [2], orderable: false },
-      { targets: [7,8,9,10,11,12,13,14,15,16,17,18], visible: window.innerWidth > 768 },
+      { targets: [9,10,11,12,13,14,15,16,17,18,19,20], visible: window.innerWidth > 768 },
     ],
     scrollX: true,
   });
@@ -759,6 +775,10 @@ function openModal(d) {
       '<div class="stat-label">총빈도</div>' +
     '</div>' +
     '<div class="stat-card">' +
+      '<div class="stat-value">' + (d['단어빈도_제목_비율'] != null ? d['단어빈도_제목_비율'].toFixed(1) : '-') + '<span class="stat-unit">%</span></div>' +
+      '<div class="stat-label">제목 빈도 비율</div>' +
+    '</div>' +
+    '<div class="stat-card">' +
       '<div class="stat-value">' + d['출현 매체 수'] + '<span class="stat-unit"> / ' + ALL_PRESS.length + '</span></div>' +
       '<div class="stat-pct">' + d['출현 매체 비율'] + '%</div>' +
       '<div class="stat-label">출현 매체 수</div>' +
@@ -772,6 +792,11 @@ function openModal(d) {
       '<div class="stat-value">' + d['출현 장르 수'] + '<span class="stat-unit"> / 2</span></div>' +
       '<div class="stat-pct">' + (d['출현 장르 수'] * 50) + '%</div>' +
       '<div class="stat-label">출현 장르 수</div>' +
+    '</div>' +
+    '<div class="stat-card">' +
+      '<div class="stat-value">' + (d['DP'] != null ? d['DP'].toFixed(4) : '-') + '</div>' +
+      '<div class="stat-pct"><div class="dp-bar" style="margin:0 auto"><div class="dp-bar-fill" style="width:' + (d['DP'] != null ? (d['DP'] * 100).toFixed(1) : '0') + '%"></div></div></div>' +
+      '<div class="stat-label">DP (분산도)</div>' +
     '</div>';
 
   // Galaxy
@@ -1192,9 +1217,9 @@ function renderExamples(neoKey, headword) {
     el.innerHTML = '<p class="no-data">예문이 없습니다.</p>';
     return;
   }
-  // Sort by date desc
+  // Sort by date asc (earliest first)
   items = items.slice().sort(function(a, b) {
-    return b.clean_date.localeCompare(a.clean_date);
+    return a.clean_date.localeCompare(b.clean_date);
   });
   var escaped = headword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   var re = new RegExp('(' + escaped + ')', 'gi');

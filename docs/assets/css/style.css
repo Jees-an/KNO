@@ -607,16 +607,6 @@ th {
   height: 240px !important;
 }
 
-.featured-chart-box .home-galaxy-container,
-.featured-chart-box .home-network-container {
-  flex: 1;
-  min-height: 0;
-}
-
-.home-galaxy-container canvas,
-.home-network-container canvas {
-  height: 100% !important;
-}
 
 /* ── INTRO HEADER (ABOUT) ── */
 .intro-header {
