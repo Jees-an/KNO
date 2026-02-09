@@ -10,6 +10,37 @@ title: K-NOVA
   {%- endif -%}
 {%- endfor -%}
 
+<style>
+  .home-galaxy-container {
+    position:relative; width:100%;
+    background:radial-gradient(ellipse at center, #0d1526 0%, #080c18 70%, #050810 100%);
+    border-radius:8px; overflow:hidden;
+  }
+  .home-galaxy-container canvas { width:100%; height:100%; display:block; }
+  .home-galaxy-tooltip {
+    position:absolute; display:none;
+    background:rgba(17,24,39,0.95); border:1px solid var(--accent-nova);
+    border-radius:6px; padding:0.4rem 0.7rem;
+    color:var(--text-primary); font-size:0.8rem;
+    pointer-events:none; white-space:nowrap; z-index:5;
+  }
+  .galaxy-summary { font-size:0.8rem; color:var(--text-secondary); margin-bottom:0.6rem; flex-shrink:0; }
+  .galaxy-total { color:var(--text-primary); font-weight:500; }
+  .galaxy-active { color:var(--accent-nova); font-weight:700; }
+  .home-network-container {
+    position:relative; width:100%;
+    background:radial-gradient(ellipse at center, #0d1526 0%, #080c18 70%, #050810 100%);
+    border-radius:8px; overflow:hidden;
+  }
+  .home-network-container canvas { width:100%; height:100%; display:block; }
+  .home-network-tooltip {
+    position:absolute; display:none;
+    background:rgba(17,24,39,0.95); border:1px solid var(--accent-nova);
+    border-radius:6px; padding:0.4rem 0.7rem;
+    color:var(--text-primary); font-size:0.8rem;
+    pointer-events:none; white-space:nowrap; z-index:5;
+  }
+</style>
 <div class="hero">
   <img src="{{ '/img/K-NOVA.png' | relative_url }}" alt="K-NOVA" class="hero-logo">
   <p class="hero-stat">2025년 1월 이후, 누적 관측 신어 <span class="fmt-num">{{ neo_total }}</span>개!</p>
@@ -55,15 +86,16 @@ const pieColors = [
 // 관측자 추천 신어 (수동 설정)
 const OBSERVER_PICK = '디지털 월세';
 
-fetch('{{ "/assets/data/neo_data_712.json" | relative_url }}')
-  .then(r => r.json())
-  .then(data => {
+let ALL_PRESS = [];
+let HOME_COLLOCATES = null;
+
+Promise.all([
+  fetch('{{ "/assets/data/neo_data_712.json" | relative_url }}').then(r => r.json()),
+  fetch('{{ "/assets/data/meta_712.json" | relative_url }}').then(r => r.json()),
+]).then(([data, meta]) => {
+  ALL_PRESS = meta.all_press || [];
     // 가장 높은 빈도
-    const highFreq = [...data].sort((a, b) => {
-      const sumA = a['월별 상대빈도'].reduce((x, y) => x + y, 0);
-      const sumB = b['월별 상대빈도'].reduce((x, y) => x + y, 0);
-      return sumB - sumA;
-    })[0];
+    const highFreq = [...data].sort((a, b) => b['단어빈도_전체'] - a['단어빈도_전체'])[0];
 
     // 가장 최근
     const recent = [...data].sort((a, b) => {
@@ -73,9 +105,22 @@ fetch('{{ "/assets/data/neo_data_712.json" | relative_url }}')
     // 관측자 추천
     const pick = data.find(d => d['표제어'] === OBSERVER_PICK) || data[0];
 
-    renderFeatured('featuredHighFreq', highFreq);
-    renderFeatured('featuredRecent', recent);
-    renderFeatured('featuredPick', pick);
+    var featured = [
+      { id: 'featuredHighFreq', d: highFreq },
+      { id: 'featuredRecent', d: recent },
+      { id: 'featuredPick', d: pick },
+    ];
+    featured.forEach(f => renderFeatured(f.id, f.d));
+
+    // Lazy load collocates for network
+    fetch('{{ "/assets/data/collocates_712.json" | relative_url }}')
+      .then(r => r.json())
+      .then(col => {
+        HOME_COLLOCATES = col;
+        featured.forEach(f => {
+          renderHomeNetwork(f.id + 'NetworkAll', f.d['신어'], 'ALL');
+        });
+      }).catch(() => {});
   })
   .catch(err => {
     console.error('데이터 로딩 실패:', err);
@@ -83,10 +128,11 @@ fetch('{{ "/assets/data/neo_data_712.json" | relative_url }}')
 
 function renderFeatured(containerId, d) {
   const container = document.getElementById(containerId);
-  const totalFreq = d['월별 상대빈도'].reduce((a, b) => a + b, 0);
+  const totalFreq = d['단어빈도_전체'];
+  const monthlyFreq = d['월별 상대빈도'].map(v => Math.round(v));
 
-  const maxVal = Math.max(...d['월별 상대빈도']);
-  const maxIdx = d['월별 상대빈도'].indexOf(maxVal);
+  const maxVal = Math.max(...monthlyFreq);
+  const maxIdx = monthlyFreq.indexOf(maxVal);
   const maxLabel = '최고 빈도(' + MONTHS[maxIdx] + '): <span style="color:#60a5fa;font-weight:600">' + maxVal.toLocaleString() + '회</span>';
 
   container.innerHTML = `
@@ -105,6 +151,23 @@ function renderFeatured(containerId, d) {
         <canvas id="${containerId}ChartPMW"></canvas>
       </div>
     </div>
+    <div class="featured-neo-charts">
+      <div class="featured-chart-box">
+        <h4>🌌 매체 사용 분포</h4>
+        <p class="galaxy-summary">전체 <span class="galaxy-total">${ALL_PRESS.length}</span>개 매체 중 <span class="galaxy-active">${d['출현 매체 수']}</span>개 매체(${d['출현 매체 비율']}%)에서 출현</p>
+        <div class="home-galaxy-container">
+          <canvas id="${containerId}Galaxy"></canvas>
+          <div class="home-galaxy-tooltip" id="${containerId}GalaxyTip"></div>
+        </div>
+      </div>
+      <div class="featured-chart-box">
+        <h4>🔗 공기어 네트워크</h4>
+        <div class="home-network-container" id="${containerId}NetworkAllWrap">
+          <canvas id="${containerId}NetworkAll"></canvas>
+          <div class="home-network-tooltip" id="${containerId}NetworkAllTip"></div>
+        </div>
+      </div>
+    </div>
   `;
 
   // 월별 빈도 차트
@@ -113,7 +176,7 @@ function renderFeatured(containerId, d) {
     data: {
       labels: MONTHS,
       datasets: [{
-        data: d['월별 상대빈도'],
+        data: monthlyFreq,
         backgroundColor: 'rgba(126,232,250,0.15)',
         borderColor: '#7ee8fa',
         borderWidth: 2,
@@ -192,6 +255,290 @@ function renderFeatured(containerId, d) {
       }
     }
   });
+
+  // Galaxy (static render)
+  setTimeout(() => renderHomeGalaxy(containerId + 'Galaxy', containerId + 'GalaxyTip', d['출현 매체명'] || []), 100);
+}
+
+/* ── Galaxy helpers ── */
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+var homeStarPositions = null;
+function getStarPositions(count) {
+  if (homeStarPositions) return homeStarPositions;
+  var rng = mulberry32(42);
+  var positions = [];
+  for (var i = 0; i < count; i++) {
+    var u1 = rng(), u2 = rng();
+    var r = Math.sqrt(-2 * Math.log(Math.max(u1, 0.001))) * 0.28;
+    var theta = 2 * Math.PI * u2;
+    var x = 0.5 + r * Math.cos(theta);
+    var y = 0.5 + r * Math.sin(theta);
+    x = Math.max(0.05, Math.min(0.95, x));
+    y = Math.max(0.08, Math.min(0.92, y));
+    positions.push({ x: x, y: y, phase: rng() * Math.PI * 2 });
+  }
+  homeStarPositions = positions;
+  return positions;
+}
+
+function renderHomeGalaxy(canvasId, tipId, activeNames) {
+  var canvas = document.getElementById(canvasId);
+  if (!canvas || ALL_PRESS.length === 0) return;
+  var container = canvas.parentElement;
+  var dpr = window.devicePixelRatio || 1;
+  canvas.width = container.clientWidth * dpr;
+  canvas.height = container.clientHeight * dpr;
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  var w = container.clientWidth, h = container.clientHeight;
+
+  var positions = getStarPositions(ALL_PRESS.length);
+  var activeSet = new Set(activeNames || []);
+
+  // Pick ~10 labels
+  var activeIdx = [];
+  for (var i = 0; i < ALL_PRESS.length; i++) {
+    if (activeSet.has(ALL_PRESS[i])) activeIdx.push(i);
+  }
+  var labelSet = new Set();
+  var lc = Math.min(10, activeIdx.length);
+  if (lc > 0) {
+    var step = activeIdx.length / lc;
+    for (var i = 0; i < lc; i++) labelSet.add(activeIdx[Math.floor(i * step)]);
+  }
+
+  // Animate
+  var animId = null;
+  function draw(time) {
+    ctx.clearRect(0, 0, w, h);
+    for (var i = 0; i < positions.length; i++) {
+      var pos = positions[i];
+      var px = pos.x * w, py = pos.y * h;
+      if (activeSet.has(ALL_PRESS[i])) {
+        var pulse = 0.7 + 0.3 * Math.sin(time * 0.002 + pos.phase);
+        var radius = 6 * pulse;
+        ctx.save();
+        ctx.shadowColor = '#7ee8fa';
+        ctx.shadowBlur = 20 * pulse;
+        ctx.beginPath();
+        ctx.arc(px, py, radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(126,232,250,' + (0.8 * pulse) + ')';
+        ctx.fill();
+        ctx.restore();
+        ctx.beginPath();
+        ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+        if (labelSet.has(i)) {
+          ctx.save();
+          ctx.font = '10px Pretendard';
+          ctx.fillStyle = 'rgba(126,232,250,0.85)';
+          ctx.textAlign = 'center';
+          ctx.fillText(ALL_PRESS[i], px, py - radius - 6);
+          ctx.restore();
+        }
+      } else {
+        var twinkle = 0.08 + 0.06 * Math.sin(time * 0.001 + pos.phase);
+        ctx.beginPath();
+        ctx.arc(px, py, 1.2, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,' + twinkle + ')';
+        ctx.fill();
+      }
+    }
+    animId = requestAnimationFrame(draw);
+  }
+  draw(0);
+
+  canvas.onmousemove = function(e) {
+    var rect = canvas.getBoundingClientRect();
+    var mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    var tip = document.getElementById(tipId);
+    var found = false;
+    for (var i = 0; i < positions.length; i++) {
+      var dx = mx - positions[i].x * w, dy = my - positions[i].y * h;
+      if (dx * dx + dy * dy < 225) {
+        tip.textContent = ALL_PRESS[i] + (activeSet.has(ALL_PRESS[i]) ? '' : ' (미출현)');
+        tip.style.display = 'block';
+        tip.style.left = Math.min(mx + 12, w - 120) + 'px';
+        tip.style.top = (my - 10) + 'px';
+        tip.style.borderColor = activeSet.has(ALL_PRESS[i]) ? '#7ee8fa' : '#1e2d4a';
+        found = true;
+        break;
+      }
+    }
+    if (!found) tip.style.display = 'none';
+  };
+  canvas.onmouseleave = function() { document.getElementById(tipId).style.display = 'none'; };
+}
+
+/* ── Collocate Network helpers ── */
+var POS_COLOR = { NNG: '#7ee8fa', NNP: '#a78bfa', VV: '#f0c27a', VA: '#34d399', MAG: '#f87171' };
+
+function renderHomeNetwork(canvasId, neoKey, posFilter) {
+  var canvas = document.getElementById(canvasId);
+  if (!canvas || !HOME_COLLOCATES || !HOME_COLLOCATES[neoKey]) {
+    if (canvas) {
+      var ctx2 = canvas.getContext('2d');
+      var dpr2 = window.devicePixelRatio || 1;
+      canvas.width = canvas.parentElement.clientWidth * dpr2;
+      canvas.height = canvas.parentElement.clientHeight * dpr2;
+      ctx2.scale(dpr2, dpr2);
+      ctx2.fillStyle = '#4a5568';
+      ctx2.font = '13px Pretendard';
+      ctx2.textAlign = 'center';
+      ctx2.fillText('공기어 데이터 로딩 중...', canvas.parentElement.clientWidth / 2, canvas.parentElement.clientHeight / 2);
+    }
+    return;
+  }
+  var data = HOME_COLLOCATES[neoKey];
+  var aggMap = {};
+  Object.keys(data).forEach(function(month) {
+    if (month === '전체') return;
+    var grams = data[month]['1gram'] || [];
+    grams.forEach(function(g) {
+      var k = g.form + '|' + g.pos;
+      if (!aggMap[k]) aggMap[k] = { form: g.form, pos: g.pos, freq: 0 };
+      aggMap[k].freq += g.freq;
+    });
+  });
+  var allItems = Object.values(aggMap).sort(function(a, b) { return b.freq - a.freq; });
+
+  var filtered = posFilter === 'ALL'
+    ? allItems.filter(function(x) { return POS_COLOR[x.pos]; }).slice(0, 40)
+    : allItems.filter(function(x) { return x.pos === posFilter; }).slice(0, 30);
+
+  var container = canvas.parentElement;
+  var dpr = window.devicePixelRatio || 1;
+  var w = container.clientWidth, h = container.clientHeight;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  if (filtered.length === 0) {
+    ctx.fillStyle = '#4a5568';
+    ctx.font = '14px Pretendard';
+    ctx.textAlign = 'center';
+    ctx.fillText('해당 품사의 공기어가 없습니다.', w / 2, h / 2);
+    return;
+  }
+
+  var maxFreq = filtered[0].freq;
+  var cx = w / 2, cy = h / 2;
+  var tipId = canvasId + 'Tip';
+  // Find headword from neoKey - get 표제어
+  var headword = neoKey;
+
+  var nodes = [{ x: cx, y: cy, vx: 0, vy: 0, r: 16, label: headword, pos: 'CENTER', freq: maxFreq, fixed: true }];
+  var rng = mulberry32(7);
+  for (var i = 0; i < filtered.length; i++) {
+    var angle = rng() * Math.PI * 2;
+    var normFreq = filtered[i].freq / maxFreq;
+    var baseDist = 40 + normFreq * 30;
+    var dist = baseDist + rng() * 120 + 20;
+    var r = 5 + normFreq * 12;
+    nodes.push({
+      x: cx + Math.cos(angle) * dist,
+      y: cy + Math.sin(angle) * dist,
+      vx: 0, vy: 0, r: r,
+      label: filtered[i].form, pos: filtered[i].pos,
+      freq: filtered[i].freq, fixed: false,
+      baseDist: baseDist + rng() * 60
+    });
+  }
+
+  // Force simulation (run to completion)
+  var damping = 0.82;
+  for (var s = 0; s < 200; s++) {
+    for (var i = 0; i < nodes.length; i++) {
+      if (nodes[i].fixed) continue;
+      var n = nodes[i];
+      var dx = cx - n.x, dy = cy - n.y;
+      var d = Math.sqrt(dx * dx + dy * dy) || 1;
+      var targetDist = n.baseDist;
+      var force = (d - targetDist) * 0.003;
+      n.vx += (dx / d) * force;
+      n.vy += (dy / d) * force;
+      for (var j = 0; j < nodes.length; j++) {
+        if (i === j) continue;
+        var ox = n.x - nodes[j].x, oy = n.y - nodes[j].y;
+        var od = Math.sqrt(ox * ox + oy * oy) || 1;
+        var minDist = n.r + nodes[j].r + 12;
+        if (od < minDist) {
+          var push = (minDist - od) * 0.15;
+          n.vx += (ox / od) * push;
+          n.vy += (oy / od) * push;
+        }
+      }
+      n.vx *= damping;
+      n.vy *= damping;
+      n.x += n.vx;
+      n.y += n.vy;
+      n.x = Math.max(n.r + 10, Math.min(w - n.r - 10, n.x));
+      n.y = Math.max(n.r + 10, Math.min(h - n.r - 10, n.y));
+    }
+  }
+
+  // Draw edges
+  for (var i = 1; i < nodes.length; i++) {
+    var n = nodes[i];
+    var alpha = 0.1 + (n.freq / maxFreq) * 0.25;
+    ctx.beginPath();
+    ctx.moveTo(nodes[0].x, nodes[0].y);
+    ctx.lineTo(n.x, n.y);
+    ctx.strokeStyle = 'rgba(126,232,250,' + alpha + ')';
+    ctx.lineWidth = 0.5 + (n.freq / maxFreq) * 1.5;
+    ctx.stroke();
+  }
+  // Draw nodes
+  for (var i = 0; i < nodes.length; i++) {
+    var n = nodes[i];
+    var color = n.fixed ? '#7ee8fa' : (POS_COLOR[n.pos] || '#8896b0');
+    ctx.save();
+    ctx.shadowColor = color;
+    ctx.shadowBlur = n.fixed ? 20 : 8;
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.globalAlpha = n.fixed ? 0.9 : 0.7;
+    ctx.fill();
+    ctx.restore();
+    ctx.fillStyle = '#fff';
+    ctx.globalAlpha = 1;
+    ctx.font = (n.fixed ? 'bold 13px' : (n.r > 12 ? '11px' : '9px')) + ' Pretendard';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(n.label, n.x, n.fixed ? n.y : n.y + n.r + 10);
+  }
+
+  // Hover tooltip
+  canvas.onmousemove = function(e) {
+    var rect = canvas.getBoundingClientRect();
+    var mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    var tip = document.getElementById(tipId);
+    var found = false;
+    for (var i = 1; i < nodes.length; i++) {
+      var dx = mx - nodes[i].x, dy = my - nodes[i].y;
+      if (dx * dx + dy * dy < (nodes[i].r + 5) * (nodes[i].r + 5)) {
+        tip.innerHTML = '<strong>' + nodes[i].label + '</strong> (' + nodes[i].pos + ')<br>빈도: ' + nodes[i].freq.toLocaleString();
+        tip.style.display = 'block';
+        tip.style.left = Math.min(mx + 12, w - 140) + 'px';
+        tip.style.top = (my - 10) + 'px';
+        found = true;
+        break;
+      }
+    }
+    if (!found) tip.style.display = 'none';
+  };
+  canvas.onmouseleave = function() { document.getElementById(tipId).style.display = 'none'; };
 }
 
 document.querySelectorAll('.fmt-num').forEach(function(el) {

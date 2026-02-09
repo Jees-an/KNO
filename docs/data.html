@@ -128,35 +128,104 @@
     .tf-total { color:var(--accent-warm); font-weight:700; }
     .tf-meta { color:var(--accent-purple); }
     .tf-max { color:#60a5fa; font-weight:700; }
+    /* Press bar & Collocate badges */
+    .press-bar {
+      position:relative; width:80px; height:20px;
+      background:var(--bg-deep); border-radius:4px; overflow:hidden;
+      display:inline-flex; align-items:center; justify-content:center;
+    }
+    .press-bar-fill {
+      position:absolute; left:0; top:0; bottom:0;
+      background:linear-gradient(90deg, rgba(126,232,250,0.15), rgba(126,232,250,0.35));
+      border-radius:4px;
+    }
+    .press-bar span {
+      position:relative; font-size:0.72rem; color:var(--accent-nova); z-index:1;
+      font-family:'Pretendard',sans-serif;
+    }
+    .press-bar small { color:var(--text-muted); }
+    .col-cell { display:flex; flex-wrap:wrap; gap:2px; min-width:100px; }
+    .col-badge {
+      display:inline-block; padding:0.1rem 0.35rem;
+      border-radius:3px; font-size:0.68rem; line-height:1.4; white-space:nowrap;
+    }
+    .col-nng { background:rgba(126,232,250,0.12); color:#7ee8fa; }
+    .col-va { background:rgba(52,211,153,0.12); color:#34d399; }
+    .col-empty { color:var(--text-muted); font-size:0.7rem; }
+    .col-loading { color:var(--text-muted); font-size:0.7rem; }
+    /* ── MODAL ── */
     .modal-overlay {
       display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-      background:rgba(0,0,0,0.7); z-index:200; backdrop-filter:blur(4px);
-      justify-content:center; align-items:center;
+      background:rgba(0,0,0,0.85); z-index:200; backdrop-filter:blur(6px);
+      overflow-y:auto; -webkit-overflow-scrolling:touch;
     }
-    .modal-overlay.active { display:flex; }
+    .modal-overlay.active { display:block; }
     .modal {
-      background:var(--bg-card); border:1px solid var(--border); border-radius:12px;
-      width:95%; max-width:1600px; height:auto; padding:2.5rem;
-      position:relative;
+      background:transparent; width:100%; max-width:900px; margin:0 auto;
+      padding:3rem 2rem 4rem; position:relative;
     }
     .modal-close {
-      position:absolute; top:1rem; right:1.2rem; background:none; border:none;
-      color:var(--text-muted); font-size:1.5rem; cursor:pointer; line-height:1;
+      position:fixed; top:1.2rem; right:1.5rem; z-index:210;
+      background:rgba(17,24,39,0.8); border:1px solid var(--border);
+      border-radius:50%; width:40px; height:40px;
+      color:var(--text-muted); font-size:1.3rem; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      backdrop-filter:blur(8px); transition:all 0.2s;
     }
-    .modal-close:hover { color:var(--text-primary); }
-    .modal h2 {
+    .modal-close:hover { color:var(--text-primary); border-color:var(--accent-nova); }
+    .modal-section {
+      background:var(--bg-card); border:1px solid var(--border); border-radius:12px;
+      padding:2rem; margin-bottom:1.5rem;
+    }
+    .modal-section h3 {
+      font-size:0.95rem; font-weight:600; color:var(--accent-glow);
+      margin-bottom:1.2rem; padding-bottom:0.6rem; border-bottom:1px solid var(--border);
+    }
+    .modal-hero h2 {
       font-family:'Pretendard', sans-serif; font-size:1.3rem; font-weight:800; color:var(--accent-nova);
-      margin-bottom:0.5rem;
+      margin-bottom:0.3rem;
     }
+    .modal-hero .hero-article {
+      font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;
+    }
+    .modal-hero .hero-article a { color:var(--text-secondary); text-decoration:none; }
+    .modal-hero .hero-article a:hover { color:var(--accent-nova); }
     .modal-meta {
-      font-size:0.85rem; color:var(--text-secondary); margin-bottom:1.5rem;
-      padding-bottom:1rem; border-bottom:1px solid var(--border);
+      font-size:0.85rem; color:var(--text-secondary);
+      display:flex; flex-wrap:wrap; gap:0.5rem 1.5rem;
     }
-    .modal-meta span { margin-right:1.5rem; }
-    .chart-section { margin-bottom:2rem; }
-    .chart-section h3 {
-      font-size:0.9rem; font-weight:500; color:var(--accent-glow); margin-bottom:0.8rem;
+    .stat-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+    .stat-card {
+      background:var(--bg-deep); border-radius:8px; padding:1rem; text-align:center;
     }
+    .stat-value { font-size:1.4rem; font-weight:700; color:var(--accent-nova); }
+    .stat-value .stat-unit { font-size:0.75rem; font-weight:400; color:var(--text-muted); }
+    .stat-pct { font-size:0.8rem; color:var(--accent-warm); margin-top:0.2rem; }
+    .stat-label { font-size:0.75rem; color:var(--text-secondary); margin-top:0.3rem; }
+    /* Galaxy */
+    .galaxy-summary { font-size:0.85rem; color:var(--text-secondary); margin-bottom:1rem; }
+    .galaxy-total { color:var(--text-primary); font-weight:500; }
+    .galaxy-active { color:var(--accent-nova); font-weight:700; }
+    .galaxy-container {
+      position:relative; width:100%; height:420px;
+      background:radial-gradient(ellipse at center, #0d1526 0%, #080c18 70%, #050810 100%);
+      border-radius:8px; overflow:hidden;
+    }
+    #galaxyCanvas { width:100%; height:100%; display:block; }
+    .galaxy-tooltip {
+      position:absolute; display:none;
+      background:rgba(17,24,39,0.95); border:1px solid var(--accent-nova);
+      border-radius:6px; padding:0.4rem 0.7rem;
+      color:var(--text-primary); font-size:0.8rem;
+      pointer-events:none; white-space:nowrap; z-index:5;
+    }
+    /* Charts */
+    .chart-box {
+      background:var(--bg-deep); border-radius:8px; padding:1.5rem; height:350px;
+      display:flex; flex-direction:column; overflow:hidden; position:relative;
+    }
+    .chart-box canvas { flex:1; max-height:280px; }
+    .chart-topic canvas { max-height:none; }
     .tf-max-label {
       position:absolute; top:0.8rem; right:1rem;
       font-size:0.75rem; color:var(--accent-nova); text-align:right;
@@ -168,11 +237,64 @@
       display:none;
     }
     .pmw-rank span { color:#fff; font-weight:600; }
-    .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-bottom:1.5rem; align-items:start; }
-    .chart-box { background:var(--bg-deep); border-radius:8px; padding:1.5rem; height:350px; display:flex; flex-direction:column; overflow:hidden; }
-    .chart-box .chart-section { flex:1; display:flex; flex-direction:column; min-height:0; }
-    .chart-box .chart-section h3 { flex-shrink:0; }
-    .chart-box canvas { flex:1; max-height:250px; }
+    /* Tabs */
+    .tab-bar { display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap; }
+    .tab-btn {
+      background:var(--bg-deep); border:1px solid var(--border); border-radius:6px;
+      color:var(--text-secondary); padding:0.4rem 0.8rem; font-size:0.8rem;
+      cursor:pointer; font-family:var(--font-body); transition:all 0.2s;
+    }
+    .tab-btn:hover { border-color:var(--accent-nova); color:var(--text-primary); }
+    .tab-btn.active {
+      background:rgba(126,232,250,0.1); border-color:var(--accent-nova);
+      color:var(--accent-nova); font-weight:500;
+    }
+    .tab-content { min-height:60px; }
+    /* Network */
+    .network-container {
+      position:relative; width:100%; height:500px;
+      background:radial-gradient(ellipse at center, #0d1526 0%, #080c18 70%, #050810 100%);
+      border-radius:8px; overflow:hidden;
+    }
+    #networkCanvas { width:100%; height:100%; display:block; }
+    .network-tooltip {
+      position:absolute; display:none;
+      background:rgba(17,24,39,0.95); border:1px solid var(--accent-nova);
+      border-radius:6px; padding:0.4rem 0.7rem;
+      color:var(--text-primary); font-size:0.8rem;
+      pointer-events:none; white-space:nowrap; z-index:5;
+    }
+    /* Collocate table */
+    .collocate-table { width:100%; border-collapse:collapse; }
+    .collocate-table th {
+      text-align:left; color:var(--accent-nova); font-size:0.78rem; font-weight:500;
+      padding:0.5rem 0.6rem; border-bottom:1px solid var(--border);
+    }
+    .collocate-table th:last-child { text-align:right; }
+    .collocate-table td {
+      padding:0.4rem 0.6rem; font-size:0.82rem; border-bottom:1px solid rgba(30,45,74,0.3);
+      color:var(--text-secondary);
+    }
+    .collocate-table td:first-child { color:var(--text-muted); width:40px; }
+    .collocate-table td:nth-child(3) { color:var(--text-muted); font-size:0.75rem; }
+    .collocate-table td:last-child { color:var(--accent-warm); font-weight:500; text-align:right; }
+    /* Examples */
+    .example-item {
+      padding:0.8rem 0; border-bottom:1px solid rgba(30,45,74,0.3);
+    }
+    .example-item:last-child { border-bottom:none; }
+    .example-meta { font-size:0.75rem; color:var(--text-muted); margin-bottom:0.3rem; }
+    .example-meta .example-press { color:var(--accent-purple); margin-right:0.8rem; }
+    .example-sentence {
+      font-size:0.85rem; color:var(--text-secondary); cursor:pointer;
+      text-decoration:none; display:block; line-height:1.6;
+    }
+    .example-sentence:hover { color:var(--text-primary); }
+    .example-sentence mark {
+      background:rgba(126,232,250,0.2); color:var(--accent-nova);
+      padding:0.1rem 0.2rem; border-radius:2px;
+    }
+    .no-data { color:var(--text-muted); font-size:0.85rem; padding:1rem 0; }
     .site-footer {
       text-align:center; padding:2rem; border-top:1px solid var(--border);
       color:var(--text-muted); font-size:0.8rem; margin-top:3rem;
@@ -227,27 +349,25 @@
       table.dataTable thead th { font-size:0.75rem; padding:0.6rem 0.4rem !important; }
       table.dataTable tbody td { font-size:0.75rem; padding:0.5rem 0.4rem !important; }
       /* ── MODAL ── */
-      .modal {
-        width:98%; padding:1.2rem; max-height:90vh; overflow-y:auto;
-      }
-      .modal h2 { font-size:1.1rem; padding-right:2rem; }
-      .modal-close {
-        font-size:1.8rem; top:0.8rem; right:0.8rem; padding:0.3rem;
-        min-width:44px; min-height:44px; display:flex; align-items:center; justify-content:center;
-      }
-      .modal-meta { font-size:0.78rem; margin-bottom:1rem; padding-bottom:0.8rem; }
-      .modal-meta span { display:inline-block; margin-right:0.8rem; margin-bottom:0.3rem; }
-      .chart-row { grid-template-columns:1fr; gap:1rem; }
+      .modal { padding:1rem 0.8rem 3rem; }
+      .modal-section { padding:1.2rem; margin-bottom:1rem; }
+      .modal-hero h2 { font-size:1.1rem; padding-right:2rem; }
+      .modal-close { top:0.8rem; right:0.8rem; width:44px; height:44px; font-size:1.5rem; }
+      .stat-cards { grid-template-columns:repeat(2,1fr); }
+      .galaxy-container { height:300px; }
+      .network-container { height:380px; }
       .chart-box { height:280px; padding:1rem; }
       .chart-box canvas { max-height:200px; }
-      .chart-section h3 { font-size:0.82rem; }
+      .modal-section h3 { font-size:0.82rem; }
     }
     /* ═══════ MOBILE: PHONES ONLY ═══════ */
     @media (max-width:480px) {
       .top-nav { padding:0.8rem 1rem; }
       .container { padding:0.8rem; }
-      .modal { width:100%; border-radius:8px; padding:1rem; }
-      .modal h2 { font-size:1rem; }
+      .modal-section { padding:1rem; border-radius:8px; }
+      .modal-hero h2 { font-size:1rem; }
+      .galaxy-container { height:250px; }
+      .network-container { height:320px; }
       .chart-box { height:250px; padding:0.8rem; }
       .chart-box canvas { max-height:180px; }
       .dataTables_paginate .paginate_button {
@@ -303,25 +423,62 @@
 </div>
 
 <div class="modal-overlay" id="modalOverlay">
+  <button class="modal-close" id="modalClose">&times;</button>
   <div class="modal">
-    <button class="modal-close" id="modalClose">&times;</button>
-    <h2 id="modalTitle"></h2>
-    <div class="modal-meta" id="modalMeta"></div>
-    <div class="chart-row">
-      <div class="chart-box" style="position:relative;">
-        <div class="chart-section">
-          <h3>📈 월별 상대빈도</h3>
-          <div id="chartTFMax" class="tf-max-label"></div>
-          <canvas id="chartTF"></canvas>
-        </div>
+    <!-- Hero -->
+    <div class="modal-section modal-hero">
+      <h2 id="modalTitle"></h2>
+      <p class="hero-article" id="modalArticle"></p>
+      <div class="modal-meta" id="modalMeta"></div>
+    </div>
+    <!-- Stat Cards -->
+    <div class="modal-section">
+      <div class="stat-cards" id="statCards"></div>
+    </div>
+    <!-- 1) Monthly Frequency -->
+    <div class="modal-section">
+      <h3>월별 빈도 추이</h3>
+      <div class="chart-box">
+        <div id="chartTFMax" class="tf-max-label"></div>
+        <canvas id="chartTF"></canvas>
       </div>
-      <div class="chart-box chart-box-doughnut" style="position:relative;">
-        <div class="chart-section">
-          <h3>📊 주제별 상대빈도</h3>
-          <div id="chartPMWRank" class="pmw-rank"></div>
-          <canvas id="chartPMW"></canvas>
-        </div>
+    </div>
+    <!-- 2) Topic Distribution -->
+    <div class="modal-section">
+      <h3>주제별 분포</h3>
+      <div class="chart-box chart-topic" style="height:440px;">
+        <div id="chartPMWRank" class="pmw-rank"></div>
+        <canvas id="chartPMW"></canvas>
       </div>
+    </div>
+    <!-- 3) Galaxy -->
+    <div class="modal-section">
+      <h3>매체 사용 분포</h3>
+      <p class="galaxy-summary" id="galaxySummary"></p>
+      <div class="galaxy-container">
+        <canvas id="galaxyCanvas"></canvas>
+        <div class="galaxy-tooltip" id="galaxyTooltip"></div>
+      </div>
+    </div>
+    <!-- 4) Collocates -->
+    <div class="modal-section" id="collocatesSection">
+      <h3>공기어 네트워크</h3>
+      <div class="tab-bar" id="collocateTabs"></div>
+      <div class="network-container">
+        <canvas id="networkCanvas"></canvas>
+        <div class="network-tooltip" id="networkTooltip"></div>
+      </div>
+    </div>
+    <!-- 5) N-GRAM -->
+    <div class="modal-section" id="ngramSection">
+      <h3>N-GRAM 분석</h3>
+      <div class="tab-bar" id="ngramTabs"></div>
+      <div id="ngramContent" class="tab-content"></div>
+    </div>
+    <!-- 6) Examples -->
+    <div class="modal-section" id="examplesSection">
+      <h3>예문 목록</h3>
+      <div id="examplesList"></div>
     </div>
   </div>
 </div>
@@ -334,19 +491,39 @@
 const MONTHS = ['2025년 1월','2025년 2월','2025년 3월','2025년 4월','2025년 5월','2025년 6월','2025년 7월','2025년 8월','2025년 9월','2025년 10월','2025년 11월','2025년 12월'];
 const SECTIONS = ['정치','경제','사회','생활/문화','IT/과학','세계','연예','스포츠'];
 let NEO_DATA = [];
+let META_DATA = {};
+let ALL_PRESS = [];
+let COLLOCATES = null;
+let EXAMPLES = null;
+let dataLoading = false;
 
-fetch('/K-NOVA/assets/data/neo_data_712.json')
-  .then(r => r.json())
-  .then(data => {
-    NEO_DATA = data;
-    document.getElementById('loadingArea').style.display = 'none';
-    document.getElementById('neoTable').style.display = 'table';
-    initTable();
-  })
-  .catch(err => {
-    document.getElementById('loadingArea').innerHTML =
-      '<p style="color:#f87171;">데이터를 불러올 수 없습니다.</p>';
-  });
+Promise.all([
+  fetch('/K-NOVA/assets/data/neo_data_712.json').then(r => r.json()),
+  fetch('/K-NOVA/assets/data/meta_712.json').then(r => r.json()),
+]).then(function([neoData, meta]) {
+  NEO_DATA = neoData;
+  META_DATA = meta;
+  ALL_PRESS = meta.all_press || [];
+  document.getElementById('loadingArea').style.display = 'none';
+  document.getElementById('neoTable').style.display = 'table';
+  initTable();
+  loadExtraData();
+}).catch(function(err) {
+  document.getElementById('loadingArea').innerHTML =
+    '<p style="color:#f87171;">데이터를 불러올 수 없습니다.</p>';
+});
+
+function loadExtraData() {
+  if (dataLoading) return;
+  dataLoading = true;
+  Promise.all([
+    fetch('/K-NOVA/assets/data/collocates_712.json').then(r => r.json()),
+    fetch('/K-NOVA/assets/data/examples_712.json').then(r => r.json()),
+  ]).then(function([col, ex]) {
+    COLLOCATES = col;
+    EXAMPLES = ex;
+  }).catch(function() {});
+}
 
 function truncate(s, n) {
   return s.length > n ? s.substring(0, n) + '…' : s;
@@ -372,7 +549,7 @@ function initTable() {
       '<span class="neo-link" data-neo="' + d['표제어'] + '">' + d['표제어'] + '</span>',
       titleText,
       '<span class="tf-total">' + totalFreq.toLocaleString() + '</span>',
-      '<span class="tf-meta">' + d['출현 매체 수'] + '</span>',
+      '<div class="press-bar"><div class="press-bar-fill" style="width:' + (d['출현 매체 수'] / ALL_PRESS.length * 100).toFixed(1) + '%"></div><span>' + d['출현 매체 수'] + '<small>/' + ALL_PRESS.length + '</small></span></div>',
       '<span class="tf-meta">' + d['출현 주제 수'] + '</span>',
       '<span class="tf-meta">' + d['출현 장르 수'] + '</span>',
       ...tfCells,
@@ -393,14 +570,14 @@ function initTable() {
       zeroRecords: "일치하는 신어가 없습니다",
     },
     columnDefs: [
-      { targets: [3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18], className: 'tf-cell', orderable: true },
+      { targets: [3,5,6,7,8,9,10,11,12,13,14,15,16,17,18], className: 'tf-cell', orderable: true },
+      { targets: [4], type: 'html-num', orderable: true },
       { targets: [2], orderable: false },
       { targets: [7,8,9,10,11,12,13,14,15,16,17,18], visible: window.innerWidth > 768 },
     ],
     scrollX: true,
   });
 
-  // 정렬 드롭다운 추가
   const sortSelect = $('<select class="sort-select" id="sortSelect">' +
     '<option value="freq-desc" selected>총빈도순</option>' +
     '<option value="date-desc">최신순</option>' +
@@ -424,19 +601,187 @@ function initTable() {
   });
 }
 
+/* ── Galaxy helpers ── */
+let galaxyAnimId = null;
+let starPositions = null;
+
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+function generateStarPositions(count) {
+  var rng = mulberry32(42);
+  var positions = [];
+  for (var i = 0; i < count; i++) {
+    var u1 = rng(), u2 = rng();
+    var r = Math.sqrt(-2 * Math.log(Math.max(u1, 0.001))) * 0.28;
+    var theta = 2 * Math.PI * u2;
+    var x = 0.5 + r * Math.cos(theta);
+    var y = 0.5 + r * Math.sin(theta);
+    x = Math.max(0.05, Math.min(0.95, x));
+    y = Math.max(0.08, Math.min(0.92, y));
+    positions.push({ x: x, y: y, phase: rng() * Math.PI * 2 });
+  }
+  return positions;
+}
+
+function renderGalaxy(activeNames) {
+  var canvas = document.getElementById('galaxyCanvas');
+  var container = canvas.parentElement;
+  var dpr = window.devicePixelRatio || 1;
+  canvas.width = container.clientWidth * dpr;
+  canvas.height = container.clientHeight * dpr;
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  var w = container.clientWidth;
+  var h = container.clientHeight;
+
+  if (!starPositions) {
+    starPositions = generateStarPositions(ALL_PRESS.length);
+  }
+
+  var activeSet = new Set(activeNames || []);
+
+  // Pick ~10 active stars to label (evenly spaced)
+  var activeIndices = [];
+  for (var i = 0; i < ALL_PRESS.length; i++) {
+    if (activeSet.has(ALL_PRESS[i])) activeIndices.push(i);
+  }
+  var labelIndices = new Set();
+  var labelCount = Math.min(10, activeIndices.length);
+  if (labelCount > 0) {
+    var step = activeIndices.length / labelCount;
+    for (var i = 0; i < labelCount; i++) {
+      labelIndices.add(activeIndices[Math.floor(i * step)]);
+    }
+  }
+
+  function draw(time) {
+    ctx.clearRect(0, 0, w, h);
+    for (var i = 0; i < starPositions.length; i++) {
+      var pos = starPositions[i];
+      var px = pos.x * w;
+      var py = pos.y * h;
+      var isActive = activeSet.has(ALL_PRESS[i]);
+      if (isActive) {
+        var pulse = 0.7 + 0.3 * Math.sin(time * 0.002 + pos.phase);
+        var radius = 6 * pulse;
+        ctx.save();
+        ctx.shadowColor = '#7ee8fa';
+        ctx.shadowBlur = 20 * pulse;
+        ctx.beginPath();
+        ctx.arc(px, py, radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(126,232,250,' + (0.8 * pulse) + ')';
+        ctx.fill();
+        ctx.restore();
+        ctx.beginPath();
+        ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+        // Label for selected stars
+        if (labelIndices.has(i)) {
+          ctx.save();
+          ctx.font = '10px Pretendard';
+          ctx.fillStyle = 'rgba(126,232,250,0.85)';
+          ctx.textAlign = 'center';
+          ctx.fillText(ALL_PRESS[i], px, py - radius - 6);
+          ctx.restore();
+        }
+      } else {
+        var twinkle = 0.08 + 0.06 * Math.sin(time * 0.001 + pos.phase);
+        ctx.beginPath();
+        ctx.arc(px, py, 1.2, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,' + twinkle + ')';
+        ctx.fill();
+      }
+    }
+    galaxyAnimId = requestAnimationFrame(draw);
+  }
+  draw(0);
+
+  canvas.onmousemove = function(e) {
+    var rect = canvas.getBoundingClientRect();
+    var mx = e.clientX - rect.left;
+    var my = e.clientY - rect.top;
+    var tooltip = document.getElementById('galaxyTooltip');
+    var found = false;
+    for (var i = 0; i < starPositions.length; i++) {
+      var px = starPositions[i].x * w;
+      var py = starPositions[i].y * h;
+      var dx = mx - px, dy = my - py;
+      if (dx * dx + dy * dy < 225) {
+        var isActive = activeSet.has(ALL_PRESS[i]);
+        tooltip.textContent = ALL_PRESS[i] + (isActive ? '' : ' (미출현)');
+        tooltip.style.display = 'block';
+        tooltip.style.left = Math.min(mx + 12, w - 120) + 'px';
+        tooltip.style.top = (my - 10) + 'px';
+        tooltip.style.borderColor = isActive ? '#7ee8fa' : '#1e2d4a';
+        found = true;
+        break;
+      }
+    }
+    if (!found) tooltip.style.display = 'none';
+  };
+  canvas.onmouseleave = function() {
+    document.getElementById('galaxyTooltip').style.display = 'none';
+  };
+}
+
+/* ── Modal ── */
 let chartTF = null;
 let chartPMW = null;
 
 function openModal(d) {
   var isMobile = window.innerWidth <= 768;
-  document.getElementById('modalTitle').textContent = d['표제어'];
-  document.getElementById('modalMeta').innerHTML =
-    '<span>📅 최초 출현일: ' + d['최초 출현일'] + '</span>' +
-    '<span>📰 출현 매체 ' + d['출현 매체 수'] + '개 (' + d['출현 매체 비율'] + '%)</span>' +
-    '<span>🗂️ 출현 주제 ' + d['출현 주제 수'] + '개 (' + d['출현 주제 비율'] + '%)</span>' +
-    '<span>📁 출현 장르 ' + d['출현 장르 수'] + '개 (' + (d['출현 장르 수'] * 50) + '%)</span>';
 
-  // 최고 빈도 표시
+  // Hero
+  document.getElementById('modalTitle').textContent = d['표제어'];
+  var articleHtml = '';
+  if (d['최초 출현 기사문']) {
+    articleHtml = d['기사문 URL']
+      ? '<a href="' + d['기사문 URL'] + '" target="_blank">' + d['최초 출현 기사문'] + '</a>'
+      : d['최초 출현 기사문'];
+  }
+  document.getElementById('modalArticle').innerHTML = articleHtml;
+  document.getElementById('modalMeta').innerHTML =
+    '<span>최초 출현일: ' + d['최초 출현일'] + '</span>' +
+    '<span>최초 출현 매체: ' + (d['최초 출현 매체'] || '') + '</span>';
+
+  // Stat cards
+  document.getElementById('statCards').innerHTML =
+    '<div class="stat-card">' +
+      '<div class="stat-value">' + d['단어빈도_전체'].toLocaleString() + '</div>' +
+      '<div class="stat-label">총빈도</div>' +
+    '</div>' +
+    '<div class="stat-card">' +
+      '<div class="stat-value">' + d['출현 매체 수'] + '<span class="stat-unit"> / ' + ALL_PRESS.length + '</span></div>' +
+      '<div class="stat-pct">' + d['출현 매체 비율'] + '%</div>' +
+      '<div class="stat-label">출현 매체 수</div>' +
+    '</div>' +
+    '<div class="stat-card">' +
+      '<div class="stat-value">' + d['출현 주제 수'] + '<span class="stat-unit"> / 8</span></div>' +
+      '<div class="stat-pct">' + d['출현 주제 비율'] + '%</div>' +
+      '<div class="stat-label">출현 주제 수</div>' +
+    '</div>' +
+    '<div class="stat-card">' +
+      '<div class="stat-value">' + d['출현 장르 수'] + '<span class="stat-unit"> / 2</span></div>' +
+      '<div class="stat-pct">' + (d['출현 장르 수'] * 50) + '%</div>' +
+      '<div class="stat-label">출현 장르 수</div>' +
+    '</div>';
+
+  // Galaxy
+  document.getElementById('galaxySummary').innerHTML =
+    '전체 <span class="galaxy-total">' + ALL_PRESS.length + '</span>개 매체 중 ' +
+    '<span class="galaxy-active">' + d['출현 매체 수'] + '</span>개 매체(' + d['출현 매체 비율'] + '%)에서 출현';
+  if (galaxyAnimId) { cancelAnimationFrame(galaxyAnimId); galaxyAnimId = null; }
+  setTimeout(function() { renderGalaxy(d['출현 매체명'] || []); }, 50);
+
+  // Monthly frequency chart
   var monthlyFreq = d['월별 상대빈도'].map(function(v) { return Math.round(v); });
   var maxVal = Math.max.apply(null, monthlyFreq);
   var maxIdx = monthlyFreq.indexOf(maxVal);
@@ -464,21 +809,15 @@ function openModal(d) {
     },
     options: {
       responsive: true,
-      interaction: {
-        mode: 'index',
-        intersect: false,
-      },
+      interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: { display: false },
         tooltip: {
-          displayColors: false,
-          bodyColor: '#fff',
+          displayColors: false, bodyColor: '#fff',
           backgroundColor: 'rgba(17,24,39,0.9)',
           callbacks: {
             title: function() { return ''; },
-            label: function(ctx) {
-              return ctx.label + ': ' + ctx.raw.toLocaleString();
-            }
+            label: function(ctx) { return ctx.label + ': ' + ctx.raw.toLocaleString(); }
           }
         }
       },
@@ -489,23 +828,21 @@ function openModal(d) {
     }
   });
 
+  // Topic distribution chart
   if (chartPMW) chartPMW.destroy();
-  const pmwData = SECTIONS.map(s => d['주제별 상대빈도'][s] || 0);
-  const pieColors = [
+  var pmwData = SECTIONS.map(function(s) { return d['주제별 상대빈도'][s] || 0; });
+  var pieColors = [
     'rgba(126,232,250,0.7)', 'rgba(240,194,122,0.7)', 'rgba(167,139,250,0.7)', 'rgba(92,224,216,0.7)',
     'rgba(248,113,113,0.7)', 'rgba(251,191,36,0.7)', 'rgba(52,211,153,0.7)', 'rgba(236,72,153,0.7)'
   ];
+  var pmwTotal = pmwData.reduce(function(a, b) { return a + b; }, 0);
 
-  const pmwTotal = pmwData.reduce((a, b) => a + b, 0);
-
-  // 상위 3개 인덱스
-  const sortedIndices = pmwData
-    .map((val, idx) => ({ val, idx }))
-    .sort((a, b) => b.val - a.val)
+  var sortedIndices = pmwData
+    .map(function(val, idx) { return { val: val, idx: idx }; })
+    .sort(function(a, b) { return b.val - a.val; })
     .slice(0, 3)
-    .map(item => item.idx);
+    .map(function(item) { return item.idx; });
 
-  // Top 3 텍스트 표시 (PC/모바일 공통)
   var rankEl = document.getElementById('chartPMWRank');
   var top3 = sortedIndices.map(function(idx, i) {
     var pct = pmwTotal > 0 ? ((pmwData[idx] / pmwTotal) * 100).toFixed(1) : 0;
@@ -536,21 +873,18 @@ function openModal(d) {
       },
       plugins: {
         legend: {
-          position: 'bottom',
-          align: 'center',
+          position: 'bottom', align: 'center',
           labels: {
-            color: '#fff',
-            font: { size: isMobile ? 9 : 10 },
-            padding: isMobile ? 6 : 8,
-            boxWidth: isMobile ? 8 : 10,
+            color: '#fff', font: { size: isMobile ? 11 : 13 },
+            padding: isMobile ? 12 : 18, boxWidth: isMobile ? 12 : 14,
             usePointStyle: true,
           }
         },
         tooltip: {
           callbacks: {
             label: function(ctx) {
-              const val = ctx.raw;
-              const pct = pmwTotal > 0 ? ((val / pmwTotal) * 100).toFixed(1) : 0;
+              var val = ctx.raw;
+              var pct = pmwTotal > 0 ? ((val / pmwTotal) * 100).toFixed(1) : 0;
               return ctx.label + ': ' + pct + '%';
             }
           }
@@ -560,17 +894,333 @@ function openModal(d) {
     }
   });
 
+  // N-GRAM (no canvas, safe before modal show)
+  renderNgrams(d['신어']);
+
+  // Examples
+  renderExamples(d['신어'], d['표제어']);
+
+  // Show modal first (canvas needs visible container for dimensions)
   document.getElementById('modalOverlay').classList.add('active');
+  document.getElementById('modalOverlay').scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+
+  // Collocates network (needs visible canvas)
+  setTimeout(function() { renderCollocates(d['신어']); }, 60);
 }
 
-document.getElementById('modalClose').addEventListener('click', () => {
+/* ── Collocates Network ── */
+var COL_POS = [
+  { key: 'NNG', label: 'NNG (일반명사)', color: '#7ee8fa' },
+  { key: 'NNP', label: 'NNP (고유명사)', color: '#a78bfa' },
+  { key: 'VV', label: 'VV (동사)', color: '#f0c27a' },
+  { key: 'VA', label: 'VA (형용사)', color: '#34d399' },
+  { key: 'MAG', label: 'MAG (부사)', color: '#f87171' },
+];
+var POS_COLOR = {};
+COL_POS.forEach(function(p) { POS_COLOR[p.key] = p.color; });
+var networkAnimId = null;
+
+function renderCollocates(neoKey) {
+  var tabsEl = document.getElementById('collocateTabs');
+  if (networkAnimId) { cancelAnimationFrame(networkAnimId); networkAnimId = null; }
+  if (!COLLOCATES || !COLLOCATES[neoKey]) {
+    tabsEl.innerHTML = '';
+    return;
+  }
+  var data = COLLOCATES[neoKey];
+  // Aggregate 1gram across all months (skip 전체)
+  var aggMap = {};
+  Object.keys(data).forEach(function(month) {
+    if (month === '전체') return;
+    var grams = data[month]['1gram'] || [];
+    grams.forEach(function(g) {
+      var k = g.form + '|' + g.pos;
+      if (!aggMap[k]) aggMap[k] = { form: g.form, pos: g.pos, freq: 0 };
+      aggMap[k].freq += g.freq;
+    });
+  });
+  var allItems = Object.values(aggMap).sort(function(a, b) { return b.freq - a.freq; });
+
+  // Tabs: all + per POS
+  tabsEl.innerHTML = '<button class="tab-btn active" data-pos="ALL">전체</button>' +
+    COL_POS.map(function(p) {
+      return '<button class="tab-btn" data-pos="' + p.key + '">' + p.label + '</button>';
+    }).join('');
+
+  function drawNetwork(pos) {
+    var filtered = pos === 'ALL'
+      ? allItems.filter(function(x) { return POS_COLOR[x.pos]; }).slice(0, 40)
+      : allItems.filter(function(x) { return x.pos === pos; }).slice(0, 30);
+
+    var canvas = document.getElementById('networkCanvas');
+    var container = canvas.parentElement;
+    var dpr = window.devicePixelRatio || 1;
+    var w = container.clientWidth;
+    var h = container.clientHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    if (filtered.length === 0) {
+      ctx.fillStyle = '#4a5568';
+      ctx.font = '14px Pretendard';
+      ctx.textAlign = 'center';
+      ctx.fillText('해당 품사의 공기어가 없습니다.', w / 2, h / 2);
+      return;
+    }
+
+    var maxFreq = filtered[0].freq;
+    var cx = w / 2, cy = h / 2;
+    var currentHeadword = document.getElementById('modalTitle').textContent;
+
+    // Build nodes: center + collocates
+    var nodes = [{ x: cx, y: cy, vx: 0, vy: 0, r: 18, label: currentHeadword, pos: 'CENTER', freq: maxFreq, fixed: true }];
+    var rng = mulberry32(7);
+    for (var i = 0; i < filtered.length; i++) {
+      var angle = rng() * Math.PI * 2;
+      var normFreq = filtered[i].freq / maxFreq;
+      var baseDist = 50 + normFreq * 40;
+      var dist = baseDist + rng() * 140 + 30;
+      var r = 6 + normFreq * 14;
+      nodes.push({
+        x: cx + Math.cos(angle) * dist,
+        y: cy + Math.sin(angle) * dist,
+        vx: 0, vy: 0, r: r,
+        label: filtered[i].form, pos: filtered[i].pos,
+        freq: filtered[i].freq, fixed: false,
+        baseDist: baseDist + rng() * 80
+      });
+    }
+
+    // Force simulation
+    var damping = 0.82;
+    var settled = false;
+    var frame = 0;
+
+    function simulate() {
+      for (var i = 0; i < nodes.length; i++) {
+        if (nodes[i].fixed) continue;
+        var n = nodes[i];
+        // Attract to center
+        var dx = cx - n.x, dy = cy - n.y;
+        var d = Math.sqrt(dx * dx + dy * dy) || 1;
+        var targetDist = n.baseDist;
+        var force = (d - targetDist) * 0.003;
+        n.vx += (dx / d) * force;
+        n.vy += (dy / d) * force;
+
+        // Repel from other nodes
+        for (var j = 0; j < nodes.length; j++) {
+          if (i === j) continue;
+          var ox = n.x - nodes[j].x, oy = n.y - nodes[j].y;
+          var od = Math.sqrt(ox * ox + oy * oy) || 1;
+          var minDist = n.r + nodes[j].r + 12;
+          if (od < minDist) {
+            var push = (minDist - od) * 0.15;
+            n.vx += (ox / od) * push;
+            n.vy += (oy / od) * push;
+          }
+        }
+        n.vx *= damping;
+        n.vy *= damping;
+        n.x += n.vx;
+        n.y += n.vy;
+        // Keep in bounds
+        n.x = Math.max(n.r + 10, Math.min(w - n.r - 10, n.x));
+        n.y = Math.max(n.r + 10, Math.min(h - n.r - 10, n.y));
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+
+      // Edges
+      for (var i = 1; i < nodes.length; i++) {
+        var n = nodes[i];
+        var alpha = 0.1 + (n.freq / maxFreq) * 0.25;
+        ctx.beginPath();
+        ctx.moveTo(nodes[0].x, nodes[0].y);
+        ctx.lineTo(n.x, n.y);
+        ctx.strokeStyle = 'rgba(126,232,250,' + alpha + ')';
+        ctx.lineWidth = 0.5 + (n.freq / maxFreq) * 1.5;
+        ctx.stroke();
+      }
+
+      // Nodes
+      for (var i = 0; i < nodes.length; i++) {
+        var n = nodes[i];
+        var color = n.fixed ? '#7ee8fa' : (POS_COLOR[n.pos] || '#8896b0');
+        // Glow
+        ctx.save();
+        ctx.shadowColor = color;
+        ctx.shadowBlur = n.fixed ? 20 : 8;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.globalAlpha = n.fixed ? 0.9 : 0.7;
+        ctx.fill();
+        ctx.restore();
+
+        // Label
+        ctx.fillStyle = '#fff';
+        ctx.globalAlpha = 1;
+        ctx.font = (n.fixed ? 'bold 13px' : (n.r > 12 ? '11px' : '9px')) + ' Pretendard';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        if (n.fixed) {
+          ctx.fillText(n.label, n.x, n.y);
+        } else {
+          ctx.fillText(n.label, n.x, n.y + n.r + 10);
+        }
+      }
+
+      frame++;
+      if (frame < 120) {
+        simulate();
+        networkAnimId = requestAnimationFrame(draw);
+      } else if (!settled) {
+        settled = true;
+      }
+    }
+
+    // Run initial simulation steps
+    for (var s = 0; s < 30; s++) simulate();
+    draw();
+
+    // Hover tooltip
+    canvas.onmousemove = function(e) {
+      var rect = canvas.getBoundingClientRect();
+      var mx = e.clientX - rect.left;
+      var my = e.clientY - rect.top;
+      var tooltip = document.getElementById('networkTooltip');
+      var found = false;
+      for (var i = 1; i < nodes.length; i++) {
+        var dx = mx - nodes[i].x, dy = my - nodes[i].y;
+        if (dx * dx + dy * dy < (nodes[i].r + 5) * (nodes[i].r + 5)) {
+          tooltip.innerHTML = '<strong>' + nodes[i].label + '</strong> (' + nodes[i].pos + ')<br>빈도: ' + nodes[i].freq.toLocaleString();
+          tooltip.style.display = 'block';
+          tooltip.style.left = Math.min(mx + 12, w - 140) + 'px';
+          tooltip.style.top = (my - 10) + 'px';
+          found = true;
+          break;
+        }
+      }
+      if (!found) tooltip.style.display = 'none';
+    };
+    canvas.onmouseleave = function() {
+      document.getElementById('networkTooltip').style.display = 'none';
+    };
+  }
+
+  drawNetwork('ALL');
+  tabsEl.onclick = function(e) {
+    var btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    tabsEl.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    if (networkAnimId) { cancelAnimationFrame(networkAnimId); networkAnimId = null; }
+    drawNetwork(btn.dataset.pos);
+  };
+}
+
+/* ── N-GRAM ── */
+var NGRAM_TABS = [
+  { key: '2gram', label: '2-GRAM' },
+  { key: '3gram', label: '3-GRAM' },
+  { key: '4gram', label: '4-GRAM' },
+  { key: '5gram', label: '5-GRAM' },
+];
+
+function renderNgrams(neoKey) {
+  var tabsEl = document.getElementById('ngramTabs');
+  var contentEl = document.getElementById('ngramContent');
+  if (!COLLOCATES || !COLLOCATES[neoKey]) {
+    tabsEl.innerHTML = '';
+    contentEl.innerHTML = '<p class="no-data">N-GRAM 데이터를 불러오는 중...</p>';
+    return;
+  }
+  var data = COLLOCATES[neoKey];
+
+  tabsEl.innerHTML = NGRAM_TABS.map(function(t, i) {
+    return '<button class="tab-btn' + (i === 0 ? ' active' : '') + '" data-gram="' + t.key + '">' + t.label + '</button>';
+  }).join('');
+
+  function showGram(gramKey) {
+    // Aggregate across months (skip 전체)
+    var aggMap = {};
+    Object.keys(data).forEach(function(month) {
+      if (month === '전체') return;
+      var grams = data[month][gramKey] || [];
+      grams.forEach(function(g) {
+        var key = g.ngram;
+        if (!aggMap[key]) aggMap[key] = { ngram: key, freq: 0 };
+        aggMap[key].freq += g.freq;
+      });
+    });
+    var items = Object.values(aggMap).sort(function(a, b) { return b.freq - a.freq; }).slice(0, 30);
+    if (items.length === 0) {
+      contentEl.innerHTML = '<p class="no-data">해당 N-GRAM 데이터가 없습니다.</p>';
+      return;
+    }
+    contentEl.innerHTML = '<table class="collocate-table"><thead><tr><th>#</th><th>N-GRAM</th><th>빈도</th></tr></thead><tbody>' +
+      items.map(function(item, i) {
+        return '<tr><td>' + (i + 1) + '</td><td>' + item.ngram + '</td><td>' + item.freq.toLocaleString() + '</td></tr>';
+      }).join('') + '</tbody></table>';
+  }
+
+  showGram(NGRAM_TABS[0].key);
+  tabsEl.onclick = function(e) {
+    var btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    tabsEl.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    showGram(btn.dataset.gram);
+  };
+}
+
+/* ── Examples ── */
+function renderExamples(neoKey, headword) {
+  var el = document.getElementById('examplesList');
+  if (!EXAMPLES || !EXAMPLES[neoKey]) {
+    el.innerHTML = '<p class="no-data">예문 데이터를 불러오는 중...</p>';
+    return;
+  }
+  var items = EXAMPLES[neoKey];
+  if (items.length === 0) {
+    el.innerHTML = '<p class="no-data">예문이 없습니다.</p>';
+    return;
+  }
+  // Sort by date desc
+  items = items.slice().sort(function(a, b) {
+    return b.clean_date.localeCompare(a.clean_date);
+  });
+  var escaped = headword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  var re = new RegExp('(' + escaped + ')', 'gi');
+  el.innerHTML = items.map(function(ex) {
+    var date = ex.clean_date ? ex.clean_date.substring(0, 10) : '';
+    var highlighted = ex.sentence.replace(re, '<mark>$1</mark>');
+    return '<div class="example-item">' +
+      '<div class="example-meta"><span class="example-press">' + ex.press + '</span><span>' + date + '</span></div>' +
+      '<a class="example-sentence" href="' + ex.url + '" target="_blank">' + highlighted + '</a>' +
+    '</div>';
+  }).join('');
+}
+
+function closeModal() {
   document.getElementById('modalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+  if (galaxyAnimId) { cancelAnimationFrame(galaxyAnimId); galaxyAnimId = null; }
+  if (networkAnimId) { cancelAnimationFrame(networkAnimId); networkAnimId = null; }
+}
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === e.currentTarget) closeModal();
 });
-document.getElementById('modalOverlay').addEventListener('click', (e) => {
-  if (e.target === e.currentTarget) document.getElementById('modalOverlay').classList.remove('active');
-});
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('active');
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
 });
 </script>
 <script>

@@ -591,6 +591,8 @@ th {
   background: var(--bg-deep);
   border-radius: 8px;
   padding: 1.5rem 1.5rem 1.8rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .featured-chart-box h4 {
@@ -598,10 +600,22 @@ th {
   color: var(--accent-glow);
   margin-bottom: 0.8rem;
   font-weight: 500;
+  flex-shrink: 0;
 }
 
 .featured-chart-box canvas {
   height: 240px !important;
+}
+
+.featured-chart-box .home-galaxy-container,
+.featured-chart-box .home-network-container {
+  flex: 1;
+  min-height: 0;
+}
+
+.home-galaxy-container canvas,
+.home-network-container canvas {
+  height: 100% !important;
 }
 
 /* ── INTRO HEADER (ABOUT) ── */
