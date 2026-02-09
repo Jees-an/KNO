@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2025년 1월 신어 관측 보고</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="stylesheet" href="/K-NOVA/assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+</head>
+<body>
+  <nav class="top-nav">
+    <a href="/K-NOVA/" class="nav-logo">🔭 K-NOVA: 한국어 신어 관측 시스템</a>
+    <button class="nav-hamburger" id="navHamburger" aria-label="메뉴 열기" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-links">
+      <a href="/K-NOVA/">홈</a>
+      <a href="/K-NOVA/reports/">신어 관측 보고</a>
+      <a href="/K-NOVA/data.html">신어별 관측 데이터</a>
+      <a href="/K-NOVA/about/">프로젝트 소개</a>
+      <a href="https://github.com/Jees-an/K-NOVA" target="_blank">GitHub</a>
+    </div>
+  </nav>
+
+  <main>
+    <article class="report-article">
+  <nav class="report-breadcrumb">
+    <a href="/K-NOVA/reports/">&larr; 전체 관측 보고 목록</a>
+  </nav>
+  <header class="report-header">
+    <span class="report-date">2025.02.01.</span>
+    <h1>2025년 1월 신어 관측 보고</h1>
+    
+    <p class="report-summary">2025년 1월 최초 출현 단어/구 총 27건 (네이버 뉴스 기준)</p>
+    
+    <div class="report-meta">
+      <span class="tag">📅 2025.01.01.~2025.01.31.</span>
+      <span class="tag fmt-eok" data-total-words="120304457">📂 문어/웹 언어</span>
+      <span class="tag">✨ 신어 27개 관측</span>
+    </div>
+  </header>
+
+  <div class="report-body">
+    <div class="report-summary-box">
+      <div class="summary-top">
+        <h2>Summary</h2>
+        <div class="summary-neo-badge">
+          <span class="neo-badge-count">27</span>
+          <span class="neo-badge-unit">개 신어 관측!</span>
+        </div>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="summary-label">관측 기간</span>
+          <span class="summary-value">2025.01.01.~2025.01.31.</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">신어 후보군 추출 결과</span>
+          <span class="summary-value"><span class="fmt-num">1554995</span>건</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">샘플 말뭉치 규모</span>
+          <span class="summary-value">기사 수: <span class="fmt-num">500399</span>건<br>어절 수: <span class="fmt-num">99998927</span>어절</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">화용 표지 말뭉치 규모</span>
+          <span class="summary-value">기사 수: <span class="fmt-num">40927</span>건<br>어절 수: <span class="fmt-num">20305530</span>어절</span>
+        </div>
+      </div>
+    </div>
+    
+
+    
+    <h2>신어 후보군 추출·정제·판별 결과</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>정제 단계</th>
+            <th>정제 후 항목 수</th>
+            <th>비율</th>
+          </tr>
+        </thead>
+        <tbody><tr>
+            <td>신어 후보군</td>
+            <td class="num fmt-num">1554995</td>
+            <td class="num fmt-pct">1.0</td>
+          </tr><tr>
+            <td>M3-1</td>
+            <td class="num fmt-num">660176</td>
+            <td class="num fmt-pct">0.42455185</td>
+          </tr><tr>
+            <td>M3-2</td>
+            <td class="num fmt-num">223471</td>
+            <td class="num fmt-pct">0.14371172</td>
+          </tr><tr>
+            <td>M3-3</td>
+            <td class="num fmt-num">223166</td>
+            <td class="num fmt-pct">0.14351557</td>
+          </tr><tr>
+            <td>M3-4</td>
+            <td class="num fmt-num">222696</td>
+            <td class="num fmt-pct">0.14321332</td>
+          </tr><tr>
+            <td>M3-5</td>
+            <td class="num fmt-num">220569</td>
+            <td class="num fmt-pct">0.14184547</td>
+          </tr><tr>
+            <td>M3-6</td>
+            <td class="num fmt-num">203514</td>
+            <td class="num fmt-pct">0.13087759</td>
+          </tr><tr>
+            <td>M3-7</td>
+            <td class="num fmt-num">202431</td>
+            <td class="num fmt-pct">0.13018113</td>
+          </tr><tr>
+            <td>M3-8</td>
+            <td class="num fmt-num">10581</td>
+            <td class="num fmt-pct">0.00680452</td>
+          </tr><tr>
+            <td>M4-LLM 1차 판별</td>
+            <td class="num fmt-num">179</td>
+            <td class="num fmt-pct">0.00011511</td>
+          </tr><tr class="highlight-row">
+            <td>M4-인간 최종 판별</td>
+            <td class="num fmt-num">27</td>
+            <td class="num fmt-pct">1.736e-05</td>
+          </tr></tbody>
+      </table>
+    </div>
+    
+
+    <h2>샘플 말뭉치 규모</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>주제</th>
+            <th>기사 수</th>
+            <th>어절 수</th>
+          </tr>
+        </thead>
+        <tbody><tr>
+              <td>정치</td>
+              <td class="num fmt-num">59161</td>
+              <td class="num fmt-num">11999952</td>
+            </tr><tr>
+              <td>경제</td>
+              <td class="num fmt-num">89896</td>
+              <td class="num fmt-num">19999920</td>
+            </tr><tr>
+              <td>사회</td>
+              <td class="num fmt-num">149873</td>
+              <td class="num fmt-num">24999876</td>
+            </tr><tr>
+              <td>생활/문화</td>
+              <td class="num fmt-num">31931</td>
+              <td class="num fmt-num">7999883</td>
+            </tr><tr>
+              <td>IT/과학</td>
+              <td class="num fmt-num">54243</td>
+              <td class="num fmt-num">9999847</td>
+            </tr><tr>
+              <td>세계</td>
+              <td class="num fmt-num">19231</td>
+              <td class="num fmt-num">4999580</td>
+            </tr><tr>
+              <td>연예</td>
+              <td class="num fmt-num">52221</td>
+              <td class="num fmt-num">9999925</td>
+            </tr><tr>
+              <td>스포츠</td>
+              <td class="num fmt-num">43843</td>
+              <td class="num fmt-num">9999944</td>
+            </tr><tr class="total-row">
+            <td><strong>합계</strong></td>
+            <td class="num fmt-num"><strong>500399</strong></td>
+            <td class="num fmt-num"><strong>99998927</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>화용 표지 말뭉치 규모</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>화용 표지</th>
+            <th>기사 수</th>
+            <th>어절 수</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>'이른바', '신조어' 등 화용 표지 18개</td>
+            <td class="num fmt-num">40927</td>
+            <td class="num fmt-num">20305530</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    
+
+  </div>
+
+  <footer class="report-footer">
+  </footer>
+</article>
+
+<script>
+document.querySelectorAll('.fmt-num').forEach(function(el) {
+  var text = el.textContent.trim();
+  var num = Number(text);
+  if (!isNaN(num) && text !== '') {
+    el.textContent = num.toLocaleString('ko-KR');
+  }
+});
+document.querySelectorAll('.fmt-pct').forEach(function(el) {
+  var val = parseFloat(el.textContent.trim());
+  if (!isNaN(val)) {
+    el.textContent = (val * 100).toFixed(5) + '%';
+  }
+});
+document.querySelectorAll('.fmt-eok').forEach(function(el) {
+  var w = parseInt(el.getAttribute('data-total-words'));
+  if (!isNaN(w)) {
+    el.textContent = '📂 문어/웹 언어 ' + (w / 100000000).toFixed(2) + '억 어절';
+  }
+});
+</script>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 K-NOVA · Korean Neologism Observatory and Visual Analytics</p>
+  </footer>
+  <script>
+  (function() {
+    var btn = document.getElementById('navHamburger');
+    if (!btn) return;
+    var nav = btn.nextElementSibling;
+    btn.addEventListener('click', function() {
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
+      btn.classList.toggle('active');
+      nav.classList.toggle('nav-open');
+    });
+    nav.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        btn.setAttribute('aria-expanded', 'false');
+        btn.classList.remove('active');
+        nav.classList.remove('nav-open');
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

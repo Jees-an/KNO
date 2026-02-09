@@ -1,0 +1,584 @@
+[
+  {
+    "YYYYMM": 202501,
+    "Topic": "정치",
+    "N of Articles": 59161,
+    "N of Words": 11999952
+  },
+  {
+    "YYYYMM": 202501,
+    "Topic": "경제",
+    "N of Articles": 89896,
+    "N of Words": 19999920
+  },
+  {
+    "YYYYMM": 202501,
+    "Topic": "사회",
+    "N of Articles": 149873,
+    "N of Words": 24999876
+  },
+  {
+    "YYYYMM": 202501,
+    "Topic": "생활/문화",
+    "N of Articles": 31931,
+    "N of Words": 7999883
+  },
+  {
+    "YYYYMM": 202501,
+    "Topic": "IT/과학",
+    "N of Articles": 54243,
+    "N of Words": 9999847
+  },
+  {
+    "YYYYMM": 202501,
+    "Topic": "세계",
+    "N of Articles": 19231,
+    "N of Words": 4999580
+  },
+  {
+    "YYYYMM": 202501,
+    "Topic": "연예",
+    "N of Articles": 52221,
+    "N of Words": 9999925
+  },
+  {
+    "YYYYMM": 202501,
+    "Topic": "스포츠",
+    "N of Articles": 43843,
+    "N of Words": 9999944
+  },
+  {
+    "YYYYMM": 202502,
+    "Topic": "정치",
+    "N of Articles": 59483,
+    "N of Words": 11999974
+  },
+  {
+    "YYYYMM": 202502,
+    "Topic": "경제",
+    "N of Articles": 92416,
+    "N of Words": 19999803
+  },
+  {
+    "YYYYMM": 202502,
+    "Topic": "사회",
+    "N of Articles": 147142,
+    "N of Words": 24999785
+  },
+  {
+    "YYYYMM": 202502,
+    "Topic": "생활/문화",
+    "N of Articles": 34455,
+    "N of Words": 7999555
+  },
+  {
+    "YYYYMM": 202502,
+    "Topic": "IT/과학",
+    "N of Articles": 57360,
+    "N of Words": 9999721
+  },
+  {
+    "YYYYMM": 202502,
+    "Topic": "세계",
+    "N of Articles": 19355,
+    "N of Words": 4999626
+  },
+  {
+    "YYYYMM": 202502,
+    "Topic": "연예",
+    "N of Articles": 58889,
+    "N of Words": 9999976
+  },
+  {
+    "YYYYMM": 202502,
+    "Topic": "스포츠",
+    "N of Articles": 47619,
+    "N of Words": 9999962
+  },
+  {
+    "YYYYMM": 202503,
+    "Topic": "정치",
+    "N of Articles": 62235,
+    "N of Words": 11999858
+  },
+  {
+    "YYYYMM": 202503,
+    "Topic": "경제",
+    "N of Articles": 90275,
+    "N of Words": 19998946
+  },
+  {
+    "YYYYMM": 202503,
+    "Topic": "사회",
+    "N of Articles": 149792,
+    "N of Words": 24999868
+  },
+  {
+    "YYYYMM": 202503,
+    "Topic": "생활/문화",
+    "N of Articles": 32923,
+    "N of Words": 7999919
+  },
+  {
+    "YYYYMM": 202503,
+    "Topic": "IT/과학",
+    "N of Articles": 54962,
+    "N of Words": 9999812
+  },
+  {
+    "YYYYMM": 202503,
+    "Topic": "세계",
+    "N of Articles": 19523,
+    "N of Words": 4999938
+  },
+  {
+    "YYYYMM": 202503,
+    "Topic": "연예",
+    "N of Articles": 55141,
+    "N of Words": 9999895
+  },
+  {
+    "YYYYMM": 202503,
+    "Topic": "스포츠",
+    "N of Articles": 49456,
+    "N of Words": 9999974
+  },
+  {
+    "YYYYMM": 202504,
+    "Topic": "정치",
+    "N of Articles": 60273,
+    "N of Words": 11999896
+  },
+  {
+    "YYYYMM": 202504,
+    "Topic": "경제",
+    "N of Articles": 91205,
+    "N of Words": 19999914
+  },
+  {
+    "YYYYMM": 202504,
+    "Topic": "사회",
+    "N of Articles": 151290,
+    "N of Words": 24999945
+  },
+  {
+    "YYYYMM": 202504,
+    "Topic": "생활/문화",
+    "N of Articles": 34874,
+    "N of Words": 7999420
+  },
+  {
+    "YYYYMM": 202504,
+    "Topic": "IT/과학",
+    "N of Articles": 52626,
+    "N of Words": 9999981
+  },
+  {
+    "YYYYMM": 202504,
+    "Topic": "세계",
+    "N of Articles": 19352,
+    "N of Words": 4999909
+  },
+  {
+    "YYYYMM": 202504,
+    "Topic": "연예",
+    "N of Articles": 55362,
+    "N of Words": 9999937
+  },
+  {
+    "YYYYMM": 202504,
+    "Topic": "스포츠",
+    "N of Articles": 56425,
+    "N of Words": 9999460
+  },
+  {
+    "YYYYMM": 202505,
+    "Topic": "정치",
+    "N of Articles": 63122,
+    "N of Words": 11999993
+  },
+  {
+    "YYYYMM": 202505,
+    "Topic": "경제",
+    "N of Articles": 89416,
+    "N of Words": 19999926
+  },
+  {
+    "YYYYMM": 202505,
+    "Topic": "사회",
+    "N of Articles": 155275,
+    "N of Words": 24999830
+  },
+  {
+    "YYYYMM": 202505,
+    "Topic": "생활/문화",
+    "N of Articles": 33684,
+    "N of Words": 7999989
+  },
+  {
+    "YYYYMM": 202505,
+    "Topic": "IT/과학",
+    "N of Articles": 56548,
+    "N of Words": 9999817
+  },
+  {
+    "YYYYMM": 202505,
+    "Topic": "세계",
+    "N of Articles": 19188,
+    "N of Words": 4999890
+  },
+  {
+    "YYYYMM": 202505,
+    "Topic": "연예",
+    "N of Articles": 56526,
+    "N of Words": 9999831
+  },
+  {
+    "YYYYMM": 202505,
+    "Topic": "스포츠",
+    "N of Articles": 58335,
+    "N of Words": 9999916
+  },
+  {
+    "YYYYMM": 202506,
+    "Topic": "정치",
+    "N of Articles": 62462,
+    "N of Words": 11999932
+  },
+  {
+    "YYYYMM": 202506,
+    "Topic": "경제",
+    "N of Articles": 87262,
+    "N of Words": 19999976
+  },
+  {
+    "YYYYMM": 202506,
+    "Topic": "사회",
+    "N of Articles": 149326,
+    "N of Words": 24999988
+  },
+  {
+    "YYYYMM": 202506,
+    "Topic": "생활/문화",
+    "N of Articles": 33406,
+    "N of Words": 7999967
+  },
+  {
+    "YYYYMM": 202506,
+    "Topic": "IT/과학",
+    "N of Articles": 52332,
+    "N of Words": 9999976
+  },
+  {
+    "YYYYMM": 202506,
+    "Topic": "세계",
+    "N of Articles": 18721,
+    "N of Words": 4999814
+  },
+  {
+    "YYYYMM": 202506,
+    "Topic": "연예",
+    "N of Articles": 55327,
+    "N of Words": 9999835
+  },
+  {
+    "YYYYMM": 202506,
+    "Topic": "스포츠",
+    "N of Articles": 57015,
+    "N of Words": 9999925
+  },
+  {
+    "YYYYMM": 202507,
+    "Topic": "정치",
+    "N of Articles": 61203,
+    "N of Words": 11999852
+  },
+  {
+    "YYYYMM": 202507,
+    "Topic": "경제",
+    "N of Articles": 88404,
+    "N of Words": 19999890
+  },
+  {
+    "YYYYMM": 202507,
+    "Topic": "사회",
+    "N of Articles": 146925,
+    "N of Words": 24999804
+  },
+  {
+    "YYYYMM": 202507,
+    "Topic": "생활/문화",
+    "N of Articles": 34817,
+    "N of Words": 7999878
+  },
+  {
+    "YYYYMM": 202507,
+    "Topic": "IT/과학",
+    "N of Articles": 51185,
+    "N of Words": 9999720
+  },
+  {
+    "YYYYMM": 202507,
+    "Topic": "세계",
+    "N of Articles": 18986,
+    "N of Words": 4999933
+  },
+  {
+    "YYYYMM": 202507,
+    "Topic": "연예",
+    "N of Articles": 56208,
+    "N of Words": 9999916
+  },
+  {
+    "YYYYMM": 202507,
+    "Topic": "스포츠",
+    "N of Articles": 54359,
+    "N of Words": 9999757
+  },
+  {
+    "YYYYMM": 202508,
+    "Topic": "정치",
+    "N of Articles": 60911,
+    "N of Words": 11999823
+  },
+  {
+    "YYYYMM": 202508,
+    "Topic": "경제",
+    "N of Articles": 87754,
+    "N of Words": 19999454
+  },
+  {
+    "YYYYMM": 202508,
+    "Topic": "사회",
+    "N of Articles": 144866,
+    "N of Words": 24999905
+  },
+  {
+    "YYYYMM": 202508,
+    "Topic": "생활/문화",
+    "N of Articles": 33391,
+    "N of Words": 7999857
+  },
+  {
+    "YYYYMM": 202508,
+    "Topic": "IT/과학",
+    "N of Articles": 52554,
+    "N of Words": 9999891
+  },
+  {
+    "YYYYMM": 202508,
+    "Topic": "세계",
+    "N of Articles": 18659,
+    "N of Words": 4999899
+  },
+  {
+    "YYYYMM": 202508,
+    "Topic": "연예",
+    "N of Articles": 54486,
+    "N of Words": 9999899
+  },
+  {
+    "YYYYMM": 202508,
+    "Topic": "스포츠",
+    "N of Articles": 57438,
+    "N of Words": 9999761
+  },
+  {
+    "YYYYMM": 202509,
+    "Topic": "정치",
+    "N of Articles": 62545,
+    "N of Words": 11999515
+  },
+  {
+    "YYYYMM": 202509,
+    "Topic": "경제",
+    "N of Articles": 88502,
+    "N of Words": 19999973
+  },
+  {
+    "YYYYMM": 202509,
+    "Topic": "사회",
+    "N of Articles": 147282,
+    "N of Words": 24999882
+  },
+  {
+    "YYYYMM": 202509,
+    "Topic": "생활/문화",
+    "N of Articles": 34680,
+    "N of Words": 7999318
+  },
+  {
+    "YYYYMM": 202509,
+    "Topic": "IT/과학",
+    "N of Articles": 54054,
+    "N of Words": 9999875
+  },
+  {
+    "YYYYMM": 202509,
+    "Topic": "세계",
+    "N of Articles": 18858,
+    "N of Words": 4999889
+  },
+  {
+    "YYYYMM": 202509,
+    "Topic": "연예",
+    "N of Articles": 59039,
+    "N of Words": 9999345
+  },
+  {
+    "YYYYMM": 202509,
+    "Topic": "스포츠",
+    "N of Articles": 54624,
+    "N of Words": 9999872
+  },
+  {
+    "YYYYMM": 202510,
+    "Topic": "정치",
+    "N of Articles": 62156,
+    "N of Words": 11999902
+  },
+  {
+    "YYYYMM": 202510,
+    "Topic": "경제",
+    "N of Articles": 88625,
+    "N of Words": 19999997
+  },
+  {
+    "YYYYMM": 202510,
+    "Topic": "사회",
+    "N of Articles": 144439,
+    "N of Words": 24999995
+  },
+  {
+    "YYYYMM": 202510,
+    "Topic": "생활/문화",
+    "N of Articles": 32569,
+    "N of Words": 7999783
+  },
+  {
+    "YYYYMM": 202510,
+    "Topic": "IT/과학",
+    "N of Articles": 74114,
+    "N of Words": 10000000
+  },
+  {
+    "YYYYMM": 202510,
+    "Topic": "세계",
+    "N of Articles": 18761,
+    "N of Words": 4999967
+  },
+  {
+    "YYYYMM": 202510,
+    "Topic": "연예",
+    "N of Articles": 54656,
+    "N of Words": 9999897
+  },
+  {
+    "YYYYMM": 202510,
+    "Topic": "스포츠",
+    "N of Articles": 63718,
+    "N of Words": 9999488
+  },
+  {
+    "YYYYMM": 202511,
+    "Topic": "정치",
+    "N of Articles": 59305,
+    "N of Words": 11999814
+  },
+  {
+    "YYYYMM": 202511,
+    "Topic": "경제",
+    "N of Articles": 87854,
+    "N of Words": 19999830
+  },
+  {
+    "YYYYMM": 202511,
+    "Topic": "사회",
+    "N of Articles": 141046,
+    "N of Words": 24999975
+  },
+  {
+    "YYYYMM": 202511,
+    "Topic": "생활/문화",
+    "N of Articles": 31778,
+    "N of Words": 7999829
+  },
+  {
+    "YYYYMM": 202511,
+    "Topic": "IT/과학",
+    "N of Articles": 68644,
+    "N of Words": 9999524
+  },
+  {
+    "YYYYMM": 202511,
+    "Topic": "세계",
+    "N of Articles": 18811,
+    "N of Words": 4999623
+  },
+  {
+    "YYYYMM": 202511,
+    "Topic": "연예",
+    "N of Articles": 77384,
+    "N of Words": 9999570
+  },
+  {
+    "YYYYMM": 202511,
+    "Topic": "스포츠",
+    "N of Articles": 54912,
+    "N of Words": 9999904
+  },
+  {
+    "YYYYMM": 202512,
+    "Topic": "정치",
+    "N of Articles": 59219,
+    "N of Words": 11999954
+  },
+  {
+    "YYYYMM": 202512,
+    "Topic": "경제",
+    "N of Articles": 86728,
+    "N of Words": 19999886
+  },
+  {
+    "YYYYMM": 202512,
+    "Topic": "사회",
+    "N of Articles": 138638,
+    "N of Words": 24999427
+  },
+  {
+    "YYYYMM": 202512,
+    "Topic": "생활/문화",
+    "N of Articles": 32384,
+    "N of Words": 7999863
+  },
+  {
+    "YYYYMM": 202512,
+    "Topic": "IT/과학",
+    "N of Articles": 69077,
+    "N of Words": 9999805
+  },
+  {
+    "YYYYMM": 202512,
+    "Topic": "세계",
+    "N of Articles": 18382,
+    "N of Words": 4999633
+  },
+  {
+    "YYYYMM": 202512,
+    "Topic": "연예",
+    "N of Articles": 110210,
+    "N of Words": 9999789
+  },
+  {
+    "YYYYMM": 202512,
+    "Topic": "스포츠",
+    "N of Articles": 60988,
+    "N of Words": 9999773
+  },
+  {
+    "YYYYMM": "합계",
+    "Topic": "-",
+    "N of Articles": 6296905,
+    "N of Words": 1199982742
+  }
+]

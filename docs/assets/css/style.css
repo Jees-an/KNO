@@ -24,6 +24,7 @@ body {
   font-family: var(--font-body);
   font-weight: 300;
   line-height: 1.8;
+  font-variant-numeric: tabular-nums;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -216,6 +217,21 @@ main {
 .view-all:hover { text-decoration: underline; }
 
 /* ── REPORT ARTICLE ── */
+.report-breadcrumb {
+  margin-bottom: 1.5rem;
+}
+
+.report-breadcrumb a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.2s;
+}
+
+.report-breadcrumb a:hover {
+  color: var(--accent-nova);
+}
+
 .report-article { padding: 2rem 0; }
 
 .report-header {
@@ -329,6 +345,112 @@ main {
 }
 
 .report-footer a:hover { text-decoration: underline; }
+
+/* ── REPORT SUMMARY BOX ── */
+.report-summary-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.8rem 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.summary-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.report-summary-box h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent-glow);
+  margin: 0;
+  gap: 0.8rem;
+}
+
+.summary-neo-badge {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  background: linear-gradient(135deg, rgba(126, 232, 250, 0.12), rgba(167, 139, 250, 0.12));
+  border: 1px solid rgba(126, 232, 250, 0.25);
+  border-radius: 10px;
+  padding: 0.6rem 1.2rem;
+}
+
+.neo-badge-count {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent-nova);
+  line-height: 1;
+}
+
+.neo-badge-unit {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem 2rem;
+  align-items: start;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-height: 0;
+}
+
+.summary-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-nova);
+  letter-spacing: 0.02em;
+}
+
+.summary-value {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+/* ── REPORT TABLE EXTRAS ── */
+.table-wrap {
+  overflow-x: auto;
+  margin: 1rem 0 2rem;
+}
+
+td.num {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.report-body th {
+  text-align: center;
+}
+
+.highlight-row {
+  background: rgba(126, 232, 250, 0.08);
+}
+
+.highlight-row td {
+  color: var(--accent-nova);
+  font-weight: 500;
+}
+
+.total-row {
+  border-top: 2px solid var(--border);
+  background: rgba(126, 232, 250, 0.04);
+}
 
 /* ── TABLE (general) ── */
 table {
@@ -662,6 +784,14 @@ main img {
   .report-body th,
   .report-body td {
     padding: 0.5rem 0.6rem;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .report-summary-box {
+    padding: 1.2rem 1.2rem;
   }
 
   /* ── ABOUT PAGE ── */

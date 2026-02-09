@@ -335,7 +335,7 @@ const MONTHS = ['2025년 1월','2025년 2월','2025년 3월','2025년 4월','202
 const SECTIONS = ['정치','경제','사회','생활/문화','IT/과학','세계','연예','스포츠'];
 let NEO_DATA = [];
 
-fetch('./data/neo_data.json')
+fetch('/K-NOVA/assets/data/neo_data.json')
   .then(r => r.json())
   .then(data => {
     NEO_DATA = data;

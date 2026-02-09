@@ -3,9 +3,16 @@ layout: default
 title: K-NOVA
 ---
 
+{%- assign neo_total = 0 -%}
+{%- for report in site.reports -%}
+  {%- if report.neologism_count -%}
+    {%- assign neo_total = neo_total | plus: report.neologism_count -%}
+  {%- endif -%}
+{%- endfor -%}
+
 <div class="hero">
   <img src="{{ '/img/K-NOVA.png' | relative_url }}" alt="K-NOVA" class="hero-logo">
-  <p class="hero-stat" id="heroStat">2025년 1월 이후, 누적 관측 신어 <span id="neoCount">---</span>개!</p>
+  <p class="hero-stat">2025년 1월 이후, 누적 관측 신어 <span class="fmt-num">{{ neo_total }}</span>개!</p>
   <p class="hero-source">(&lt;네이버 뉴스&gt; 최초 출현 기준)</p>
 </div>
 
@@ -48,12 +55,9 @@ const pieColors = [
 // 관측자 추천 신어 (수동 설정)
 const OBSERVER_PICK = '디지털 월세';
 
-fetch('{{ "/data/neo_data.json" | relative_url }}')
+fetch('{{ "/assets/data/neo_data.json" | relative_url }}')
   .then(r => r.json())
   .then(data => {
-    // 누적 신어 수 표시
-    document.getElementById('neoCount').textContent = data.length.toLocaleString();
-
     // 가장 높은 빈도
     const highFreq = [...data].sort((a, b) => {
       const sumA = a['월별 상대빈도'].reduce((x, y) => x + y, 0);
@@ -189,4 +193,12 @@ function renderFeatured(containerId, d) {
     }
   });
 }
+
+document.querySelectorAll('.fmt-num').forEach(function(el) {
+  var text = el.textContent.trim();
+  var num = Number(text);
+  if (!isNaN(num) && text !== '') {
+    el.textContent = num.toLocaleString('ko-KR');
+  }
+});
 </script>

@@ -1,7 +1,37 @@
 ---
 layout: default
 ---
+{%- assign ym = page.yyyymm -%}
+{%- assign pipeline = site.data.filter_and_judge_log_monthly[ym] -%}
+
+{%- assign d_articles = 0 -%}
+{%- assign d_words = 0 -%}
+{%- assign d_marker = "" -%}
+{%- for item in site.data.discourse_marker_corpus_size_monthly -%}
+  {%- assign iym = item.YYYYMM | append: "" -%}
+  {%- if iym == ym -%}
+    {%- assign d_articles = item["N of Articles"] -%}
+    {%- assign d_words = item["N of Words"] -%}
+    {%- assign d_marker = item["Discourse Marker"] -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- assign s_total_articles = 0 -%}
+{%- assign s_total_words = 0 -%}
+{%- for item in site.data.sampled_corpus_size_monthly -%}
+  {%- assign iym = item.YYYYMM | append: "" -%}
+  {%- if iym == ym -%}
+    {%- assign s_total_articles = s_total_articles | plus: item["N of Articles"] -%}
+    {%- assign s_total_words = s_total_words | plus: item["N of Words"] -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- assign total_words = s_total_words | plus: d_words -%}
+
 <article class="report-article">
+  <nav class="report-breadcrumb">
+    <a href="{{ '/reports/' | relative_url }}">&larr; 전체 관측 보고 목록</a>
+  </nav>
   <header class="report-header">
     <span class="report-date">{{ page.date | date: "%Y.%m.%d." }}</span>
     <h1>{{ page.title }}</h1>
@@ -10,16 +40,143 @@ layout: default
     {% endif %}
     <div class="report-meta">
       {% if page.period %}<span class="tag">📅 {{ page.period }}</span>{% endif %}
-      {% if page.genre %}<span class="tag">📂 {{ page.genre }}</span>{% endif %}
-      {% if page.neologism_count %}<span class="tag">✨ 신어 {{ page.neologism_count }}건</span>{% endif %}
+      {% if page.genre %}<span class="tag fmt-eok" data-total-words="{{ total_words }}">📂 {{ page.genre }}</span>{% endif %}
+      {% if page.neologism_count %}<span class="tag">✨ 신어 {{ page.neologism_count }}개 관측</span>{% endif %}
     </div>
   </header>
 
   <div class="report-body">
+    {% if pipeline %}
+    {%- assign first_step = pipeline | first -%}
+    {%- assign final_step = pipeline | last -%}
+    <div class="report-summary-box">
+      <div class="summary-top">
+        <h2>Summary</h2>
+        <div class="summary-neo-badge">
+          <span class="neo-badge-count">{{ final_step["정제 후 항목 수"] }}</span>
+          <span class="neo-badge-unit">개 신어 관측!</span>
+        </div>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="summary-label">관측 기간</span>
+          <span class="summary-value">{{ page.period }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">신어 후보군 추출 결과</span>
+          <span class="summary-value"><span class="fmt-num">{{ first_step["정제 후 항목 수"] }}</span>건</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">샘플 말뭉치 규모</span>
+          <span class="summary-value">기사 수: <span class="fmt-num">{{ s_total_articles }}</span>건<br>어절 수: <span class="fmt-num">{{ s_total_words }}</span>어절</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">화용 표지 말뭉치 규모</span>
+          <span class="summary-value">기사 수: <span class="fmt-num">{{ d_articles }}</span>건<br>어절 수: <span class="fmt-num">{{ d_words }}</span>어절</span>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if pipeline %}
+    <h2>신어 후보군 추출·정제·판별 결과</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>정제 단계</th>
+            <th>정제 후 항목 수</th>
+            <th>비율</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for step in pipeline -%}
+          <tr{% if step["정제 단계"] == "M4-인간 최종 판별" %} class="highlight-row"{% endif %}>
+            <td>{{ step["정제 단계"] }}</td>
+            <td class="num fmt-num">{{ step["정제 후 항목 수"] }}</td>
+            <td class="num fmt-pct">{{ step["정제 후 항목 비율"] }}</td>
+          </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+
+    <h2>샘플 말뭉치 규모</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>주제</th>
+            <th>기사 수</th>
+            <th>어절 수</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for item in site.data.sampled_corpus_size_monthly -%}
+            {%- assign iym = item.YYYYMM | append: "" -%}
+            {%- if iym == ym -%}
+            <tr>
+              <td>{{ item.Topic }}</td>
+              <td class="num fmt-num">{{ item["N of Articles"] }}</td>
+              <td class="num fmt-num">{{ item["N of Words"] }}</td>
+            </tr>
+            {%- endif -%}
+          {%- endfor -%}
+          <tr class="total-row">
+            <td><strong>합계</strong></td>
+            <td class="num fmt-num"><strong>{{ s_total_articles }}</strong></td>
+            <td class="num fmt-num"><strong>{{ s_total_words }}</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>화용 표지 말뭉치 규모</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>화용 표지</th>
+            <th>기사 수</th>
+            <th>어절 수</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ d_marker }}</td>
+            <td class="num fmt-num">{{ d_articles }}</td>
+            <td class="num fmt-num">{{ d_words }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     {{ content }}
   </div>
 
   <footer class="report-footer">
-    <a href="{{ '/reports/' | relative_url }}">&larr; 전체 관측 보고 목록</a>
   </footer>
 </article>
+
+<script>
+document.querySelectorAll('.fmt-num').forEach(function(el) {
+  var text = el.textContent.trim();
+  var num = Number(text);
+  if (!isNaN(num) && text !== '') {
+    el.textContent = num.toLocaleString('ko-KR');
+  }
+});
+document.querySelectorAll('.fmt-pct').forEach(function(el) {
+  var val = parseFloat(el.textContent.trim());
+  if (!isNaN(val)) {
+    el.textContent = (val * 100).toFixed(5) + '%';
+  }
+});
+document.querySelectorAll('.fmt-eok').forEach(function(el) {
+  var w = parseInt(el.getAttribute('data-total-words'));
+  if (!isNaN(w)) {
+    el.textContent = '📂 문어/웹 언어 ' + (w / 100000000).toFixed(2) + '억 어절';
+  }
+});
+</script>

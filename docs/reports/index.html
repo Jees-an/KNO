@@ -12,6 +12,22 @@ title: 신어 관측 보고
 {% if reports.size > 0 %}
 <ul class="report-list">
   {% for report in reports %}
+  {%- assign rym = report.yyyymm -%}
+  {%- assign r_d_words = 0 -%}
+  {%- for item in site.data.discourse_marker_corpus_size_monthly -%}
+    {%- assign iym = item.YYYYMM | append: "" -%}
+    {%- if iym == rym -%}
+      {%- assign r_d_words = item["N of Words"] -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign r_s_words = 0 -%}
+  {%- for item in site.data.sampled_corpus_size_monthly -%}
+    {%- assign iym = item.YYYYMM | append: "" -%}
+    {%- if iym == rym -%}
+      {%- assign r_s_words = r_s_words | plus: item["N of Words"] -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign r_total_words = r_s_words | plus: r_d_words -%}
   <li>
     <a href="{{ report.url | relative_url }}" class="report-card">
       <span class="card-date">{{ report.date | date: "%Y.%m.%d." }}</span>
@@ -21,8 +37,8 @@ title: 신어 관측 보고
       {% endif %}
       <div class="card-tags">
         {% if report.period %}<span class="tag">📅 {{ report.period }}</span>{% endif %}
-        {% if report.genre %}<span class="tag">📂 {{ report.genre }}</span>{% endif %}
-        {% if report.neologism_count %}<span class="tag">✨ {{ report.neologism_count }}건</span>{% endif %}
+        {% if report.genre %}<span class="tag fmt-eok" data-total-words="{{ r_total_words }}">📂 {{ report.genre }}</span>{% endif %}
+        {% if report.neologism_count %}<span class="tag">✨ 신어 {{ report.neologism_count }}개 관측!</span>{% endif %}
       </div>
     </a>
   </li>
@@ -33,3 +49,12 @@ title: 신어 관측 보고
   <p>🔭 아직 관측 보고가 없습니다. 곧 첫 번째 보고가 등록됩니다.</p>
 </div>
 {% endif %}
+
+<script>
+document.querySelectorAll('.fmt-eok').forEach(function(el) {
+  var w = parseInt(el.getAttribute('data-total-words'));
+  if (!isNaN(w)) {
+    el.textContent = '📂 문어/웹 언어 ' + (w / 100000000).toFixed(2) + '억 어절';
+  }
+});
+</script>

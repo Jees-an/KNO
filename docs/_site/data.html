@@ -159,15 +159,15 @@
     }
     .tf-max-label {
       position:absolute; top:0.8rem; right:1rem;
-      font-size:0.75rem; color:var(--text-secondary); text-align:right;
+      font-size:0.75rem; color:var(--accent-nova); text-align:right;
     }
-    .tf-max-label span { color:#60a5fa; font-weight:600; }
+    .tf-max-label span { color:#fff; font-weight:600; }
     .pmw-rank {
       position:absolute; top:0.8rem; right:1rem;
-      font-size:0.75rem; color:var(--text-secondary); text-align:right; line-height:1.6;
+      font-size:0.75rem; color:var(--accent-nova); text-align:right; line-height:1.8;
       display:none;
     }
-    .pmw-rank span { color:var(--accent-warm); font-weight:600; }
+    .pmw-rank span { color:#fff; font-weight:600; }
     .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-bottom:1.5rem; align-items:start; }
     .chart-box { background:var(--bg-deep); border-radius:8px; padding:1.5rem; height:350px; display:flex; flex-direction:column; overflow:hidden; }
     .chart-box .chart-section { flex:1; display:flex; flex-direction:column; min-height:0; }
@@ -335,7 +335,7 @@ const MONTHS = ['2025년 1월','2025년 2월','2025년 3월','2025년 4월','202
 const SECTIONS = ['정치','경제','사회','생활/문화','IT/과학','세계','연예','스포츠'];
 let NEO_DATA = [];
 
-fetch('./data/neo_data.json')
+fetch('/K-NOVA/assets/data/neo_data.json')
   .then(r => r.json())
   .then(data => {
     NEO_DATA = data;
@@ -441,7 +441,7 @@ function openModal(d) {
   var maxVal = Math.max.apply(null, monthlyFreq);
   var maxIdx = monthlyFreq.indexOf(maxVal);
   document.getElementById('chartTFMax').innerHTML =
-    '최고 빈도(' + MONTHS[maxIdx] + '): <span>' + maxVal.toLocaleString() + '회</span>';
+    '월 최고 빈도 (' + MONTHS[maxIdx] + '): <span>' + maxVal.toLocaleString() + '회</span>';
 
   if (chartTF) chartTF.destroy();
   chartTF = new Chart(document.getElementById('chartTF'), {
@@ -505,22 +505,18 @@ function openModal(d) {
     .slice(0, 3)
     .map(item => item.idx);
 
-  // 모바일: 우측 상단에 Top 3 텍스트 표시
+  // Top 3 텍스트 표시 (PC/모바일 공통)
   var rankEl = document.getElementById('chartPMWRank');
-  if (isMobile) {
-    var top3 = sortedIndices.map(function(idx, i) {
-      var pct = pmwTotal > 0 ? ((pmwData[idx] / pmwTotal) * 100).toFixed(1) : 0;
-      return (i + 1) + '. ' + SECTIONS[idx] + ' <span>' + pct + '%</span>';
-    });
-    rankEl.innerHTML = top3.join('<br>');
-    rankEl.style.display = 'block';
-  } else {
-    rankEl.style.display = 'none';
-  }
+  var top3 = sortedIndices.map(function(idx, i) {
+    var pct = pmwTotal > 0 ? ((pmwData[idx] / pmwTotal) * 100).toFixed(1) : 0;
+    return (i + 1) + '위 ' + SECTIONS[idx] + ' <span>' + pct + '%</span>';
+  });
+  rankEl.innerHTML = top3.join('<br>');
+  rankEl.style.display = 'block';
 
   chartPMW = new Chart(document.getElementById('chartPMW'), {
     type: 'doughnut',
-    plugins: isMobile ? [] : [ChartDataLabels],
+    plugins: [],
     data: {
       labels: SECTIONS,
       datasets: [{
@@ -536,7 +532,7 @@ function openModal(d) {
       layout: {
         padding: isMobile
           ? { top: 5, bottom: 5, left: 5, right: 5 }
-          : { top: 40, bottom: 20, left: 60, right: 60 }
+          : { top: 10, bottom: 10, left: 10, right: 10 }
       },
       plugins: {
         legend: {
@@ -559,30 +555,7 @@ function openModal(d) {
             }
           }
         },
-        datalabels: {
-          color: '#fff',
-          font: { size: 11, weight: 'bold' },
-          anchor: 'center',
-          align: function(ctx) {
-            var idx = ctx.dataIndex;
-            var rank = sortedIndices.indexOf(idx);
-            if (rank === 0) return 'end';
-            if (rank === 1) return 'start';
-            return 'end';
-          },
-          offset: 16,
-          clamp: true,
-          formatter: function(value, ctx) {
-            const idx = ctx.dataIndex;
-            if (!sortedIndices.includes(idx)) return '';
-            const pct = pmwTotal > 0 ? ((value / pmwTotal) * 100).toFixed(1) : 0;
-            return ctx.chart.data.labels[idx] + '\n' + pct + '%';
-          },
-          display: function(ctx) {
-            return sortedIndices.includes(ctx.dataIndex);
-          },
-          textAlign: 'center'
-        }
+        datalabels: { display: false }
       }
     }
   });
