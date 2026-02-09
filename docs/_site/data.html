@@ -277,7 +277,7 @@
 <div class="container">
   <div class="page-header">
     <h1>📋 한국어 신어 목록</h1>
-    <p>신어 수집·분석용 균형 말뭉치에서 수집된 한국어 신어 목록입니다. 각 신어를 클릭하면 뜻풀이, 의미 범주, 상세 관측 결과를 확인하실 수 있습니다.</p>
+    <p>신어 수집·분석용 균형 말뭉치에서 수집된 한국어 신어 목록입니다. 각 신어를 클릭하면 상세 관측 결과를 확인하실 수 있습니다.</p>
   </div>
 
   <div id="loadingArea" class="loading">
@@ -289,10 +289,10 @@
     <thead>
       <tr>
         <th>최초 출현일</th>
-        <th>신어</th>
+        <th>표제어</th>
         <th>최초 출현 기사문</th>
         <th>총빈도</th>
-        <th>출현 매체 수</th><th>출현 주제 수</th><th>출현 장르 수</th>
+        <th>출현 매체</th><th>출현 주제</th><th>출현 장르</th>
         <th>2025년 1월</th><th>2025년 2월</th><th>2025년 3월</th><th>2025년 4월</th>
         <th>2025년 5월</th><th>2025년 6월</th><th>2025년 7월</th><th>2025년 8월</th>
         <th>2025년 9월</th><th>2025년 10월</th><th>2025년 11월</th><th>2025년 12월</th>
@@ -327,7 +327,7 @@
 </div>
 
 <footer class="site-footer">
-  <p>&copy; 2025 K-NOVA · Korean Neologism Observatory and Visual Analytics</p>
+  <p>&copy; 2026 K-NOVA · Korean Neologism Observatory and Visual Analytics</p>
 </footer>
 
 <script>
@@ -335,7 +335,7 @@ const MONTHS = ['2025년 1월','2025년 2월','2025년 3월','2025년 4월','202
 const SECTIONS = ['정치','경제','사회','생활/문화','IT/과학','세계','연예','스포츠'];
 let NEO_DATA = [];
 
-fetch('/K-NOVA/assets/data/neo_data.json')
+fetch('/K-NOVA/assets/data/neo_data_712.json')
   .then(r => r.json())
   .then(data => {
     NEO_DATA = data;
@@ -369,11 +369,11 @@ function initTable() {
     const totalFreq = monthlyFreq.reduce((a, b) => a + b, 0);
     return [
       d['최초 출현일'],
-      '<span class="neo-link" data-neo="' + d['신어'] + '">' + d['신어'] + '</span>',
+      '<span class="neo-link" data-neo="' + d['표제어'] + '">' + d['표제어'] + '</span>',
       titleText,
       '<span class="tf-total">' + totalFreq.toLocaleString() + '</span>',
-      '<span class="tf-meta">' + d['출현 매체 수'] + '</span>',
-      '<span class="tf-meta">' + d['출현 주제 수'] + '</span>',
+      '<span class="tf-meta">' + d['출현 매체 수'] + ' (' + d['출현 매체 비율'] + '%)</span>',
+      '<span class="tf-meta">' + d['출현 주제 수'] + ' (' + d['출현 주제 비율'] + '%)</span>',
       '<span class="tf-meta">' + d['출현 장르 수'] + '</span>',
       ...tfCells,
     ];
@@ -419,7 +419,7 @@ function initTable() {
 
   $('#neoTable').on('click', '.neo-link', function() {
     const name = $(this).data('neo');
-    const d = NEO_DATA.find(x => x['신어'] === name);
+    const d = NEO_DATA.find(x => x['표제어'] === name);
     if (d) openModal(d);
   });
 }
@@ -429,12 +429,12 @@ let chartPMW = null;
 
 function openModal(d) {
   var isMobile = window.innerWidth <= 768;
-  document.getElementById('modalTitle').textContent = d['신어'];
+  document.getElementById('modalTitle').textContent = d['표제어'];
   document.getElementById('modalMeta').innerHTML =
     '<span>📅 최초 출현일: ' + d['최초 출현일'] + '</span>' +
-    '<span>📰 출현 매체 수 ' + d['출현 매체 수'] + '개</span>' +
-    '<span>🗂️ 출현 주제 수 ' + d['출현 주제 수'] + '개</span>' +
-    '<span>📁 출현 장르 수 ' + d['출현 장르 수'] + '개</span>';
+    '<span>📰 출현 매체 ' + d['출현 매체 수'] + '개 (' + d['출현 매체 비율'] + '%)</span>' +
+    '<span>🗂️ 출현 주제 ' + d['출현 주제 수'] + '개 (' + d['출현 주제 비율'] + '%)</span>' +
+    '<span>📁 출현 장르 ' + d['출현 장르 수'] + '개</span>';
 
   // 최고 빈도 표시
   var monthlyFreq = d['월별 상대빈도'];
