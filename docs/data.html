@@ -235,12 +235,12 @@
     }
     /* Charts */
     .chart-box {
-      background:var(--bg-deep); border-radius:8px; padding:1.5rem; height:350px;
-      display:flex; flex-direction:column; overflow:hidden; position:relative;
+      background:var(--bg-deep); border-radius:8px; padding:1.5rem;
+      aspect-ratio:16/9; display:flex; flex-direction:column; overflow:hidden; position:relative;
     }
-    .chart-box canvas { flex:1; max-height:280px; }
-    .chart-topic { height:440px; }
-    .chart-topic canvas { max-height:none; }
+    .chart-box canvas { flex:1; min-height:0; }
+    .chart-topic { aspect-ratio:5/4; }
+    .chart-topic canvas { min-height:0; }
     .tf-max-label {
       position:absolute; top:0.8rem; right:1rem;
       font-size:0.75rem; color:var(--accent-nova); text-align:right;
@@ -371,9 +371,7 @@
       .stat-cards { grid-template-columns:repeat(2,1fr); }
       .galaxy-container { height:300px; }
       .network-container { height:380px; }
-      .chart-box { height:280px; padding:1rem; }
-      .chart-box canvas { max-height:200px; }
-      .chart-topic { height:350px; }
+      .chart-box { padding:1rem; }
       .modal-section h3 { font-size:0.82rem; }
     }
     /* ═══════ MOBILE: PHONES ONLY ═══════ */
@@ -384,9 +382,7 @@
       .modal-hero h2 { font-size:1rem; }
       .galaxy-container { height:250px; }
       .network-container { height:320px; }
-      .chart-box { height:250px; padding:0.8rem; }
-      .chart-box canvas { max-height:180px; }
-      .chart-topic { height:300px; }
+      .chart-box { padding:0.8rem; }
       .dataTables_paginate .paginate_button {
         padding:0.3rem 0.5rem !important; margin:0 1px; min-width:32px; font-size:0.75rem !important;
       }
