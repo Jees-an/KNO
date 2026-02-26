@@ -67,7 +67,7 @@ const OBSERVER_PICK = '디지털 월세';
 
 let neoPool = [];
 
-fetch('{{ "/assets/data/neo_data_712.json" | relative_url }}')
+fetch('./assets/data/neo_data_712.json')
   .then(r => r.json())
   .then(data => {
     const highFreq = [...data].sort((a, b) => b['단어빈도_전체'] - a['단어빈도_전체'])[0];

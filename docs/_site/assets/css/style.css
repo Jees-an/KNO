@@ -1139,7 +1139,7 @@ main img {
   /* ── SHOOTING STAR SECTION ── */
   .star-stage {
     padding: 2rem 1.2rem;
-    min-height: 1000px;
+    min-height: 700px;
   }
 
   .star-btn {
@@ -1305,7 +1305,7 @@ main img {
 
   .star-stage {
     padding: 1.5rem 1rem;
-    min-height: 950px;
+    min-height: 600px;
   }
 
   .star-btn {

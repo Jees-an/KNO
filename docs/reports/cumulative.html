@@ -80,7 +80,7 @@ title: 누적 관측 결과
     <p class="report-summary">{{ total_reports }}건의 관측 보고를 합산한 누적 결과입니다.</p>
     <div class="report-meta">
       <span class="tag">📅 {{ first_period }} ~ {{ last_period }}</span>
-      <span class="tag fmt-eok" data-total-words="{{ cum_total_words }}">📂 문어/웹 언어</span>
+      <span class="tag fmt-eok" data-total-words="{{ cum_total_words }}">📂 신문/영상 댓글</span>
       <span class="tag">✨ 신어 <span class="fmt-num">{{ cum_final_neo }}</span>개 관측</span>
     </div>
   </header>
@@ -250,7 +250,7 @@ document.querySelectorAll('.fmt-num').forEach(function(el) {
 document.querySelectorAll('.fmt-eok').forEach(function(el) {
   var w = parseInt(el.getAttribute('data-total-words'));
   if (!isNaN(w)) {
-    el.textContent = '📂 문어/웹 언어 ' + (w / 100000000).toFixed(2) + '억 어절';
+    el.textContent = '📂 신문/영상 댓글 ' + (w / 100000000).toFixed(2) + '억 어절';
   }
 });
 document.querySelectorAll('.cum-pct').forEach(function(el) {

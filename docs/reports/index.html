@@ -139,7 +139,7 @@ document.querySelectorAll('.fmt-eok').forEach(function(el) {
   if (!isNaN(w)) {
     // 카드 태그(.tag) 안에서는 접두사 포함, 배너에서는 값만
     if (el.classList.contains('tag')) {
-      el.textContent = '📂 문어/웹 언어 ' + (w / 100000000).toFixed(2) + '억 어절';
+      el.textContent = '📂 신문/영상 댓글 ' + (w / 100000000).toFixed(2) + '억 어절';
     } else {
       el.textContent = (w / 100000000).toFixed(2) + '억 어절';
     }

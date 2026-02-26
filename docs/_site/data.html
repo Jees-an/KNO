@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <title>신어 관측 데이터</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -33,6 +33,7 @@
       background: var(--bg-deep);
       color: var(--text-primary);
       font-family: var(--font-body);
+      font-variant-numeric: tabular-nums;
       font-weight: 300;
       line-height: 1.6;
     }
@@ -79,8 +80,36 @@
     .dataTables_filter input {
       background:var(--bg-card) !important; color:var(--text-primary) !important;
       border:1px solid var(--border) !important; border-radius:4px; padding:0.4rem 0.8rem;
-      font-family:var(--font-body);
+      font-family:var(--font-body); text-align:center;
     }
+    .dataTables_filter { display:flex; align-items:center; justify-content:flex-end; gap:0.5rem; }
+    .search-help {
+      display:inline-block; color:var(--accent-nova); order:-1;
+      font-size:0.8rem; cursor:default; position:relative; vertical-align:middle;
+    }
+    .search-help:hover::after {
+      content: attr(data-tip);
+      position:absolute; top:calc(100% + 6px); left:0; transform:none;
+      white-space:pre-line; z-index:999; width:max-content; max-width:280px;
+      background:var(--bg-card); color:var(--text-primary);
+      border:1px solid var(--accent-nova); border-radius:6px;
+      padding:0.6rem 0.85rem; font-size:0.8rem; font-weight:400;
+      font-family:'Pretendard',sans-serif; line-height:1.6;
+      box-shadow:0 4px 16px rgba(126,232,250,0.18);
+      pointer-events:none;
+    }
+    /* 검색 인풋 포커스 시 안내 팝업 */
+    .search-input-wrap { position:relative; display:inline-block; }
+    .search-tip-popup {
+      display:none; position:absolute; top:calc(100% + 6px); right:0;
+      white-space:pre-line; z-index:999; width:max-content; max-width:300px;
+      background:var(--bg-card); color:var(--text-primary);
+      border:1px solid var(--accent-nova); border-radius:6px;
+      padding:0.6rem 0.85rem; font-size:0.8rem; font-weight:400;
+      font-family:'Pretendard',sans-serif; line-height:1.6;
+      box-shadow:0 4px 16px rgba(126,232,250,0.18);
+    }
+    .search-tip-popup.visible { display:block; }
     .dataTables_length select {
       background:var(--bg-card) !important; color:var(--text-primary) !important;
       border:1px solid var(--border) !important; border-radius:4px; padding:0.3rem;
@@ -123,7 +152,8 @@
     .neo-link:hover { border-bottom-style:solid; }
     .url-link { color:var(--text-muted); font-size:0.75rem; text-decoration:none; }
     .url-link:hover { color:var(--accent-nova); }
-    .tf-cell { font-family:'Pretendard', sans-serif; font-size:0.78rem; color:var(--text-secondary); }
+    .tf-cell { font-family:'Pretendard', sans-serif; font-size:0.78rem; color:var(--text-secondary); text-align:right; }
+    .filter-sep { display:inline-block; width:1px; height:1.2rem; background:var(--border); margin:0 0.2rem; vertical-align:middle; }
     .tf-nonzero { color:var(--text-secondary); }
     .tf-total { color:var(--accent-warm); font-weight:700; }
     .tf-meta { color:var(--accent-purple); }
@@ -131,19 +161,32 @@
     /* Press bar & Collocate badges */
     .press-bar {
       position:relative; width:80px; height:20px;
-      background:var(--bg-deep); border-radius:4px; overflow:hidden;
+      background:var(--bg-deep); border-radius:4px;
       display:inline-flex; align-items:center; justify-content:center;
     }
     .press-bar-fill {
       position:absolute; left:0; top:0; bottom:0;
       background:linear-gradient(90deg, rgba(126,232,250,0.15), rgba(126,232,250,0.35));
-      border-radius:4px;
+      border-radius:4px; overflow:hidden;
     }
     .press-bar span {
       position:relative; font-size:0.72rem; color:var(--accent-nova); z-index:1;
       font-family:'Pretendard',sans-serif;
     }
     .press-bar small { color:var(--text-muted); }
+    .press-bar[data-tip] { cursor:default; overflow:visible; }
+    td:has(.press-bar[data-tip]) { overflow:visible !important; }
+    .press-bar[data-tip]:hover::after {
+      content: attr(data-tip);
+      position:absolute; bottom:calc(100% + 6px); left:50%; transform:translateX(-50%);
+      white-space:nowrap; z-index:999;
+      background:var(--bg-card); color:var(--text-primary);
+      border:1px solid var(--accent-nova); border-radius:6px;
+      padding:0.45rem 0.75rem; font-size:0.85rem; font-weight:500;
+      font-family:'Pretendard',sans-serif; letter-spacing:0.02em;
+      box-shadow:0 4px 16px rgba(126,232,250,0.18);
+      pointer-events:none;
+    }
     .dp-bar {
       position:relative; width:80px; height:20px;
       background:var(--bg-deep); border-radius:4px; overflow:hidden;
@@ -216,6 +259,7 @@
     .stat-value .stat-unit { font-size:0.75rem; font-weight:400; color:var(--text-muted); }
     .stat-pct { font-size:0.8rem; color:var(--accent-warm); margin-top:0.2rem; }
     .stat-label { font-size:0.75rem; color:var(--text-secondary); margin-top:0.3rem; }
+    .stat-sub { font-size:0.7rem; color:var(--text-muted); margin-top:0.15rem; }
     /* Galaxy */
     .galaxy-summary { font-size:0.85rem; color:var(--text-secondary); margin-bottom:1rem; }
     .galaxy-total { color:var(--text-primary); font-weight:500; }
@@ -233,16 +277,28 @@
       color:var(--text-primary); font-size:0.8rem;
       pointer-events:none; white-space:nowrap; z-index:5;
     }
+    .speaker-bar-wrap { margin-top:0.8rem; }
+    .speaker-ratio-bar {
+      width:100%; height:28px; background:rgba(30,45,74,0.6); border-radius:6px; overflow:hidden;
+      position:relative;
+    }
+    .speaker-ratio-fill {
+      height:100%; background:linear-gradient(90deg, rgba(52,211,153,0.7), rgba(52,211,153,0.35));
+      border-radius:6px; transition:width 0.6s ease;
+      display:flex; align-items:center; justify-content:flex-end; padding:0 0.6rem;
+      font-size:0.8rem; color:#fff; font-weight:500; min-width:fit-content;
+    }
     /* Charts */
     .chart-box {
-      background:var(--bg-deep); border-radius:8px; padding:1.5rem; height:350px;
-      display:flex; flex-direction:column; overflow:hidden; position:relative;
+      background:var(--bg-deep); border-radius:8px; padding:1.5rem;
+      aspect-ratio:16/9; display:flex; flex-direction:column; overflow:hidden; position:relative;
     }
-    .chart-box canvas { flex:1; max-height:280px; }
-    .chart-topic canvas { max-height:none; }
+    .chart-box canvas { flex:1; min-height:0; }
+    .chart-topic { aspect-ratio:5/4; }
+    .chart-topic canvas { min-height:0; }
     .tf-max-label {
-      position:absolute; top:0.8rem; right:1rem;
       font-size:0.75rem; color:var(--accent-nova); text-align:right;
+      margin-bottom:0.25rem;
     }
     .tf-max-label span { color:#fff; font-weight:600; }
     .pmw-rank {
@@ -253,6 +309,7 @@
     .pmw-rank span { color:#fff; font-weight:600; }
     /* Tabs */
     .tab-bar { display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap; }
+    .tab-bar.source-tabs .tab-btn.active { background:rgba(52,211,153,0.12); border-color:#34d399; color:#34d399; }
     .tab-btn {
       background:var(--bg-deep); border:1px solid var(--border); border-radius:6px;
       color:var(--text-secondary); padding:0.4rem 0.8rem; font-size:0.8rem;
@@ -309,6 +366,59 @@
       padding:0.1rem 0.2rem; border-radius:2px;
     }
     .no-data { color:var(--text-muted); font-size:0.85rem; padding:1rem 0; }
+    /* Source tabs */
+    .source-tabs {
+      display:flex; gap:0.5rem; margin-bottom:1.5rem;
+    }
+    .source-tab {
+      background:var(--bg-card); border:1px solid var(--border); border-radius:8px;
+      color:var(--text-secondary); padding:0.6rem 1.4rem; font-size:0.9rem;
+      cursor:pointer; font-family:var(--font-body); font-weight:400; transition:all 0.2s;
+    }
+    .source-tab:hover { border-color:var(--accent-nova); color:var(--text-primary); }
+    .source-tab.active {
+      background:rgba(126,232,250,0.1); border-color:var(--accent-nova);
+      color:var(--accent-nova); font-weight:600;
+    }
+    .example-yt-meta { display:flex; gap:0.8rem; align-items:center; flex-wrap:wrap; }
+    .example-likes { color:var(--accent-warm); font-size:0.75rem; }
+    .example-type { color:var(--text-muted); font-size:0.72rem; text-transform:uppercase; }
+    /* 상대빈도 tooltip */
+    th[title] { cursor:help; }
+    /* 통합 모달: 소스 구분 헤더 */
+    .source-divider {
+      font-size:0.78rem; font-weight:600; color:var(--accent-nova);
+      padding:0.6rem 0 0.3rem; margin-top:0.5rem;
+      border-top:1px solid var(--border);
+    }
+    .source-divider:first-child { border-top:none; margin-top:0; }
+    /* 빈도 필터 바 */
+    .freq-filter-bar {
+      display:none; align-items:center; gap:1.2rem; flex-wrap:wrap;
+      margin-bottom:1rem; padding:0.8rem 1rem;
+      background:var(--bg-card); border:1px solid var(--border); border-radius:6px;
+      font-size:0.82rem; color:var(--text-secondary);
+    }
+    .freq-filter-bar.visible { display:flex; }
+    .freq-filter-bar label { display:flex; align-items:center; gap:0.4rem; white-space:nowrap; }
+    .freq-filter-bar input[type="number"] {
+      width:6rem; background:var(--bg-deep); color:var(--text-primary);
+      border:1px solid var(--border); border-radius:4px; padding:0.3rem 0.5rem;
+      font-family:var(--font-mono); font-size:0.8rem; text-align:right;
+    }
+    .freq-filter-bar input[type="number"]:focus { outline:none; border-color:var(--accent-nova); }
+    .filter-op {
+      background:var(--bg-deep); color:var(--text-primary);
+      border:1px solid var(--border); border-radius:4px; padding:0.3rem 0.3rem;
+      font-size:0.82rem; cursor:pointer;
+    }
+    .filter-op:focus { outline:none; border-color:var(--accent-nova); }
+    .freq-filter-bar .filter-reset {
+      background:none; border:1px solid var(--border); color:var(--text-secondary);
+      border-radius:4px; padding:0.25rem 0.6rem; cursor:pointer; font-size:0.78rem;
+      transition:border-color 0.2s;
+    }
+    .freq-filter-bar .filter-reset:hover { border-color:var(--accent-nova); color:var(--text-primary); }
     .site-footer {
       text-align:center; padding:2rem; border-top:1px solid var(--border);
       color:var(--text-muted); font-size:0.8rem; margin-top:3rem;
@@ -348,10 +458,17 @@
       .container { padding:1.2rem; }
       .page-header h1 { font-size:1.15rem; }
       .page-header p { font-size:0.85rem; }
+      /* ── 필터 바 ── */
+      .freq-filter-bar.visible { display:grid; grid-template-columns:1fr 1fr; gap:0.4rem 0.6rem; padding:0.5rem 0.6rem; font-size:0.74rem; }
+      .freq-filter-bar label { min-width:0; gap:0.25rem; }
+      .freq-filter-bar input[type="number"] { width:auto; min-width:0; flex:1; font-size:0.72rem; padding:0.2rem 0.35rem; }
+      .filter-op { font-size:0.72rem; padding:0.2rem 0.25rem; }
+      .freq-filter-bar .filter-reset { grid-column:1 / -1; justify-self:end; margin-right:0; }
       /* ── DATATABLE CONTROLS ── */
       .dataTables_wrapper .dataTables_length,
-      .dataTables_wrapper .dataTables_filter { float:none; text-align:left; margin-bottom:1rem; }
-      .dataTables_filter input { width:100% !important; margin-left:0 !important; margin-top:0.5rem; }
+      .dataTables_wrapper .dataTables_filter { float:none; text-align:right; margin-bottom:0.5rem; }
+      .dataTables_filter { justify-content:flex-end; }
+      .dataTables_filter input { margin-left:0.3rem !important; }
       .dataTables_length { display:flex; flex-wrap:wrap; align-items:center; gap:0.5rem; }
       .sort-select { margin-left:0; margin-top:0.5rem; width:100%; }
       .dataTables_info { font-size:0.78rem !important; }
@@ -368,26 +485,74 @@
       .modal-hero h2 { font-size:1.1rem; padding-right:2rem; }
       .modal-close { top:0.8rem; right:0.8rem; width:44px; height:44px; font-size:1.5rem; }
       .stat-cards { grid-template-columns:repeat(2,1fr); }
+      .modal { overflow-x:hidden; }
       .galaxy-container { height:300px; }
       .network-container { height:380px; }
-      .chart-box { height:280px; padding:1rem; }
-      .chart-box canvas { max-height:200px; }
+      .chart-box { padding:1rem; }
       .modal-section h3 { font-size:0.82rem; }
+      /* 모달 가로 overflow 방지 */
+      .modal-section { overflow:hidden; }
+      .modal-overlay { -webkit-overflow-scrolling:touch; overflow-x:hidden; }
+      /* 차트 최고값 라벨 */
+      .tf-max-label { font-size:0.65rem; }
+      .pmw-rank { font-size:0.65rem; }
     }
     /* ═══════ MOBILE: PHONES ONLY ═══════ */
     @media (max-width:480px) {
       .top-nav { padding:0.8rem 1rem; }
-      .container { padding:0.8rem; }
-      .modal-section { padding:1rem; border-radius:8px; }
-      .modal-hero h2 { font-size:1rem; }
-      .galaxy-container { height:250px; }
-      .network-container { height:320px; }
-      .chart-box { height:250px; padding:0.8rem; }
-      .chart-box canvas { max-height:180px; }
+      .container { padding:0.6rem; }
+      .page-header h1 { font-size:1.05rem; }
+      .page-header p { font-size:0.78rem; }
+      .source-tabs { gap:0.3rem; }
+      .source-tab { font-size:0.75rem; padding:0.35rem 0.7rem; }
+      /* 필터 바 */
+      .freq-filter-bar { gap:0.3rem 0.5rem; padding:0.4rem 0.5rem; font-size:0.68rem; }
+      .freq-filter-bar label { white-space:nowrap; min-width:0; gap:0.2rem; }
+      .freq-filter-bar input[type="number"] { width:auto; min-width:0; flex:1; font-size:0.68rem; padding:0.15rem 0.3rem; }
+      .filter-op { font-size:0.68rem; padding:0.15rem 0.2rem; }
+      .freq-filter-bar .filter-reset { font-size:0.65rem; padding:0.2rem 0.5rem; }
+      /* 데이터 테이블 컨트롤 */
+      .dataTables_wrapper .dataTables_length { font-size:0.78rem; }
+      .dataTables_wrapper .dataTables_filter { font-size:0.78rem; }
+      .sort-select { font-size:0.78rem; }
+      /* 검색 안내 팝업 모바일 조정 */
+      .search-tip-popup { max-width:85vw; font-size:0.72rem; right:0; left:auto; }
       .dataTables_paginate .paginate_button {
-        padding:0.3rem 0.5rem !important; margin:0 1px; min-width:32px; font-size:0.75rem !important;
+        padding:0.3rem 0.5rem !important; margin:0 1px; min-width:32px; font-size:0.72rem !important;
       }
+      /* 모달 */
+      .modal { padding:0.5rem 0.3rem 2rem; overflow-x:hidden; }
+      .modal-section { padding:0.6rem; margin-bottom:0.8rem; border-radius:8px; overflow:hidden; }
+      .modal-hero h2 { font-size:0.95rem; }
+      .modal-hero .hero-article { font-size:0.75rem; }
+      .modal-close { top:0.4rem; right:0.4rem; width:48px; height:48px; font-size:1.6rem; }
+      .modal-section h3 { font-size:0.75rem; margin-bottom:0.8rem; }
+      /* 스탯 카드 */
+      .stat-cards { grid-template-columns:repeat(2,1fr); gap:0.5rem; }
+      .stat-card { padding:0.6rem; border-radius:6px; }
+      .stat-value { font-size:1rem; }
+      .stat-unit { font-size:0.6rem; }
+      .stat-label { font-size:0.6rem; }
+      .stat-pct { font-size:0.6rem; }
+      .stat-sub { font-size:0.55rem; }
+      /* 차트 */
+      .chart-box { padding:0.4rem; }
+      .tf-max-label { font-size:0.58rem; }
+      .pmw-rank { font-size:0.58rem; }
+      /* 갤럭시/네트워크 */
+      .galaxy-container { height:220px; }
+      .network-container { height:260px; }
+      /* 공기어 탭 */
+      .coll-tab, .coll-pos-tab { font-size:0.72rem; padding:0.3rem 0.6rem; }
+      /* 용례/ngram 테이블 */
+      .examples-table { font-size:0.68rem; }
+      .examples-table th, .examples-table td { padding:0.35rem; }
+      .ngram-table { font-size:0.68rem; }
+      .ngram-table th, .ngram-table td { padding:0.25rem 0.35rem; }
     }
+    /* ═══════ 확대 시 가로 스크롤 허용 ═══════ */
+    html { overflow-x:auto; }
+    body { min-width:320px; }
   </style>
 </head>
 <body>
@@ -411,7 +576,47 @@
 <div class="container">
   <div class="page-header">
     <h1>📋 한국어 신어 목록</h1>
-    <p>신어 수집·분석용 균형 말뭉치에서 수집된 한국어 신어 목록입니다. 각 신어를 클릭하면 뜻풀이, 의미 범주, 상세 관측 결과를 확인하실 수 있습니다.</p>
+    <p>신어 수집·분석용 균형 말뭉치에서 수집된 한국어 신어 목록입니다. 각 신어를 클릭하면 상세 관측 결과를 확인하실 수 있습니다.</p>
+  </div>
+
+  <div class="source-tabs">
+    <button class="source-tab active" data-source="combined">통합</button>
+    <button class="source-tab" data-source="naver_news">신문 말뭉치</button>
+    <button class="source-tab" data-source="youtube">영상 댓글 말뭉치</button>
+  </div>
+
+  <div class="freq-filter-bar" id="freqFilterBar">
+    <label>신문 상대빈도
+      <select id="filterNvOp" class="filter-op"><option value="gte">≥</option><option value="lte">≤</option><option value="eq">=</option></select>
+      <input type="number" id="filterNvFreq" min="0" step="1">
+    </label>
+    <label>영상 댓글 상대빈도
+      <select id="filterYtOp" class="filter-op"><option value="gte">≥</option><option value="lte">≤</option><option value="eq">=</option></select>
+      <input type="number" id="filterYtFreq" min="0" step="1">
+    </label>
+    <label>신문 절대빈도
+      <select id="filterNvAbsOp" class="filter-op"><option value="gte">≥</option><option value="lte">≤</option><option value="eq">=</option></select>
+      <input type="number" id="filterNvAbsFreq" min="0" step="1">
+    </label>
+    <label>영상 댓글 절대빈도
+      <select id="filterYtAbsOp" class="filter-op"><option value="gte">≥</option><option value="lte">≤</option><option value="eq">=</option></select>
+      <input type="number" id="filterYtAbsFreq" min="0" step="1">
+    </label>
+    <button class="filter-reset" id="filterReset">초기화</button>
+    <span id="filterCount" style="color:var(--accent-nova);font-size:0.9rem;font-weight:500;margin-left:0.5rem;"></span>
+  </div>
+
+  <div class="freq-filter-bar" id="singleFilterBar">
+    <label>상대빈도
+      <select id="filterSrcOp" class="filter-op"><option value="gte">&ge;</option><option value="lte">&le;</option><option value="eq">=</option></select>
+      <input type="number" id="filterSrcFreq" min="0" step="1">
+    </label>
+    <label>절대빈도
+      <select id="filterSrcAbsOp" class="filter-op"><option value="gte">&ge;</option><option value="lte">&le;</option><option value="eq">=</option></select>
+      <input type="number" id="filterSrcAbsFreq" min="0" step="1">
+    </label>
+    <button class="filter-reset" id="singleFilterReset">초기화</button>
+    <span id="singleFilterCount" style="color:var(--accent-nova);font-size:0.9rem;font-weight:500;margin-left:0.5rem;"></span>
   </div>
 
   <div id="loadingArea" class="loading">
@@ -419,21 +624,12 @@
     <p>데이터를 불러오는 중...</p>
   </div>
 
-  <table id="neoTable" class="display" style="width:100%; display:none;">
-    <thead>
-      <tr>
-        <th>최초 출현일</th>
-        <th>표제어</th>
-        <th>최초 출현 기사문</th>
-        <th>총빈도</th><th>제목 빈도 비율</th>
-        <th>출현 매체 수</th><th>출현 주제 수</th><th>출현 장르 수</th><th>DP</th>
-        <th>2025년 1월</th><th>2025년 2월</th><th>2025년 3월</th><th>2025년 4월</th>
-        <th>2025년 5월</th><th>2025년 6월</th><th>2025년 7월</th><th>2025년 8월</th>
-        <th>2025년 9월</th><th>2025년 10월</th><th>2025년 11월</th><th>2025년 12월</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <div id="tableWrap" style="display:none;">
+    <table id="neoTable" class="display" style="width:100%;">
+      <thead><tr id="tableHead"></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
 </div>
 
 <div class="modal-overlay" id="modalOverlay">
@@ -449,34 +645,67 @@
     <div class="modal-section">
       <div class="stat-cards" id="statCards"></div>
     </div>
-    <!-- 1) Monthly Frequency -->
-    <div class="modal-section">
-      <h3>월별 빈도 추이</h3>
+    <!-- 1) Monthly Frequency (통합: dual-line / 단일: single-line) -->
+    <div class="modal-section" id="chartTFSection">
+      <h3 id="chartTFTitle">월별 빈도 추이</h3>
       <div class="chart-box">
         <div id="chartTFMax" class="tf-max-label"></div>
         <canvas id="chartTF"></canvas>
       </div>
     </div>
-    <!-- 2) Topic Distribution -->
-    <div class="modal-section">
-      <h3>주제별 분포</h3>
-      <div class="chart-box chart-topic" style="height:440px;">
+    <!-- 1-b) 통합 전용: 신문 월별 빈도 추이 -->
+    <div class="modal-section" id="chartTFNvSection" style="display:none">
+      <h3>월별 빈도 추이 (신문)</h3>
+      <div class="chart-box">
+        <div id="chartTFNvMax" class="tf-max-label"></div>
+        <canvas id="chartTFNv"></canvas>
+      </div>
+    </div>
+    <!-- 1-c) 통합 전용: 웹 월별 빈도 추이 -->
+    <div class="modal-section" id="chartTFYtSection" style="display:none">
+      <h3>월별 빈도 추이 (영상 댓글)</h3>
+      <div class="chart-box">
+        <div id="chartTFYtMax" class="tf-max-label"></div>
+        <canvas id="chartTFYt"></canvas>
+      </div>
+    </div>
+    <!-- 2) Topic Distribution (통합: 신문+웹 각각 / 단일: 해당 소스) -->
+    <div class="modal-section" id="chartPMWSection">
+      <h3 id="chartPMWTitle">주제별 분포</h3>
+      <div class="chart-box chart-topic">
         <div id="chartPMWRank" class="pmw-rank"></div>
         <canvas id="chartPMW"></canvas>
       </div>
     </div>
+    <!-- 2-b) 통합 전용: 웹 주제별 분포 -->
+    <div class="modal-section" id="chartPMWYtSection" style="display:none">
+      <h3>주제별 분포 (영상 댓글)</h3>
+      <div class="chart-box chart-topic">
+        <div id="chartPMWYtRank" class="pmw-rank"></div>
+        <canvas id="chartPMWYt"></canvas>
+      </div>
+    </div>
     <!-- 3) Galaxy -->
-    <div class="modal-section">
-      <h3>매체 사용 분포</h3>
+    <div class="modal-section" id="galaxySection">
+      <h3 id="galaxyTitle">사용 매체 수</h3>
       <p class="galaxy-summary" id="galaxySummary"></p>
       <div class="galaxy-container">
         <canvas id="galaxyCanvas"></canvas>
         <div class="galaxy-tooltip" id="galaxyTooltip"></div>
       </div>
     </div>
+    <!-- 3-B) Speaker Stats -->
+    <div class="modal-section" id="speakerSection" style="display:none">
+      <h3 id="speakerTitle">사용 화자 수</h3>
+      <p class="galaxy-summary" id="speakerSummary"></p>
+      <div class="speaker-bar-wrap">
+        <div class="speaker-ratio-bar"><div class="speaker-ratio-fill" id="speakerFill"></div></div>
+      </div>
+    </div>
     <!-- 4) Collocates -->
     <div class="modal-section" id="collocatesSection">
       <h3>공기어 네트워크</h3>
+      <div class="tab-bar source-tabs" id="collSourceTabs" style="margin-bottom:0.5rem"></div>
       <div class="tab-bar" id="collocateTabs"></div>
       <div class="network-container">
         <canvas id="networkCanvas"></canvas>
@@ -486,6 +715,7 @@
     <!-- 5) N-GRAM -->
     <div class="modal-section" id="ngramSection">
       <h3>N-GRAM 분석</h3>
+      <div class="tab-bar source-tabs" id="ngramSourceTabs" style="margin-bottom:0.5rem"></div>
       <div class="tab-bar" id="ngramTabs"></div>
       <div id="ngramContent" class="tab-content"></div>
     </div>
@@ -503,117 +733,680 @@
 
 <script>
 const MONTHS = ['2025년 1월','2025년 2월','2025년 3월','2025년 4월','2025년 5월','2025년 6월','2025년 7월','2025년 8월','2025년 9월','2025년 10월','2025년 11월','2025년 12월'];
-const SECTIONS = ['정치','경제','사회','생활/문화','IT/과학','세계','연예','스포츠'];
-let NEO_DATA = [];
-let META_DATA = {};
-let ALL_PRESS = [];
-let COLLOCATES = null;
-let EXAMPLES = null;
-let dataLoading = false;
 
+/* ── 소스별 설정 ── */
+var SRC = {
+  combined: {
+    label: '통합',
+    isCombined: true,
+    hasTitle: false, showGalaxy: true,
+  },
+  naver_news: {
+    label: '신문 말뭉치',
+    sections: ['정치','경제','사회','생활/문화','IT/과학','세계','연예','스포츠'],
+    sectionLabels: null,
+    pressCountKey: '출현 매체 수', pressCount: '사용 매체 비율',
+    pressNames: '출현 매체명', pressRatio: '출현 매체 비율',
+    firstPress: '최초 출현 매체', firstText: '최초 출현 기사문', textUrl: '기사문 URL',
+    pressLabel: '매체', totalPressKey: 'total_press_count', allPressKey: 'all_press',
+    hasTitle: true, showGalaxy: true,
+    colors8: ['rgba(126,232,250,0.7)','rgba(240,194,122,0.7)','rgba(167,139,250,0.7)','rgba(92,224,216,0.7)',
+              'rgba(248,113,113,0.7)','rgba(251,191,36,0.7)','rgba(52,211,153,0.7)','rgba(236,72,153,0.7)'],
+  },
+  youtube: {
+    label: '영상 댓글 말뭉치',
+    sections: ['news_and_politics','gaming','people_and_blogs','entertainment','music','comedy','sports',
+               'education','auto_and_vehicles','howto_and_style','film','travel_and_events',
+               'science_and_technology','pets_and_animals','nonprofits_and_activism'],
+    sectionLabels: {
+      'news_and_politics':'뉴스/정치','gaming':'게임','people_and_blogs':'인물/블로그',
+      'entertainment':'엔터테인먼트','music':'음악','comedy':'코미디','sports':'스포츠',
+      'education':'교육','auto_and_vehicles':'자동차','howto_and_style':'노하우/스타일',
+      'film':'영화','travel_and_events':'여행/이벤트','science_and_technology':'과학/기술',
+      'pets_and_animals':'반려동물','nonprofits_and_activism':'비영리/시민활동',
+    },
+    pressCountKey: '출현 화자 수', pressCount: '사용 화자 비율',
+    pressNames: '출현 화자명', pressRatio: '출현 화자 비율',
+    firstPress: '최초 출현 화자', firstText: '최초 출현 기사문', textUrl: '기사문 URL',
+    pressLabel: '화자', totalPressKey: 'total_speaker_count', allPressKey: 'all_speakers',
+    hasTitle: true, showGalaxy: false,
+    colors8: ['rgba(126,232,250,0.7)','rgba(240,194,122,0.7)','rgba(167,139,250,0.7)','rgba(92,224,216,0.7)',
+              'rgba(248,113,113,0.7)','rgba(251,191,36,0.7)','rgba(52,211,153,0.7)','rgba(236,72,153,0.7)',
+              'rgba(96,165,250,0.7)','rgba(244,114,182,0.7)','rgba(163,230,53,0.7)','rgba(251,146,60,0.7)',
+              'rgba(129,140,248,0.7)','rgba(34,211,238,0.7)','rgba(217,70,239,0.7)'],
+  },
+};
+function secLabel(src, s) { return (SRC[src] && SRC[src].sectionLabels && SRC[src].sectionLabels[s]) || s; }
+
+/* ── 데이터 저장소 ── */
+var DATA = {
+  naver_news: { neo: [], meta: {}, coll: null, ex: null, totalPress: 0, allPress: [] },
+  youtube:    { neo: [], meta: {}, coll: null, ex: null, totalPress: 0, allPress: [] },
+  combined:   { neo: [] },
+};
+var currentSource = 'combined';
+var dtInstance = null;
+
+/* ── 통합 데이터 빌드 ── */
+function buildCombinedData() {
+  var nvMap = {};
+  DATA.naver_news.neo.forEach(function(d) { nvMap[d['표제어']] = d; });
+  var ytMap = {};
+  DATA.youtube.neo.forEach(function(d) { ytMap[d['표제어']] = d; });
+
+  // 유튜브: 최초 출현일, 최초 출현 기사문, 기사문 URL을 네이버에서 가져오기
+  DATA.youtube.neo.forEach(function(d) {
+    var nv = nvMap[d['표제어']];
+    if (nv) {
+      d['최초 출현일'] = nv['최초 출현일'];
+      d['최초 출현 기사문'] = nv['최초 출현 기사문'];
+      d['기사문 URL'] = nv['기사문 URL'];
+      d['최초 출현 매체'] = nv['최초 출현 매체'];
+    }
+  });
+
+  // 양쪽 모두에서 출현 장르 수 업데이트 (빈도 0이면 미출현으로 처리)
+  DATA.naver_news.neo.forEach(function(d) {
+    var yt = ytMap[d['표제어']];
+    d['출현 장르 수'] = (yt && (yt['단어빈도_전체'] || 0) > 0) ? 2 : 1;
+  });
+  DATA.youtube.neo.forEach(function(d) {
+    var nv = nvMap[d['표제어']];
+    d['출현 장르 수'] = (nv && (nv['단어빈도_전체'] || 0) > 0) ? 2 : 1;
+  });
+
+  // 통합 배열: 모든 표제어를 합침
+  var allKeys = {};
+  DATA.naver_news.neo.forEach(function(d) { allKeys[d['표제어']] = true; });
+  DATA.youtube.neo.forEach(function(d) { allKeys[d['표제어']] = true; });
+
+  // 23개 주제 목록 (신문 8 + 유튜브 15)
+  var nvSections = SRC.naver_news.sections;
+  var ytSections = SRC.youtube.sections;
+
+  var combined = [];
+  Object.keys(allKeys).forEach(function(key) {
+    var nv = nvMap[key] || null;
+    var yt = ytMap[key] || null;
+    var nvHasFreq = nv && (nv['단어빈도_전체'] || 0) > 0;
+    var ytHasFreq = yt && (yt['단어빈도_전체'] || 0) > 0;
+    var genreCount = (nvHasFreq ? 1 : 0) + (ytHasFreq ? 1 : 0);
+
+    // 통합 출현 주제 수 (23개 주제 기준)
+    var topicCount23 = 0;
+    var topicValues23 = [];
+    nvSections.forEach(function(s) {
+      var v = nv ? (nv['주제별 상대빈도'][s] || 0) : 0;
+      topicValues23.push(v);
+      if (v > 0) topicCount23++;
+    });
+    ytSections.forEach(function(s) {
+      var v = yt ? (yt['주제별 상대빈도'][s] || 0) : 0;
+      topicValues23.push(v);
+      if (v > 0) topicCount23++;
+    });
+
+    // 통합 DP (23개 주제 기준, 균등 가중)
+    var totalVal = topicValues23.reduce(function(a, b) { return a + b; }, 0);
+    var dp23 = null;
+    if (totalVal > 0) {
+      var n = 23;
+      var expected = 1.0 / n;
+      var sum = 0;
+      topicValues23.forEach(function(v) {
+        var observed = v / totalVal;
+        sum += Math.abs(observed - expected);
+      });
+      dp23 = sum / 2;
+    }
+
+    combined.push({
+      '표제어': key,
+      '신어': (nv || yt)['신어'],
+      '연번': (nv || yt)['연번'],
+      '최초 출현일': nv ? nv['최초 출현일'] : '',
+      '최초 출현 기사문': nv ? (nv['최초 출현 기사문'] || '') : '',
+      '기사문 URL': nv ? (nv['기사문 URL'] || '') : '',
+      '최초 출현 매체': nv ? (nv['최초 출현 매체'] || '') : '',
+      '출현 장르 수': genreCount,
+      '출현 주제 수': topicCount23,
+      'DP': dp23,
+      'nv_tf': nv ? (nv['단어빈도_전체'] || 0) : 0,
+      'yt_tf': yt ? (yt['단어빈도_전체'] || 0) : 0,
+      'nv_press': nv ? (nv['출현 매체 수'] || 0) : 0,
+      'yt_speaker': yt ? (yt['출현 화자 수'] || 0) : 0,
+      'nv_press_ratio': nv ? (nv['출현 매체 비율'] || 0) : 0,
+      'yt_speaker_ratio': yt ? (yt['출현 화자 비율'] || 0) : 0,
+      'nv_topic': nv ? (nv['출현 주제 수'] || 0) : 0,
+      'yt_topic': yt ? (yt['출현 주제 수'] || 0) : 0,
+      'nv_dp': nv ? nv['DP'] : null,
+      'yt_dp': yt ? yt['DP'] : null,
+      'nv_monthly': nv ? nv['월별 상대빈도'] : [0,0,0,0,0,0,0,0,0,0,0,0],
+      'yt_monthly': yt ? yt['월별 상대빈도'] : [0,0,0,0,0,0,0,0,0,0,0,0],
+      '_nv': nv,
+      '_yt': yt,
+    });
+  });
+  DATA.combined.neo = combined;
+}
+
+/* ── 데이터 로드 ── */
 Promise.all([
-  fetch('/K-NOVA/assets/data/neo_data_712.json').then(r => r.json()),
-  fetch('/K-NOVA/assets/data/meta_712.json').then(r => r.json()),
-]).then(function([neoData, meta]) {
-  NEO_DATA = neoData;
-  META_DATA = meta;
-  ALL_PRESS = meta.all_press || [];
+  fetch('./assets/data/neo_data_712.json').then(function(r){return r.json();}),
+  fetch('./assets/data/meta_712.json').then(function(r){return r.json();}),
+  fetch('./assets/data/yt_neo_data_712.json').then(function(r){return r.json();}),
+  fetch('./assets/data/yt_meta_712.json').then(function(r){return r.json();}),
+]).then(function(results) {
+  DATA.naver_news.neo = results[0];
+  DATA.naver_news.meta = results[1];
+  DATA.naver_news.allPress = results[1].all_press || [];
+  DATA.naver_news.totalPress = (results[1].all_press || []).length;
+  DATA.youtube.neo = results[2];
+  DATA.youtube.meta = results[3];
+  DATA.youtube.totalPress = results[3].total_speaker_count || 0;
+  DATA.youtube.allPress = [];
+  // 말뭉치 총 어절 수 (PPBW 계산용)
+  DATA.naver_news.corpusWords = Object.values(results[1].monthly_word_counts || {}).reduce(function(a,b){return a+b;}, 0);
+  DATA.youtube.corpusWords = Object.values(results[3].monthly_word_counts || {}).reduce(function(a,b){return a+b;}, 0);
+  buildCombinedData();
   document.getElementById('loadingArea').style.display = 'none';
-  document.getElementById('neoTable').style.display = 'table';
+  document.getElementById('tableWrap').style.display = 'block';
   initTable();
   loadExtraData();
 }).catch(function(err) {
+  console.error(err);
   document.getElementById('loadingArea').innerHTML =
     '<p style="color:#f87171;">데이터를 불러올 수 없습니다.</p>';
 });
 
 function loadExtraData() {
-  if (dataLoading) return;
-  dataLoading = true;
   Promise.all([
-    fetch('/K-NOVA/assets/data/collocates_712.json').then(r => r.json()),
-    fetch('/K-NOVA/assets/data/examples_712.json').then(r => r.json()),
-  ]).then(function([col, ex]) {
-    COLLOCATES = col;
-    EXAMPLES = ex;
+    fetch('./assets/data/collocates_712.json').then(function(r){return r.json();}),
+    fetch('./assets/data/examples_712.json').then(function(r){return r.json();}),
+    fetch('./assets/data/yt_collocates_712.json').then(function(r){return r.json();}),
+    fetch('./assets/data/yt_examples_712.json').then(function(r){return r.json();}),
+  ]).then(function(results) {
+    DATA.naver_news.coll = results[0];
+    DATA.naver_news.ex = results[1];
+    DATA.youtube.coll = results[2];
+    DATA.youtube.ex = results[3];
   }).catch(function() {});
 }
+
+/* ── 빈도 필터 ── */
+var freqFilterBar = document.getElementById('freqFilterBar');
+var filterNvInput = document.getElementById('filterNvFreq');
+var filterYtInput = document.getElementById('filterYtFreq');
+var filterNvOp = document.getElementById('filterNvOp');
+var filterYtOp = document.getElementById('filterYtOp');
+var filterNvAbsInput = document.getElementById('filterNvAbsFreq');
+var filterYtAbsInput = document.getElementById('filterYtAbsFreq');
+var filterNvAbsOp = document.getElementById('filterNvAbsOp');
+var filterYtAbsOp = document.getElementById('filterYtAbsOp');
+
+var singleFilterBar = document.getElementById('singleFilterBar');
+var filterSrcInput = document.getElementById('filterSrcFreq');
+var filterSrcOp = document.getElementById('filterSrcOp');
+var filterSrcAbsInput = document.getElementById('filterSrcAbsFreq');
+var filterSrcAbsOp = document.getElementById('filterSrcAbsOp');
+
+function updateFilterBarVisibility() {
+  if (SRC[currentSource] && SRC[currentSource].isCombined) {
+    freqFilterBar.classList.add('visible');
+    singleFilterBar.classList.remove('visible');
+  } else {
+    freqFilterBar.classList.remove('visible');
+    singleFilterBar.classList.add('visible');
+  }
+}
+updateFilterBarVisibility();
+
+function _cmpOp(val, threshold, op) {
+  if (op === 'lte') return val <= threshold;
+  if (op === 'eq') return val === threshold;
+  return val >= threshold; // gte (기본)
+}
+
+// DataTables 커스텀 필터: 통합 탭의 상대빈도 + 절대빈도 필터링
+$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+  if (!SRC[currentSource] || !SRC[currentSource].isCombined) return true;
+  var nvThresh = filterNvInput.value.trim();
+  var ytThresh = filterYtInput.value.trim();
+  var nvAbsThresh = filterNvAbsInput.value.trim();
+  var ytAbsThresh = filterYtAbsInput.value.trim();
+  if (nvThresh === '' && ytThresh === '' && nvAbsThresh === '' && ytAbsThresh === '') return true;
+  // 통합: 4=신문빈도, 6=웹빈도, 26=신문절대빈도, 27=웹절대빈도 (HTML stripped)
+  var nvVal = parseFloat(data[4].replace(/,/g, '')) || 0;
+  var ytVal = parseFloat(data[6].replace(/,/g, '')) || 0;
+  var nvAbsVal = parseFloat(data[26]) || 0;
+  var ytAbsVal = parseFloat(data[27]) || 0;
+  var pass = true;
+  if (nvThresh !== '') pass = pass && _cmpOp(nvVal, parseFloat(nvThresh), filterNvOp.value);
+  if (ytThresh !== '') pass = pass && _cmpOp(ytVal, parseFloat(ytThresh), filterYtOp.value);
+  if (nvAbsThresh !== '') pass = pass && _cmpOp(nvAbsVal, parseFloat(nvAbsThresh), filterNvAbsOp.value);
+  if (ytAbsThresh !== '') pass = pass && _cmpOp(ytAbsVal, parseFloat(ytAbsThresh), filterYtAbsOp.value);
+  return pass;
+});
+
+filterNvInput.addEventListener('input', function() { if (dtInstance) dtInstance.draw(); });
+filterYtInput.addEventListener('input', function() { if (dtInstance) dtInstance.draw(); });
+filterNvOp.addEventListener('change', function() { if (dtInstance) dtInstance.draw(); });
+filterYtOp.addEventListener('change', function() { if (dtInstance) dtInstance.draw(); });
+filterNvAbsInput.addEventListener('input', function() { if (dtInstance) dtInstance.draw(); });
+filterYtAbsInput.addEventListener('input', function() { if (dtInstance) dtInstance.draw(); });
+filterNvAbsOp.addEventListener('change', function() { if (dtInstance) dtInstance.draw(); });
+filterYtAbsOp.addEventListener('change', function() { if (dtInstance) dtInstance.draw(); });
+document.getElementById('filterReset').addEventListener('click', function() {
+  filterNvInput.value = '';
+  filterYtInput.value = '';
+  filterNvOp.value = 'gte';
+  filterYtOp.value = 'gte';
+  filterNvAbsInput.value = '';
+  filterYtAbsInput.value = '';
+  filterNvAbsOp.value = 'gte';
+  filterYtAbsOp.value = 'gte';
+  if (dtInstance) dtInstance.draw();
+});
+
+// DataTables 커스텀 필터: 단일 소스 탭의 상대빈도 + 절대빈도 필터링
+$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+  if (!SRC[currentSource] || SRC[currentSource].isCombined) return true;
+  var srcThresh = filterSrcInput.value.trim();
+  var srcAbsThresh = filterSrcAbsInput.value.trim();
+  if (srcThresh === '' && srcAbsThresh === '') return true;
+  // 단일 소스: 4=상대빈도, 3=절대빈도
+  var srcVal = parseFloat(data[4].replace(/,/g, '')) || 0;
+  var srcAbsVal = parseFloat(data[3].replace(/,/g, '')) || 0;
+  var pass = true;
+  if (srcThresh !== '') pass = pass && _cmpOp(srcVal, parseFloat(srcThresh), filterSrcOp.value);
+  if (srcAbsThresh !== '') pass = pass && _cmpOp(srcAbsVal, parseFloat(srcAbsThresh), filterSrcAbsOp.value);
+  return pass;
+});
+
+filterSrcInput.addEventListener('input', function() { if (dtInstance) dtInstance.draw(); });
+filterSrcOp.addEventListener('change', function() { if (dtInstance) dtInstance.draw(); });
+filterSrcAbsInput.addEventListener('input', function() { if (dtInstance) dtInstance.draw(); });
+filterSrcAbsOp.addEventListener('change', function() { if (dtInstance) dtInstance.draw(); });
+document.getElementById('singleFilterReset').addEventListener('click', function() {
+  filterSrcInput.value = '';
+  filterSrcAbsInput.value = '';
+  filterSrcOp.value = 'gte';
+  filterSrcAbsOp.value = 'gte';
+  if (dtInstance) dtInstance.draw();
+});
+
+// 필터 결과 수 표시 (DataTables draw 이벤트)
+var filterCountEl = document.getElementById('filterCount');
+var singleFilterCountEl = document.getElementById('singleFilterCount');
+$(document).on('draw.dt', function() {
+  if (!dtInstance) return;
+  // 통합 탭
+  if (SRC[currentSource] && SRC[currentSource].isCombined) {
+    singleFilterCountEl.textContent = '';
+    var nvVal = filterNvInput.value.trim();
+    var ytVal = filterYtInput.value.trim();
+    var nvAbsVal = filterNvAbsInput.value.trim();
+    var ytAbsVal = filterYtAbsInput.value.trim();
+    if (nvVal === '' && ytVal === '' && nvAbsVal === '' && ytAbsVal === '') {
+      filterCountEl.textContent = '';
+    } else {
+      var info = dtInstance.page.info();
+      filterCountEl.textContent = info.recordsDisplay + '건';
+    }
+  } else {
+    filterCountEl.textContent = '';
+    var srcVal = filterSrcInput.value.trim();
+    var srcAbsVal = filterSrcAbsInput.value.trim();
+    if (srcVal === '' && srcAbsVal === '') {
+      singleFilterCountEl.textContent = '';
+    } else {
+      var info2 = dtInstance.page.info();
+      singleFilterCountEl.textContent = info2.recordsDisplay + '건';
+    }
+  }
+});
+
+/* ── 커스텀 정렬: HTML 내부 숫자 + % 제거 후 파싱 ── */
+$.fn.dataTable.ext.type.order['bar-num-pre'] = function(data) {
+  var s = String(data).replace(/<[^>]+>/g, '').replace(/%/g, '').replace(/,/g, '').trim();
+  return parseFloat(s) || 0;
+};
+
+/* ── 소스 탭 전환 ── */
+document.querySelector('.source-tabs').addEventListener('click', function(e) {
+  var btn = e.target.closest('.source-tab');
+  if (!btn || btn.dataset.source === currentSource) return;
+  document.querySelectorAll('.source-tab').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  currentSource = btn.dataset.source;
+  filterNvInput.value = '';
+  filterYtInput.value = '';
+  filterNvAbsInput.value = '';
+  filterYtAbsInput.value = '';
+  filterSrcInput.value = '';
+  filterSrcAbsInput.value = '';
+  updateFilterBarVisibility();
+  if (dtInstance) { dtInstance.destroy(); dtInstance = null; }
+  document.getElementById('neoTable').innerHTML = '<thead><tr id="tableHead"></tr></thead><tbody></tbody>';
+  initTable();
+});
 
 function truncate(s, n) {
   return s.length > n ? s.substring(0, n) + '…' : s;
 }
 
+var FREQ_TIP = '10억 어절당 상대빈도 = (절대빈도 ÷ 말뭉치 전체 어절 수) × 10억';
+var DP_TIP = 'DP (Deviation of Proportions): 주제별 빈도 분포의 균등도. 0에 가까울수록 균등, 1에 가까울수록 편중.';
+
 function initTable() {
-  const tableData = NEO_DATA.map(d => {
-    const monthlyFreq = d['월별 상대빈도'].map(v => Math.round(v));
-    const maxMonthly = Math.max(...monthlyFreq);
-    const tfCells = monthlyFreq.map(v => {
-      if (v === 0) return '<span class="tf-cell">0</span>';
-      if (v === maxMonthly) return '<span class="tf-max">' + v.toLocaleString() + '</span>';
-      return '<span class="tf-nonzero">' + v.toLocaleString() + '</span>';
-    });
-    const titleText = d['최초 출현 기사문']
-      ? (d['기사문 URL']
-        ? '<a href="' + d['기사문 URL'] + '" target="_blank" class="url-link">' + truncate(d['최초 출현 기사문'], 30) + '</a>'
-        : truncate(d['최초 출현 기사문'], 30))
-      : '';
-    const totalFreq = d['단어빈도_전체'];
-    return [
-      d['최초 출현일'],
-      '<span class="neo-link" data-neo="' + d['표제어'] + '">' + d['표제어'] + '</span>',
-      titleText,
-      '<span class="tf-total">' + totalFreq.toLocaleString() + '</span>',
-      '<span class="tf-meta">' + (d['단어빈도_제목_비율'] != null ? d['단어빈도_제목_비율'].toFixed(1) : '-') + '%</span>',
-      '<div class="press-bar"><div class="press-bar-fill" style="width:' + (d['출현 매체 수'] / ALL_PRESS.length * 100).toFixed(1) + '%"></div><span>' + d['출현 매체 수'] + '<small>/' + ALL_PRESS.length + '</small></span></div>',
-      '<span class="tf-meta">' + d['출현 주제 수'] + '</span>',
-      '<span class="tf-meta">' + d['출현 장르 수'] + '</span>',
-      '<div class="dp-bar"><div class="dp-bar-fill" style="width:' + (d['DP'] != null ? (d['DP'] * 100).toFixed(1) : '0') + '%"></div><span>' + (d['DP'] != null ? d['DP'].toFixed(4) : '-') + '</span></div>',
-      ...tfCells,
-    ];
+  var src = currentSource;
+  var cfg = SRC[src];
+  var isComb = !!cfg.isCombined;
+  var NEO = DATA[src].neo;
+
+  // ── 동적 테이블 헤더 ──
+  var heads, headTitles;
+  if (isComb) {
+    // 통합: 0=날짜,1=표제어,2=기사문,3=총빈도(hidden),
+    //       4=신문빈도,5=신문순위,6=웹빈도,7=웹순위,8=순위차이,
+    //       9=매체비율,10=화자비율,11=출현장르수,12=출현주제수,13=DP,14~25=월별
+    heads = ['최초 출현일','표제어','최초 출현 기사문','총 상대빈도',
+             '신문 상대빈도','신문 순위','영상 댓글 상대빈도','영상 댓글 순위','순위 차이',
+             '사용 매체 비율','사용 화자 비율','출현 장르 수','출현 주제 수','DP'];
+    headTitles = ['','','',FREQ_TIP,FREQ_TIP,'',FREQ_TIP,'','|신문 순위 - 영상 댓글 순위|','','','신문 말뭉치(1) + 영상 댓글 말뭉치(1)','신문 8 + 영상 댓글 15 = 23개 주제',DP_TIP + ' — 23개 주제 기준 (신문 8 + 영상 댓글 15)'];
+    MONTHS.forEach(function(m) { heads.push(m); headTitles.push(FREQ_TIP + ' (신문)'); });
+    heads.push('신문 절대빈도', '영상 댓글 절대빈도');
+    headTitles.push('단어빈도_전체 (신문)', '단어빈도_전체 (영상 댓글)');
+  } else {
+    heads = ['최초 출현일','표제어',cfg.firstText,'절대빈도','상대빈도'];
+    headTitles = ['','','','절대빈도',FREQ_TIP];
+    if (cfg.hasTitle) { heads.push('제목 빈도 비율'); headTitles.push(''); }
+    var numSec = cfg.sections ? cfg.sections.length : 0;
+    heads.push(cfg.pressCount,'출현 장르 수','출현 주제 수','DP');
+    headTitles.push('','신문 말뭉치(1) + 영상 댓글 말뭉치(1)', numSec + '개 주제',DP_TIP);
+    MONTHS.forEach(function(m) { heads.push(m); headTitles.push(FREQ_TIP); });
+  }
+
+  // ── 컬럼 인덱스 (헤더 렌더링 전에 필요) ──
+  var pressIdx, dpIdx, monthStart, monthEnd, tfColIndices;
+  if (isComb) {
+    pressIdx = 9; dpIdx = 13; monthStart = 14; monthEnd = 25;
+    tfColIndices = [3,4,5,6,7,8,11,12];
+    for (var mi = monthStart; mi <= monthEnd; mi++) tfColIndices.push(mi);
+  } else if (cfg.hasTitle) {
+    // 0=날짜,1=표제어,2=기사문,3=절대빈도,4=상대빈도,5=제목비율,6=매체비율,7=장르수,8=주제수,9=DP,10~21=월별
+    pressIdx = 6; dpIdx = 9; monthStart = 10; monthEnd = 21;
+    tfColIndices = [3,4,5,7,8];
+    for (var mi2 = monthStart; mi2 <= monthEnd; mi2++) tfColIndices.push(mi2);
+  } else {
+    // 0=날짜,1=표제어,2=텍스트,3=절대빈도,4=상대빈도,5=비율,6=장르수,7=주제수,8=DP,9~20=월별
+    pressIdx = 5; dpIdx = 8; monthStart = 9; monthEnd = 20;
+    tfColIndices = [3,4,6,7];
+    for (var mi3 = monthStart; mi3 <= monthEnd; mi3++) tfColIndices.push(mi3);
+  }
+
+  var _rightSet = {};
+  tfColIndices.forEach(function(idx) { _rightSet[idx] = true; });
+  document.getElementById('tableHead').innerHTML = heads.map(function(h, i) {
+    var ra = _rightSet[i] ? ' style="text-align:right"' : '';
+    return (headTitles[i] ? '<th title="' + headTitles[i] + '"' + ra + '>' : '<th' + ra + '>') + h + '</th>';
+  }).join('');
+
+  // ── 테이블 데이터 ──
+  var nvTotalPress = DATA.naver_news.totalPress || 1;
+  var ytTotalSpeaker = DATA.youtube.totalPress || 1;
+
+  // 통합 탭: 동점 평균 순위 사전 계산
+  var nvRankMap = {}, ytRankMap = {};
+  if (isComb) {
+    function _tiedRankInit(key) {
+      var indexed = NEO.map(function(d,i){ return {i:i,v:d[key]}; }).sort(function(a,b){ return b.v-a.v; });
+      var ranks = {};
+      var j = 0;
+      while (j < indexed.length) {
+        var k = j;
+        while (k < indexed.length && indexed[k].v === indexed[j].v) k++;
+        var avgRank = Math.round((j + 1 + k) / 2);
+        for (var m = j; m < k; m++) ranks[indexed[m].i] = avgRank;
+        j = k;
+      }
+      return ranks;
+    }
+    nvRankMap = _tiedRankInit('nv_tf');
+    ytRankMap = _tiedRankInit('yt_tf');
+    // 순위 정보를 각 항목에 저장 (모달에서 사용)
+    NEO.forEach(function(d, i) { d._nvRank = nvRankMap[i]; d._ytRank = ytRankMap[i]; });
+  }
+
+  // 통합 탭: PPBW 계산용 말뭉치 총 어절
+  var nvCorpusWords = DATA.naver_news.corpusWords || 1;
+  var ytCorpusWords = DATA.youtube.corpusWords || 1;
+  var combCorpusWords = nvCorpusWords + ytCorpusWords;
+
+  var tableData = NEO.map(function(d, neoIdx) {
+    if (isComb) {
+      var nvMonthly = d['nv_monthly'].map(function(v) { return Math.round(v); });
+      var maxM = Math.max.apply(null, nvMonthly);
+      var mCells = nvMonthly.map(function(v) {
+        if (v === 0) return '<span class="tf-cell">0</span>';
+        if (v === maxM) return '<span class="tf-max">' + v.toLocaleString() + '</span>';
+        return '<span class="tf-nonzero">' + v.toLocaleString() + '</span>';
+      });
+      var firstText = d['최초 출현 기사문'] || '';
+      var firstUrl = d['기사문 URL'] || '';
+      var titleText = firstText
+        ? (firstUrl ? '<a href="' + firstUrl + '" target="_blank" class="url-link">' + truncate(firstText, 30) + '</a>' : truncate(firstText, 30))
+        : '';
+      var combDP = d['DP'];
+      // 상대빈도(PPBW): 절대빈도 / 총 어절 × 10억
+      var nvPhmw = (d['nv_tf'] / nvCorpusWords * 1e9);
+      var ytPhmw = (d['yt_tf'] / ytCorpusWords * 1e9);
+      var combPhmw = ((d['nv_tf'] + d['yt_tf']) / combCorpusWords * 1e9);
+      var nvRank = nvRankMap[neoIdx];
+      var ytRank = ytRankMap[neoIdx];
+      var row = [
+        d['최초 출현일'] || '',
+        '<span class="neo-link" data-neo="' + d['표제어'] + '">' + d['표제어'] + '</span>',
+        titleText,
+        '<span class="tf-total">' + Math.round(combPhmw).toLocaleString() + '</span>',
+        '<span class="tf-total">' + Math.round(nvPhmw).toLocaleString() + '</span>',
+        '<span class="tf-meta">' + nvRank + '위</span>',
+        '<span class="tf-total" style="color:#34d399">' + Math.round(ytPhmw).toLocaleString() + '</span>',
+        '<span class="tf-meta">' + ytRank + '위</span>',
+        '<span class="tf-meta">' + String(Math.abs(nvRank - ytRank)).padStart(3, '0') + '</span>',
+        '<div class="press-bar" data-tip="' + d['nv_press'] + ' / ' + nvTotalPress + ' (' + d['nv_press_ratio'] + '%)"><div class="press-bar-fill" style="width:' + (d['nv_press'] / nvTotalPress * 100).toFixed(1) + '%"></div><span>' + d['nv_press_ratio'] + '%</span></div>',
+        '<div class="press-bar" data-tip="' + d['yt_speaker'] + ' / ' + ytTotalSpeaker + ' (' + (d['yt_speaker'] / ytTotalSpeaker * 100).toFixed(5) + '%)"><div class="press-bar-fill" style="width:' + (d['yt_speaker'] / ytTotalSpeaker * 100).toFixed(1) + '%"></div><span>' + (d['yt_speaker'] / ytTotalSpeaker * 100).toFixed(5) + '%</span></div>',
+        '<span class="tf-meta">' + d['출현 장르 수'] + ' / 2</span>',
+        '<span class="tf-meta">' + (d['출현 주제 수'] || 0) + ' / 23</span>',
+        '<div class="dp-bar"><div class="dp-bar-fill" style="width:' + (combDP != null ? (combDP * 100).toFixed(1) : '0') + '%"></div><span>' + (combDP != null ? combDP.toFixed(4) : '-') + '</span></div>',
+      ];
+      mCells.forEach(function(c) { row.push(c); });
+      // 절대빈도 hidden columns (필터용)
+      row.push(d._nv ? (d._nv['단어빈도_전체'] || 0) : 0);
+      row.push(d._yt ? (d._yt['단어빈도_전체'] || 0) : 0);
+      return row;
+    } else {
+      // 기존 단일 소스 로직
+      var totalPress = DATA[src].totalPress || 1;
+      var monthlyFreq = d['월별 상대빈도'].map(function(v) { return Math.round(v); });
+      var maxMonthly = Math.max.apply(null, monthlyFreq);
+      var tfCells = monthlyFreq.map(function(v) {
+        if (v === 0) return '<span class="tf-cell">0</span>';
+        if (v === maxMonthly) return '<span class="tf-max">' + v.toLocaleString() + '</span>';
+        return '<span class="tf-nonzero">' + v.toLocaleString() + '</span>';
+      });
+      var firstTextVal = d[cfg.firstText] || '';
+      var urlVal = d[cfg.textUrl] || '';
+      var titleText2 = firstTextVal
+        ? (urlVal ? '<a href="' + urlVal + '" target="_blank" class="url-link">' + truncate(firstTextVal, 30) + '</a>' : truncate(firstTextVal, 30))
+        : '';
+      var pc = d[cfg.pressCountKey] || 0;
+      var srcCorpusWords = DATA[src].corpusWords || 1;
+      var srcPhmw = srcCorpusWords > 0 ? ((d['단어빈도_전체'] || 0) / srcCorpusWords * 1e9) : 0;
+      var row2 = [
+        d['최초 출현일'] || '',
+        '<span class="neo-link" data-neo="' + d['표제어'] + '">' + d['표제어'] + '</span>',
+        titleText2,
+        '<span class="tf-total">' + (d['단어빈도_전체'] || 0).toLocaleString() + '</span>',
+        '<span class="tf-total">' + Math.round(srcPhmw).toLocaleString() + '</span>',
+      ];
+      if (cfg.hasTitle) {
+        row2.push('<span class="tf-meta">' + (d['단어빈도_제목_비율'] != null ? d['단어빈도_제목_비율'].toFixed(1) : '-') + '%</span>');
+      }
+      var pr = d[cfg.pressRatio] || 0;
+      var prFill = (pc / totalPress * 100).toFixed(1);
+      var prDisplay = src === 'youtube' ? (pc / totalPress * 100).toFixed(5) : pr;
+      var numSec = cfg.sections ? cfg.sections.length : 0;
+      row2.push(
+        '<div class="press-bar" data-tip="' + pc + ' / ' + totalPress + ' (' + prDisplay + '%)"><div class="press-bar-fill" style="width:' + prFill + '%"></div><span>' + prDisplay + '%</span></div>',
+        '<span class="tf-meta">' + (d['출현 장르 수'] || 0) + ' / 2</span>',
+        '<span class="tf-meta">' + (d['출현 주제 수'] || 0) + ' / ' + numSec + '</span>',
+        '<div class="dp-bar"><div class="dp-bar-fill" style="width:' + (d['DP'] != null ? (d['DP'] * 100).toFixed(1) : '0') + '%"></div><span>' + (d['DP'] != null ? d['DP'].toFixed(4) : '-') + '</span></div>'
+      );
+      tfCells.forEach(function(c) { row2.push(c); });
+      return row2;
+    }
   });
 
-  const table = $('#neoTable').DataTable({
+  // press-bar, dp-bar 컬럼 (data-order 속성 사용)
+  var barTargets = isComb ? [pressIdx, pressIdx+1, dpIdx] : [pressIdx, dpIdx];
+
+  dtInstance = $('#neoTable').DataTable({
     data: tableData,
     pageLength: 25,
     order: [[3, 'desc']],
     language: {
-      search: "검색:",
-      lengthMenu: "_MENU_ 건씩 보기",
-      info: "_TOTAL_건 중 _START_~_END_",
-      infoEmpty: "데이터 없음",
+      search: "표제어 검색:", lengthMenu: "_MENU_ 건씩 보기",
+      info: "_TOTAL_건 중 _START_~_END_", infoEmpty: "데이터 없음",
       infoFiltered: "(전체 _MAX_건에서 필터링)",
       paginate: { first:"처음", last:"끝", next:"다음", previous:"이전" },
       zeroRecords: "일치하는 신어가 없습니다",
     },
     columnDefs: [
-      { targets: [3,4,6,7,9,10,11,12,13,14,15,16,17,18,19,20], className: 'tf-cell', orderable: true },
-      { targets: [5,8], type: 'html-num', orderable: true },
+      { targets: tfColIndices, className: 'tf-cell', type: 'html-num-fmt', orderable: true },
+      { targets: barTargets, type: 'bar-num', orderable: true },
       { targets: [2], orderable: false },
-      { targets: [9,10,11,12,13,14,15,16,17,18,19,20], visible: window.innerWidth > 768 },
-    ],
+      { targets: (function() { var a = []; for (var i = monthStart; i <= monthEnd; i++) a.push(i); return a; })(), visible: window.innerWidth > 768 },
+    ].concat(isComb ? [{ targets: [3, 26, 27], visible: false }] : []),
     scrollX: true,
   });
 
-  const sortSelect = $('<select class="sort-select" id="sortSelect">' +
-    '<option value="freq-desc" selected>총빈도순</option>' +
-    '<option value="date-desc">최신순</option>' +
-    '<option value="date-asc">오래된 순</option>' +
-    '<option value="name-asc">가나다순</option>' +
-    '</select>');
+  var sortOpts;
+  if (isComb) {
+    sortOpts =
+      '<option value="freq-desc" selected>총빈도순</option>' +
+      '<option value="nv-freq-desc">빈도순(신문)</option>' +
+      '<option value="yt-freq-desc">빈도순(영상 댓글)</option>' +
+      '<option value="nv-skew">신문 편중순</option>' +
+      '<option value="yt-skew">영상 댓글 편중순</option>' +
+      '<option value="rank-diff">순위 차이순</option>' +
+      '<option value="date-asc">오래된순</option>' +
+      '<option value="name-asc">가나다순</option>';
+  } else {
+    sortOpts =
+      '<option value="freq-desc" selected>빈도순</option>' +
+      '<option value="date-asc">오래된순</option>' +
+      '<option value="name-asc">가나다순</option>';
+  }
+  var sortSelect = $('<select class="sort-select" id="sortSelect">' + sortOpts + '</select>');
   $('.dataTables_length').append(sortSelect);
 
+  // ── 통합 탭: 편중순/순위차이순은 JS 직접 정렬 후 DataTable 재로드 ──
+  var _combSortCache = null;
+  if (isComb) {
+    var _lr = NEO.map(function(d) { return Math.log2((d['nv_tf'] + 1) / (d['yt_tf'] + 1)); });
+    // nvRankMap, ytRankMap은 위에서 이미 동점 평균 순위로 계산됨
+    var _rd = NEO.map(function(d,i) { return Math.abs(nvRankMap[i] - ytRankMap[i]); });
+    _combSortCache = { logRatio: _lr, rankDiff: _rd };
+  }
+
+  function _customSort(values, direction) {
+    // tableData와 values를 같이 정렬한 뒤 DataTable 재로드
+    var indices = values.map(function(v,i){ return i; });
+    indices.sort(function(a,b) {
+      return direction === 'desc' ? values[b] - values[a] : values[a] - values[b];
+    });
+    var sorted = indices.map(function(i){ return tableData[i]; });
+    dtInstance.clear();
+    dtInstance.rows.add(sorted);
+    dtInstance.order([]); // DataTables 자체 정렬 해제
+    dtInstance.draw();
+  }
+
   $('#sortSelect').on('change', function() {
-    const val = $(this).val();
-    if (val === 'date-desc') table.order([0, 'desc']).draw();
-    else if (val === 'date-asc') table.order([0, 'asc']).draw();
-    else if (val === 'name-asc') table.order([1, 'asc']).draw();
-    else if (val === 'freq-desc') table.order([3, 'desc']).draw();
+    var val = $(this).val();
+    if (isComb) {
+      if (val === 'nv-skew') { _customSort(_combSortCache.logRatio, 'desc'); return; }
+      if (val === 'yt-skew') { _customSort(_combSortCache.logRatio, 'asc'); return; }
+      if (val === 'rank-diff') { _customSort(_combSortCache.rankDiff, 'desc'); return; }
+      // 통합: 3=총빈도(hidden), 4=신문빈도, 6=웹빈도
+      if (val === 'freq-desc') dtInstance.order([3, 'desc']).draw();
+      else if (val === 'nv-freq-desc') dtInstance.order([4, 'desc']).draw();
+      else if (val === 'yt-freq-desc') dtInstance.order([6, 'desc']).draw();
+      else if (val === 'date-asc') dtInstance.order([0, 'asc']).draw();
+      else if (val === 'name-asc') dtInstance.order([1, 'asc']).draw();
+    } else {
+      if (val === 'freq-desc') dtInstance.order([3, 'desc']).draw();
+      else if (val === 'date-asc') dtInstance.order([0, 'asc']).draw();
+      else if (val === 'name-asc') dtInstance.order([1, 'asc']).draw();
+    }
   });
 
-  $('#neoTable').on('click', '.neo-link', function() {
-    const name = $(this).data('neo');
-    const d = NEO_DATA.find(x => x['표제어'] === name);
+  $('#neoTable').off('click', '.neo-link').on('click', '.neo-link', function() {
+    var name = $(this).data('neo');
+    var d = DATA[currentSource].neo.find(function(x) { return x['표제어'] === name; });
     if (d) openModal(d);
+  });
+
+  // ── 표제어 전용 검색 (와일드카드 지원) ──
+  var $searchInput = $('.dataTables_filter input');
+  $searchInput.attr('placeholder', '표제어 검색');
+  // "표제어 검색:" 라벨 텍스트 제거 — 인풋만 남김
+  var $filterLabel = $searchInput.closest('label');
+  if ($filterLabel.length) {
+    $filterLabel.contents().filter(function() { return this.nodeType === 3; }).remove();
+  }
+  var helpTip = '기본: 부분 일치 (캉스 → 화캉스)\n\n와일드카드:\n^ : 시작\n$ : 끝\n# : 임의의 한 글자\n#+ : 임의의 여러 글자\n\n예) ^꿀 → 꿀○○…\n예) 세권$ → ○세권\n예) ##재질 → ○○재질\n예) ^호모#+쿠스$ → 호모○○…쿠스';
+  // 검색 인풋을 래퍼로 감싸고 포커스 시 안내 팝업
+  $searchInput.wrap('<span class="search-input-wrap"></span>');
+  var $tipPopup = $('<div class="search-tip-popup">' + helpTip + '</div>');
+  $searchInput.after($tipPopup);
+  $searchInput.on('focus', function() { $tipPopup.addClass('visible'); });
+  $searchInput.on('blur', function() { setTimeout(function() { $tipPopup.removeClass('visible'); }, 200); });
+  $searchInput.off('keyup search input').on('input', function() {
+    var val = this.value.trim();
+    if (!val) { dtInstance.column(1).search('').draw(); return; }
+    var stripped = val.replace(/\s+/g, '');
+    // 와일드카드(#, #+) 포함 여부
+    var hasSpecial = stripped.indexOf('#') !== -1 || stripped.indexOf('^') !== -1 || stripped.indexOf('$') !== -1;
+    if (hasSpecial) {
+      // ^, $, #, #+ 를 regex로 변환
+      var regexStr = '';
+      for (var i = 0; i < stripped.length; i++) {
+        if (stripped[i] === '^') {
+          regexStr += '^';
+        } else if (stripped[i] === '$') {
+          regexStr += '$';
+        } else if (stripped[i] === '#') {
+          if (i + 1 < stripped.length && stripped[i + 1] === '+') {
+            regexStr += '.+?';
+            i++; // skip '+'
+          } else {
+            regexStr += '.';
+          }
+        } else {
+          regexStr += stripped[i].replace(/[.*+?{}()|[\]\\]/g, '\\$&');
+        }
+      }
+      dtInstance.column(1).search(regexStr, true, false).draw();
+    } else {
+      // 기본 모드: 부분 일치 (띄어쓰기 무시)
+      var chars = stripped.split('');
+      var regex = chars.map(function(c) {
+        return c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }).join('\\s*');
+      dtInstance.column(1).search(regex, true, false).draw();
+    }
   });
 }
 
@@ -639,8 +1432,8 @@ function generateStarPositions(count) {
     var theta = 2 * Math.PI * u2;
     var x = 0.5 + r * Math.cos(theta);
     var y = 0.5 + r * Math.sin(theta);
-    x = Math.max(0.05, Math.min(0.95, x));
-    y = Math.max(0.08, Math.min(0.92, y));
+    x = Math.max(0.08, Math.min(0.92, x));
+    y = Math.max(0.10, Math.min(0.90, y));
     positions.push({ x: x, y: y, phase: rng() * Math.PI * 2 });
   }
   return positions;
@@ -657,16 +1450,18 @@ function renderGalaxy(activeNames) {
   var w = container.clientWidth;
   var h = container.clientHeight;
 
-  if (!starPositions) {
-    starPositions = generateStarPositions(ALL_PRESS.length);
+  var galaxySrc = SRC[currentSource] && SRC[currentSource].isCombined ? 'naver_news' : currentSource;
+  var AP = DATA[galaxySrc].allPress || [];
+  if (!starPositions || starPositions.length !== AP.length) {
+    starPositions = generateStarPositions(AP.length);
   }
 
   var activeSet = new Set(activeNames || []);
 
   // Pick ~10 active stars to label (evenly spaced)
   var activeIndices = [];
-  for (var i = 0; i < ALL_PRESS.length; i++) {
-    if (activeSet.has(ALL_PRESS[i])) activeIndices.push(i);
+  for (var i = 0; i < AP.length; i++) {
+    if (activeSet.has(AP[i])) activeIndices.push(i);
   }
   var labelIndices = new Set();
   var labelCount = Math.min(10, activeIndices.length);
@@ -683,7 +1478,7 @@ function renderGalaxy(activeNames) {
       var pos = starPositions[i];
       var px = pos.x * w;
       var py = pos.y * h;
-      var isActive = activeSet.has(ALL_PRESS[i]);
+      var isActive = activeSet.has(AP[i]);
       if (isActive) {
         var pulse = 0.7 + 0.3 * Math.sin(time * 0.002 + pos.phase);
         var radius = 6 * pulse;
@@ -705,7 +1500,7 @@ function renderGalaxy(activeNames) {
           ctx.font = '10px Pretendard';
           ctx.fillStyle = 'rgba(126,232,250,0.85)';
           ctx.textAlign = 'center';
-          ctx.fillText(ALL_PRESS[i], px, py - radius - 6);
+          ctx.fillText(AP[i], px, py - radius - 6);
           ctx.restore();
         }
       } else {
@@ -731,8 +1526,8 @@ function renderGalaxy(activeNames) {
       var py = starPositions[i].y * h;
       var dx = mx - px, dy = my - py;
       if (dx * dx + dy * dy < 225) {
-        var isActive = activeSet.has(ALL_PRESS[i]);
-        tooltip.textContent = ALL_PRESS[i] + (isActive ? '' : ' (미출현)');
+        var isActive = activeSet.has(AP[i]);
+        tooltip.textContent = AP[i] + (isActive ? '' : ' (미출현)');
         tooltip.style.display = 'block';
         tooltip.style.left = Math.min(mx + 12, w - 120) + 'px';
         tooltip.style.top = (my - 10) + 'px';
@@ -750,99 +1545,178 @@ function renderGalaxy(activeNames) {
 
 /* ── Modal ── */
 let chartTF = null;
+let chartTFNv = null;
+let chartTFYt = null;
 let chartPMW = null;
+let chartPMWYt = null;
 
 function openModal(d) {
   var isMobile = window.innerWidth <= 768;
+  var src = currentSource;
+  var cfg = SRC[src];
+  var isComb = !!cfg.isCombined;
 
-  // Hero
+  // ── Hero ──
   document.getElementById('modalTitle').textContent = d['표제어'];
-  var articleHtml = '';
-  if (d['최초 출현 기사문']) {
-    articleHtml = d['기사문 URL']
-      ? '<a href="' + d['기사문 URL'] + '" target="_blank">' + d['최초 출현 기사문'] + '</a>'
-      : d['최초 출현 기사문'];
+  if (isComb) {
+    var heroText = d['최초 출현 기사문'] || '';
+    var heroUrl = d['기사문 URL'] || '';
+    var heroHtml = heroText ? (heroUrl ? '<a href="' + heroUrl + '" target="_blank">' + heroText + '</a>' : heroText) : '';
+    document.getElementById('modalArticle').innerHTML = heroHtml;
+    document.getElementById('modalMeta').innerHTML =
+      '<span>최초 출현일: ' + (d['최초 출현일'] || '') + '</span>' +
+      '<span>최초 출현 매체: ' + (d['최초 출현 매체'] || '') + '</span>';
+  } else {
+    var firstText = d[cfg.firstText] || '';
+    var textUrl = d[cfg.textUrl] || '';
+    var articleHtml = firstText ? (textUrl ? '<a href="' + textUrl + '" target="_blank">' + firstText + '</a>' : firstText) : '';
+    document.getElementById('modalArticle').innerHTML = articleHtml;
+    document.getElementById('modalMeta').innerHTML =
+      '<span>최초 출현일: ' + (d['최초 출현일'] || '') + '</span>' +
+      '<span>최초 출현 ' + cfg.pressLabel + ': ' + (d[cfg.firstPress] || '') + '</span>';
   }
-  document.getElementById('modalArticle').innerHTML = articleHtml;
-  document.getElementById('modalMeta').innerHTML =
-    '<span>최초 출현일: ' + d['최초 출현일'] + '</span>' +
-    '<span>최초 출현 매체: ' + (d['최초 출현 매체'] || '') + '</span>';
 
-  // Stat cards
-  document.getElementById('statCards').innerHTML =
-    '<div class="stat-card">' +
-      '<div class="stat-value">' + d['단어빈도_전체'].toLocaleString() + '</div>' +
-      '<div class="stat-label">총빈도</div>' +
-    '</div>' +
-    '<div class="stat-card">' +
-      '<div class="stat-value">' + (d['단어빈도_제목_비율'] != null ? d['단어빈도_제목_비율'].toFixed(1) : '-') + '<span class="stat-unit">%</span></div>' +
-      '<div class="stat-label">제목 빈도 비율</div>' +
-    '</div>' +
-    '<div class="stat-card">' +
-      '<div class="stat-value">' + d['출현 매체 수'] + '<span class="stat-unit"> / ' + ALL_PRESS.length + '</span></div>' +
-      '<div class="stat-pct">' + d['출현 매체 비율'] + '%</div>' +
-      '<div class="stat-label">출현 매체 수</div>' +
-    '</div>' +
-    '<div class="stat-card">' +
-      '<div class="stat-value">' + d['출현 주제 수'] + '<span class="stat-unit"> / 8</span></div>' +
-      '<div class="stat-pct">' + d['출현 주제 비율'] + '%</div>' +
-      '<div class="stat-label">출현 주제 수</div>' +
-    '</div>' +
-    '<div class="stat-card">' +
-      '<div class="stat-value">' + d['출현 장르 수'] + '<span class="stat-unit"> / 2</span></div>' +
-      '<div class="stat-pct">' + (d['출현 장르 수'] * 50) + '%</div>' +
-      '<div class="stat-label">출현 장르 수</div>' +
-    '</div>' +
-    '<div class="stat-card">' +
-      '<div class="stat-value">' + (d['DP'] != null ? d['DP'].toFixed(4) : '-') + '</div>' +
-      '<div class="stat-pct"><div class="dp-bar" style="margin:0 auto"><div class="dp-bar-fill" style="width:' + (d['DP'] != null ? (d['DP'] * 100).toFixed(1) : '0') + '%"></div></div></div>' +
-      '<div class="stat-label">DP (분산도)</div>' +
-    '</div>';
+  // ── Stat cards ──
+  var cards = '';
+  if (isComb) {
+    var nvTotalPress = DATA.naver_news.totalPress || 1;
+    var ytTotalSpeaker = DATA.youtube.totalPress || 1;
+    var _nvPhmw = DATA.naver_news.corpusWords > 0 ? Math.round(d['nv_tf'] / DATA.naver_news.corpusWords * 1e9) : 0;
+    var _ytPhmw = DATA.youtube.corpusWords > 0 ? Math.round(d['yt_tf'] / DATA.youtube.corpusWords * 1e9) : 0;
+    // 제목 빈도 비율
+    var _nvTR = d._nv ? (d._nv['단어빈도_제목_비율'] || 0) : 0;
+    var _ytTR = d._yt ? (d._yt['단어빈도_제목_비율'] || 0) : 0;
+    // 1행: 신문(문어)
+    cards += '<div class="stat-card"><div class="stat-value">' + d['nv_tf'].toLocaleString() + '</div><div class="stat-label">신문 절대빈도</div></div>';
+    cards += '<div class="stat-card"><div class="stat-value">' + _nvPhmw.toLocaleString() + '</div><div class="stat-label">신문 상대빈도</div></div>';
+    cards += '<div class="stat-card"><div class="stat-value">' + _nvTR.toFixed(1) + '<span class="stat-unit">%</span></div><div class="stat-label">신문 제목 비율</div></div>';
+    // 2행: 영상 댓글
+    cards += '<div class="stat-card"><div class="stat-value" style="color:#34d399">' + d['yt_tf'].toLocaleString() + '</div><div class="stat-label">영상 댓글 절대빈도</div></div>';
+    cards += '<div class="stat-card"><div class="stat-value" style="color:#34d399">' + _ytPhmw.toLocaleString() + '</div><div class="stat-label">영상 댓글 상대빈도</div></div>';
+    cards += '<div class="stat-card"><div class="stat-value" style="color:#34d399">' + _ytTR.toFixed(1) + '<span class="stat-unit">%</span></div><div class="stat-label">영상 댓글 제목 비율</div></div>';
+    // 순위 차이 카드
+    var _nvR = d._nvRank || 0, _ytR = d._ytRank || 0;
+    var _rankDiff = Math.abs(_nvR - _ytR);
+    var _skewLabel = _nvR < _ytR ? '신문 우세' : (_ytR < _nvR ? '영상 댓글 우세' : '동일');
+    cards += '<div class="stat-card"><div class="stat-value">' + _rankDiff.toLocaleString() + '</div><div class="stat-pct">' + _skewLabel + '</div><div class="stat-label">순위 차이</div><div class="stat-sub">신문 ' + _nvR.toLocaleString() + '위 · 영상 댓글 ' + _ytR.toLocaleString() + '위</div></div>';
+    cards += '<div class="stat-card"><div class="stat-value">' + d['nv_press'].toLocaleString() + '<span class="stat-unit"> / ' + nvTotalPress.toLocaleString() + '</span></div><div class="stat-pct">' + d['nv_press_ratio'] + '%</div><div class="stat-label">사용 매체 수</div></div>';
+    cards += '<div class="stat-card"><div class="stat-value">' + d['yt_speaker'].toLocaleString() + '<span class="stat-unit"> / ' + ytTotalSpeaker.toLocaleString() + '</span></div><div class="stat-pct">' + d['yt_speaker_ratio'] + '%</div><div class="stat-label">사용 화자 수</div></div>';
+    cards += '<div class="stat-card"><div class="stat-value">' + (d['출현 주제 수'] || 0) + '<span class="stat-unit"> / 23</span></div><div class="stat-pct">' + ((d['출현 주제 수'] || 0) / 23 * 100).toFixed(1) + '%</div><div class="stat-label">출현 주제 수</div></div>';
+    cards += '<div class="stat-card"><div class="stat-value">' + d['출현 장르 수'] + '<span class="stat-unit"> / 2</span></div><div class="stat-pct">' + (d['출현 장르 수'] * 50) + '%</div><div class="stat-label">출현 장르 수</div></div>';
+    var combDP = d['DP'];
+    var nvDP = d['nv_dp'];
+    var ytDP = d['yt_dp'];
+    cards += '<div class="stat-card" title="' + DP_TIP + '"><div class="stat-value">' + (nvDP != null ? nvDP.toFixed(4) : '-') + '</div><div class="stat-pct"><div class="dp-bar" style="margin:0 auto"><div class="dp-bar-fill" style="width:' + (nvDP != null ? (nvDP * 100).toFixed(1) : '0') + '%"></div></div></div><div class="stat-label">DP (신문 8주제)</div></div>';
+    cards += '<div class="stat-card" title="' + DP_TIP + '"><div class="stat-value">' + (ytDP != null ? ytDP.toFixed(4) : '-') + '</div><div class="stat-pct"><div class="dp-bar" style="margin:0 auto"><div class="dp-bar-fill" style="width:' + (ytDP != null ? (ytDP * 100).toFixed(1) : '0') + '%"></div></div></div><div class="stat-label">DP (영상 댓글 15주제)</div></div>';
+    cards += '<div class="stat-card" title="' + DP_TIP + '"><div class="stat-value">' + (combDP != null ? combDP.toFixed(4) : '-') + '</div><div class="stat-pct"><div class="dp-bar" style="margin:0 auto"><div class="dp-bar-fill" style="width:' + (combDP != null ? (combDP * 100).toFixed(1) : '0') + '%"></div></div></div><div class="stat-label">DP (통합 23주제)</div></div>';
+  } else {
+    var sd = DATA[src];
+    var pc = d[cfg.pressCountKey] || 0;
+    var pr = d[cfg.pressRatio] || 0;
+    var totalPress = sd.totalPress || 1;
+    var numSections = cfg.sections.length;
+    var _srcAbsFreq = (d['단어빈도_전체'] || 0);
+    var _srcPhmw = DATA[src].corpusWords > 0 ? Math.round(_srcAbsFreq / DATA[src].corpusWords * 1e9) : 0;
+    cards += '<div class="stat-card"><div class="stat-value">' + _srcAbsFreq.toLocaleString() + '</div><div class="stat-label">절대빈도</div></div>';
+    cards += '<div class="stat-card"><div class="stat-value">' + _srcPhmw.toLocaleString() + '</div><div class="stat-label">상대빈도</div></div>';
+    if (cfg.hasTitle) {
+      cards += '<div class="stat-card"><div class="stat-value">' + (d['단어빈도_제목_비율'] != null ? d['단어빈도_제목_비율'].toFixed(1) : '-') + '<span class="stat-unit">%</span></div><div class="stat-label">제목 빈도 비율</div></div>';
+    }
+    cards += '<div class="stat-card"><div class="stat-value">' + pc.toLocaleString() + '<span class="stat-unit"> / ' + totalPress.toLocaleString() + '</span></div><div class="stat-pct">' + pr + '%</div><div class="stat-label">사용 ' + cfg.pressLabel + ' 수</div></div>';
+    cards += '<div class="stat-card"><div class="stat-value">' + (d['출현 주제 수'] || 0) + '<span class="stat-unit"> / ' + numSections + '</span></div><div class="stat-pct">' + (d['출현 주제 비율'] || 0) + '%</div><div class="stat-label">출현 주제 수</div></div>';
+    cards += '<div class="stat-card"><div class="stat-value">' + (d['출현 장르 수'] || 0) + '<span class="stat-unit"> / 2</span></div><div class="stat-pct">' + ((d['출현 장르 수'] || 0) * 50) + '%</div><div class="stat-label">출현 장르 수</div></div>';
+    var dpLabel = src === 'naver_news' ? 'DP (신문 ' + numSections + '주제)' : 'DP (영상 댓글 ' + numSections + '주제)';
+    cards += '<div class="stat-card" title="' + DP_TIP + '"><div class="stat-value">' + (d['DP'] != null ? d['DP'].toFixed(4) : '-') + '</div><div class="stat-pct"><div class="dp-bar" style="margin:0 auto"><div class="dp-bar-fill" style="width:' + (d['DP'] != null ? (d['DP'] * 100).toFixed(1) : '0') + '%"></div></div></div><div class="stat-label">' + dpLabel + '</div></div>';
+  }
+  document.getElementById('statCards').innerHTML = cards;
 
-  // Galaxy
-  document.getElementById('galaxySummary').innerHTML =
-    '전체 <span class="galaxy-total">' + ALL_PRESS.length + '</span>개 매체 중 ' +
-    '<span class="galaxy-active">' + d['출현 매체 수'] + '</span>개 매체(' + d['출현 매체 비율'] + '%)에서 출현';
-  if (galaxyAnimId) { cancelAnimationFrame(galaxyAnimId); galaxyAnimId = null; }
-  setTimeout(function() { renderGalaxy(d['출현 매체명'] || []); }, 50);
+  // ── Galaxy ──
+  var galaxySec = document.getElementById('galaxySection');
+  if (isComb) {
+    // 통합: naver_news 데이터로 Galaxy 표시
+    var nvD = d['_nv'];
+    if (nvD) {
+      galaxySec.style.display = '';
+      var nvPC = nvD['출현 매체 수'] || 0;
+      var nvPR = nvD['출현 매체 비율'] || 0;
+      document.getElementById('galaxyTitle').textContent = '사용 매체 수 (신문)';
+      document.getElementById('galaxySummary').innerHTML =
+        '전체 <span class="galaxy-total">' + DATA.naver_news.allPress.length + '</span>개 매체 중 ' +
+        '<span class="galaxy-active">' + nvPC + '</span>개 매체(' + nvPR + '%)에서 출현';
+      if (galaxyAnimId) { cancelAnimationFrame(galaxyAnimId); galaxyAnimId = null; }
+      setTimeout(function() { renderGalaxy(nvD['출현 매체명'] || []); }, 50);
+    } else {
+      galaxySec.style.display = 'none';
+      if (galaxyAnimId) { cancelAnimationFrame(galaxyAnimId); galaxyAnimId = null; }
+    }
+  } else if (cfg.showGalaxy) {
+    galaxySec.style.display = '';
+    document.getElementById('galaxyTitle').textContent = '사용 매체 수';
+    var sd2 = DATA[src];
+    var pc2 = d[cfg.pressCountKey] || 0;
+    var pr2 = d[cfg.pressRatio] || 0;
+    document.getElementById('galaxySummary').innerHTML =
+      '전체 <span class="galaxy-total">' + sd2.allPress.length + '</span>개 매체 중 ' +
+      '<span class="galaxy-active">' + pc2 + '</span>개 매체(' + pr2 + '%)에서 출현';
+    if (galaxyAnimId) { cancelAnimationFrame(galaxyAnimId); galaxyAnimId = null; }
+    setTimeout(function() { renderGalaxy(d[cfg.pressNames] || []); }, 50);
+  } else {
+    galaxySec.style.display = 'none';
+    if (galaxyAnimId) { cancelAnimationFrame(galaxyAnimId); galaxyAnimId = null; }
+  }
 
-  // Monthly frequency chart
-  var monthlyFreq = d['월별 상대빈도'].map(function(v) { return Math.round(v); });
-  var maxVal = Math.max.apply(null, monthlyFreq);
-  var maxIdx = monthlyFreq.indexOf(maxVal);
-  document.getElementById('chartTFMax').innerHTML =
-    '월 최고 빈도 (' + MONTHS[maxIdx] + '): <span>' + maxVal.toLocaleString() + '회</span>';
+  // ── Speaker Section ──
+  var speakerSec = document.getElementById('speakerSection');
+  if (isComb) {
+    // 통합: 웹 화자 수 표시
+    var ytD = d['_yt'];
+    var ytSC = ytD ? (ytD['출현 화자 수'] || 0) : 0;
+    var ytTotal = DATA.youtube.totalPress || 1;
+    var ytSR = (ytSC / ytTotal * 100);
+    speakerSec.style.display = '';
+    document.getElementById('speakerTitle').textContent = '사용 화자 수 (영상 댓글)';
+    document.getElementById('speakerSummary').innerHTML =
+      '전체 <span class="galaxy-total">' + ytTotal.toLocaleString() + '</span>명 화자 중 ' +
+      '<span class="galaxy-active">' + ytSC.toLocaleString() + '</span>명(' +ytSR.toFixed(5) + '%)이 사용';
+    var fillEl = document.getElementById('speakerFill');
+    var fillPct = Math.max(ytSR, ytSC > 0 ? 2 : 0); // 최소 2% 너비 (보이도록)
+    fillEl.style.width = Math.min(fillPct, 100).toFixed(2) + '%';
+    fillEl.textContent = ytSC > 0 ? ytSR.toFixed(5) + '%' : '';
+  } else if (src === 'youtube') {
+    var spkCount = d['출현 화자 수'] || 0;
+    var spkTotal = DATA.youtube.totalPress || 1;
+    var spkRatio = (spkCount / spkTotal * 100);
+    speakerSec.style.display = '';
+    document.getElementById('speakerTitle').textContent = '사용 화자 수';
+    document.getElementById('speakerSummary').innerHTML =
+      '전체 <span class="galaxy-total">' + spkTotal.toLocaleString() + '</span>명 화자 중 ' +
+      '<span class="galaxy-active">' + spkCount.toLocaleString() + '</span>명(' +spkRatio.toFixed(5) + '%)이 사용';
+    var fillEl2 = document.getElementById('speakerFill');
+    var fillPct2 = Math.max(spkRatio, spkCount > 0 ? 2 : 0);
+    fillEl2.style.width = Math.min(fillPct2, 100).toFixed(2) + '%';
+    fillEl2.textContent = spkCount > 0 ? spkRatio.toFixed(5) + '%' : '';
+  } else {
+    speakerSec.style.display = 'none';
+  }
 
+  // ── Monthly frequency charts ──
   if (chartTF) chartTF.destroy();
-  chartTF = new Chart(document.getElementById('chartTF'), {
-    type: 'line',
-    data: {
-      labels: MONTHS,
-      datasets: [{
-        label: '사용 빈도(TF)',
-        data: monthlyFreq,
-        backgroundColor: 'rgba(126,232,250,0.15)',
-        borderColor: '#7ee8fa',
-        borderWidth: 2,
-        pointBackgroundColor: '#7ee8fa',
-        pointBorderColor: '#7ee8fa',
-        pointRadius: isMobile ? 3 : 4,
-        pointHoverRadius: isMobile ? 4 : 6,
-        tension: 0.3,
-        fill: true,
-      }]
-    },
-    options: {
+  if (chartTFNv) chartTFNv.destroy();
+  if (chartTFYt) chartTFYt.destroy();
+  chartTFNv = null; chartTFYt = null;
+
+  var _lineOpts = function(hasLegend) {
+    return {
       responsive: true,
       interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: { display: false },
+        legend: hasLegend ? { display: true, position: isMobile ? 'bottom' : 'top', labels: { color: '#fff', font: { size: isMobile ? 8 : 12 }, usePointStyle: true, padding: isMobile ? 6 : 16, boxWidth: isMobile ? 6 : 12 } } : { display: false },
         tooltip: {
-          displayColors: false, bodyColor: '#fff',
+          displayColors: hasLegend, bodyColor: '#fff',
           backgroundColor: 'rgba(17,24,39,0.9)',
           callbacks: {
             title: function() { return ''; },
-            label: function(ctx) { return ctx.label + ': ' + ctx.raw.toLocaleString(); }
+            label: function(ctx) { return (hasLegend ? ctx.dataset.label + ': ' : ctx.label + ': ') + ctx.raw.toLocaleString(); }
           }
         }
       },
@@ -850,88 +1724,208 @@ function openModal(d) {
         x: { ticks: { color: '#8896b0', font: { size: isMobile ? 9 : 11 }, maxRotation: 90, minRotation: 90 }, grid: { color: 'rgba(30,45,74,0.5)' } },
         y: { ticks: { color: '#8896b0', font: { size: isMobile ? 9 : 11 } }, grid: { color: 'rgba(30,45,74,0.5)' }, beginAtZero: true }
       }
-    }
-  });
-
-  // Topic distribution chart
-  if (chartPMW) chartPMW.destroy();
-  var pmwData = SECTIONS.map(function(s) { return d['주제별 상대빈도'][s] || 0; });
-  var pieColors = [
-    'rgba(126,232,250,0.7)', 'rgba(240,194,122,0.7)', 'rgba(167,139,250,0.7)', 'rgba(92,224,216,0.7)',
-    'rgba(248,113,113,0.7)', 'rgba(251,191,36,0.7)', 'rgba(52,211,153,0.7)', 'rgba(236,72,153,0.7)'
-  ];
-  var pmwTotal = pmwData.reduce(function(a, b) { return a + b; }, 0);
-
-  var sortedIndices = pmwData
-    .map(function(val, idx) { return { val: val, idx: idx }; })
-    .sort(function(a, b) { return b.val - a.val; })
-    .slice(0, 3)
-    .map(function(item) { return item.idx; });
-
-  var rankEl = document.getElementById('chartPMWRank');
-  var top3 = sortedIndices.map(function(idx, i) {
-    var pct = pmwTotal > 0 ? ((pmwData[idx] / pmwTotal) * 100).toFixed(1) : 0;
-    return (i + 1) + '위 ' + SECTIONS[idx] + ' <span>' + pct + '%</span>';
-  });
-  rankEl.innerHTML = top3.join('<br>');
-  rankEl.style.display = 'block';
-
-  chartPMW = new Chart(document.getElementById('chartPMW'), {
-    type: 'doughnut',
-    plugins: [],
-    data: {
-      labels: SECTIONS,
-      datasets: [{
-        data: pmwData,
-        backgroundColor: pieColors,
-        borderColor: 'rgba(17,24,39,0.8)',
-        borderWidth: 2,
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      layout: {
-        padding: isMobile
-          ? { top: 5, bottom: 5, left: 5, right: 5 }
-          : { top: 10, bottom: 10, left: 10, right: 10 }
-      },
+    };
+  };
+  var _ds = function(data, color, label) {
+    return { label: label, data: data, backgroundColor: color.replace(')', ',0.12)').replace('rgb', 'rgba'), borderColor: color, borderWidth: 2, pointBackgroundColor: color, pointBorderColor: color, pointRadius: isMobile ? 3 : 4, pointHoverRadius: isMobile ? 4 : 6, tension: 0.3, fill: true };
+  };
+  var _maxLabel = function(arr, prefix) {
+    var mx = Math.max.apply(null, arr);
+    var mi = arr.indexOf(mx);
+    return prefix + ' 최고 (' + MONTHS[mi] + '): <span>' + mx.toLocaleString() + '</span>';
+  };
+  var _topicLineOpts = function() {
+    return {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: {
-          position: 'bottom', align: 'center',
-          labels: {
-            color: '#fff', font: { size: isMobile ? 11 : 13 },
-            padding: isMobile ? 12 : 18, boxWidth: isMobile ? 12 : 14,
-            usePointStyle: true,
-          }
-        },
+        legend: isMobile
+          ? { display: false }
+          : { display: true, labels: { color: '#fff', font: { size: 11 }, usePointStyle: true, padding: 10, boxWidth: 10 } },
         tooltip: {
+          displayColors: true, bodyColor: '#fff',
+          backgroundColor: 'rgba(17,24,39,0.95)',
           callbacks: {
-            label: function(ctx) {
-              var val = ctx.raw;
-              var pct = pmwTotal > 0 ? ((val / pmwTotal) * 100).toFixed(1) : 0;
-              return ctx.label + ': ' + pct + '%';
-            }
+            title: function(items) { return items[0].label; },
+            label: function(ctx) { return ctx.dataset.label + ': ' + Math.round(ctx.raw).toLocaleString(); }
           }
-        },
+        }
+      },
+      scales: {
+        x: { ticks: { color: '#8896b0', font: { size: isMobile ? 8 : 11 }, maxRotation: 90, minRotation: 90 }, grid: { color: 'rgba(30,45,74,0.5)' } },
+        y: { ticks: { color: '#8896b0', font: { size: isMobile ? 8 : 11 } }, grid: { color: 'rgba(30,45,74,0.5)' }, beginAtZero: true }
+      }
+    };
+  };
+  var _buildTopicDS = function(topicMonthly, srcCfg) {
+    if (!topicMonthly) return [];
+    var secs = srcCfg.sections;
+    var labels = srcCfg.sectionLabels || {};
+    var colors = srcCfg.colors8 || [];
+    var datasets = [];
+    for (var si = 0; si < secs.length; si++) {
+      var s = secs[si];
+      var vals = topicMonthly[s];
+      if (!vals) continue;
+      var hasVal = vals.some(function(v) { return v > 0; });
+      if (!hasVal) continue;
+      var c = colors[si % colors.length] || 'rgba(136,150,176,0.7)';
+      var borderC = c.replace(/[\d.]+\)$/, '1)');
+      datasets.push({
+        label: labels[s] || s,
+        data: vals.map(function(v) { return Math.round(v); }),
+        backgroundColor: borderC,
+        borderColor: borderC,
+        borderWidth: 2,
+        pointRadius: 2,
+        pointHoverRadius: 4,
+        tension: 0.3,
+        fill: false,
+        _total: vals.reduce(function(a,b){return a+b;}, 0)
+      });
+    }
+    datasets.sort(function(a, b) { return b._total - a._total; });
+    return datasets;
+  };
+
+  if (isComb) {
+    var nvMonthly = d['nv_monthly'].map(function(v) { return Math.round(v); });
+    var ytMonthly = d['yt_monthly'].map(function(v) { return Math.round(v); });
+
+    // 1) 통합 (dual-line)
+    document.getElementById('chartTFTitle').textContent = '월별 빈도 추이 (통합)';
+    document.getElementById('chartTFMax').innerHTML = _maxLabel(nvMonthly, '신문') + ' · ' + _maxLabel(ytMonthly, '영상 댓글').replace('<span>', '<span style="color:#34d399">');
+    chartTF = new Chart(document.getElementById('chartTF'), {
+      type: 'line',
+      data: { labels: MONTHS, datasets: [_ds(nvMonthly, '#7ee8fa', '신문 말뭉치'), _ds(ytMonthly, '#34d399', '영상 댓글 말뭉치')] },
+      options: _lineOpts(true)
+    });
+
+    // 2) 신문 주제별 스택
+    document.getElementById('chartTFNvSection').style.display = '';
+    document.getElementById('chartTFNvMax').innerHTML = _maxLabel(nvMonthly, '월');
+    var nvTopicDS = _buildTopicDS(d._nv ? d._nv['주제별_월별_상대빈도'] : null, SRC.naver_news);
+    chartTFNv = new Chart(document.getElementById('chartTFNv'), {
+      type: 'line',
+      data: { labels: MONTHS, datasets: nvTopicDS.length > 0 ? nvTopicDS : [_ds(nvMonthly, '#7ee8fa', '신문')] },
+      options: nvTopicDS.length > 0 ? _topicLineOpts() : _lineOpts(false)
+    });
+
+    // 3) 웹 주제별 스택
+    document.getElementById('chartTFYtSection').style.display = '';
+    document.getElementById('chartTFYtMax').innerHTML = _maxLabel(ytMonthly, '월');
+    var ytTopicDS = _buildTopicDS(d._yt ? d._yt['주제별_월별_상대빈도'] : null, SRC.youtube);
+    chartTFYt = new Chart(document.getElementById('chartTFYt'), {
+      type: 'line',
+      data: { labels: MONTHS, datasets: ytTopicDS.length > 0 ? ytTopicDS : [_ds(ytMonthly, '#34d399', '영상 댓글')] },
+      options: ytTopicDS.length > 0 ? _topicLineOpts() : _lineOpts(false)
+    });
+  } else {
+    document.getElementById('chartTFTitle').textContent = '월별 빈도 추이 (주제별)';
+    document.getElementById('chartTFNvSection').style.display = 'none';
+    document.getElementById('chartTFYtSection').style.display = 'none';
+    var monthlyFreq = d['월별 상대빈도'].map(function(v) { return Math.round(v); });
+    document.getElementById('chartTFMax').innerHTML = _maxLabel(monthlyFreq, '월');
+    var srcKey = currentSource;
+    var topicDS = _buildTopicDS(d['주제별_월별_상대빈도'], SRC[srcKey]);
+    chartTF = new Chart(document.getElementById('chartTF'), {
+      type: 'line',
+      data: { labels: MONTHS, datasets: topicDS.length > 0 ? topicDS : [_ds(monthlyFreq, '#7ee8fa', '상대빈도')] },
+      options: topicDS.length > 0 ? _topicLineOpts() : _lineOpts(false)
+    });
+  }
+
+  // ── Topic distribution chart ──
+  if (chartPMW) chartPMW.destroy();
+  if (chartPMWYt) chartPMWYt.destroy();
+  chartPMWYt = null;
+
+  var _donutOpts = function(pmwTotal) {
+    return {
+      responsive: true, maintainAspectRatio: false,
+      layout: { padding: isMobile ? { top: 2, bottom: 2, left: 2, right: 2 } : { top: 10, bottom: 10, left: 10, right: 10 } },
+      plugins: {
+        legend: isMobile
+          ? { display: true, position: 'bottom', align: 'center', labels: { color: '#fff', font: { size: 9 }, padding: 6, boxWidth: 8, usePointStyle: true } }
+          : { position: 'bottom', align: 'center', labels: { color: '#fff', font: { size: 13 }, padding: 18, boxWidth: 14, usePointStyle: true } },
+        tooltip: { callbacks: { label: function(ctx) { var pct = pmwTotal > 0 ? ((ctx.raw / pmwTotal) * 100).toFixed(1) : 0; return ctx.label + ': ' + pct + '%'; } } },
         datalabels: { display: false }
       }
-    }
-  });
+    };
+  };
+  var _topRank = function(labels, vals, total) {
+    return vals.map(function(v, i) { return { v: v, i: i }; }).sort(function(a, b) { return b.v - a.v; }).slice(0, 3).map(function(item, rank) {
+      var pct = total > 0 ? ((item.v / total) * 100).toFixed(1) : 0;
+      return (rank + 1) + '위 ' + labels[item.i] + ' <span>' + pct + '%</span>';
+    }).join('<br>');
+  };
 
-  // N-GRAM (no canvas, safe before modal show)
-  renderNgrams(d['신어']);
+  if (isComb) {
+    // 신문 주제별 분포
+    document.getElementById('chartPMWTitle').textContent = '주제별 분포 (신문)';
+    var nvRec = d['_nv'];
+    var nvCfg = SRC.naver_news;
+    var nvSections = nvCfg.sections;
+    var nvLabels = nvSections.map(function(s) { return secLabel('naver_news', s); });
+    var nvPmw = nvRec ? nvSections.map(function(s) { return nvRec['주제별 상대빈도'][s] || 0; }) : nvSections.map(function() { return 0; });
+    var nvPmwTotal = nvPmw.reduce(function(a, b) { return a + b; }, 0);
+    var rankEl = document.getElementById('chartPMWRank');
+    rankEl.innerHTML = _topRank(nvLabels, nvPmw, nvPmwTotal);
+    rankEl.style.display = 'block';
+    chartPMW = new Chart(document.getElementById('chartPMW'), {
+      type: 'doughnut', plugins: [],
+      data: { labels: nvLabels, datasets: [{ data: nvPmw, backgroundColor: nvCfg.colors8, borderColor: 'rgba(17,24,39,0.8)', borderWidth: 2 }] },
+      options: _donutOpts(nvPmwTotal)
+    });
+
+    // 웹 주제별 분포
+    document.getElementById('chartPMWYtSection').style.display = '';
+    var ytRec = d['_yt'];
+    var ytCfg = SRC.youtube;
+    var ytSections = ytCfg.sections;
+    var ytLabels = ytSections.map(function(s) { return secLabel('youtube', s); });
+    var ytPmw = ytRec ? ytSections.map(function(s) { return ytRec['주제별 상대빈도'][s] || 0; }) : ytSections.map(function() { return 0; });
+    var ytPmwTotal = ytPmw.reduce(function(a, b) { return a + b; }, 0);
+    var ytRankEl = document.getElementById('chartPMWYtRank');
+    ytRankEl.innerHTML = _topRank(ytLabels, ytPmw, ytPmwTotal);
+    ytRankEl.style.display = 'block';
+    chartPMWYt = new Chart(document.getElementById('chartPMWYt'), {
+      type: 'doughnut', plugins: [],
+      data: { labels: ytLabels, datasets: [{ data: ytPmw, backgroundColor: ytCfg.colors8, borderColor: 'rgba(17,24,39,0.8)', borderWidth: 2 }] },
+      options: _donutOpts(ytPmwTotal)
+    });
+  } else {
+    document.getElementById('chartPMWTitle').textContent = '주제별 분포';
+    document.getElementById('chartPMWYtSection').style.display = 'none';
+    var sections = cfg.sections;
+    var sectionDisplayLabels = sections.map(function(s) { return secLabel(src, s); });
+    var pmwData = sections.map(function(s) { return d['주제별 상대빈도'][s] || 0; });
+    var pieColors = cfg.colors8;
+    var pmwTotal = pmwData.reduce(function(a, b) { return a + b; }, 0);
+    var rankEl2 = document.getElementById('chartPMWRank');
+    rankEl2.innerHTML = _topRank(sectionDisplayLabels, pmwData, pmwTotal);
+    rankEl2.style.display = 'block';
+    chartPMW = new Chart(document.getElementById('chartPMW'), {
+      type: 'doughnut', plugins: [],
+      data: { labels: sectionDisplayLabels, datasets: [{ data: pmwData, backgroundColor: pieColors, borderColor: 'rgba(17,24,39,0.8)', borderWidth: 2 }] },
+      options: _donutOpts(pmwTotal)
+    });
+  }
+
+  // N-GRAM
+  var neoKey = isComb ? d['신어'] : d['신어'];
+  renderNgrams(neoKey);
 
   // Examples
-  renderExamples(d['신어'], d['표제어']);
+  renderExamples(neoKey, d['표제어']);
 
-  // Show modal first (canvas needs visible container for dimensions)
+  // Show modal
   document.getElementById('modalOverlay').classList.add('active');
   document.getElementById('modalOverlay').scrollTop = 0;
   document.body.style.overflow = 'hidden';
 
   // Collocates network (needs visible canvas)
-  setTimeout(function() { renderCollocates(d['신어']); }, 60);
+  setTimeout(function() { renderCollocates(neoKey); }, 60);
 }
 
 /* ── Collocates Network ── */
@@ -946,32 +1940,74 @@ var POS_COLOR = {};
 COL_POS.forEach(function(p) { POS_COLOR[p.key] = p.color; });
 var networkAnimId = null;
 
-function renderCollocates(neoKey) {
-  var tabsEl = document.getElementById('collocateTabs');
-  if (networkAnimId) { cancelAnimationFrame(networkAnimId); networkAnimId = null; }
-  if (!COLLOCATES || !COLLOCATES[neoKey]) {
-    tabsEl.innerHTML = '';
-    return;
-  }
-  var data = COLLOCATES[neoKey];
-  // Aggregate 1gram across all months (skip 전체)
+function _aggregateCollocate1gram(collData, neoKey) {
+  // 여러 소스의 collocate 데이터를 합산
   var aggMap = {};
-  Object.keys(data).forEach(function(month) {
-    if (month === '전체') return;
-    var grams = data[month]['1gram'] || [];
-    grams.forEach(function(g) {
-      var k = g.form + '|' + g.pos;
-      if (!aggMap[k]) aggMap[k] = { form: g.form, pos: g.pos, freq: 0 };
-      aggMap[k].freq += g.freq;
+  var sources = Array.isArray(collData) ? collData : [collData];
+  sources.forEach(function(coll) {
+    if (!coll || !coll[neoKey]) return;
+    var data = coll[neoKey];
+    Object.keys(data).forEach(function(month) {
+      if (month === '전체') return;
+      var grams = data[month]['1gram'] || [];
+      grams.forEach(function(g) {
+        var k = g.form + '|' + g.pos;
+        if (!aggMap[k]) aggMap[k] = { form: g.form, pos: g.pos, freq: 0 };
+        aggMap[k].freq += g.freq;
+      });
     });
   });
-  var allItems = Object.values(aggMap).sort(function(a, b) { return b.freq - a.freq; });
+  return Object.values(aggMap).sort(function(a, b) { return b.freq - a.freq; });
+}
 
-  // Tabs: all + per POS
-  tabsEl.innerHTML = '<button class="tab-btn active" data-pos="ALL">전체</button>' +
-    COL_POS.map(function(p) {
-      return '<button class="tab-btn" data-pos="' + p.key + '">' + p.label + '</button>';
-    }).join('');
+function _getCollSources(neoKey) {
+  var isComb = !!SRC[currentSource].isCombined;
+  if (isComb) return [DATA.naver_news.coll, DATA.youtube.coll];
+  return [DATA[currentSource].coll];
+}
+
+function renderCollocates(neoKey) {
+  var tabsEl = document.getElementById('collocateTabs');
+  var srcTabsEl = document.getElementById('collSourceTabs');
+  if (networkAnimId) { cancelAnimationFrame(networkAnimId); networkAnimId = null; }
+  var isComb = !!SRC[currentSource].isCombined;
+
+  // 소스별 데이터 준비
+  var sourceSets = {};
+  if (isComb) {
+    sourceSets['combined'] = _aggregateCollocate1gram([DATA.naver_news.coll, DATA.youtube.coll], neoKey);
+    sourceSets['naver_news'] = _aggregateCollocate1gram([DATA.naver_news.coll], neoKey);
+    sourceSets['youtube'] = _aggregateCollocate1gram([DATA.youtube.coll], neoKey);
+  } else {
+    sourceSets['current'] = _aggregateCollocate1gram([DATA[currentSource].coll], neoKey);
+  }
+
+  var activeSource = isComb ? 'combined' : 'current';
+  var allItems = sourceSets[activeSource];
+  if (allItems.length === 0 && !isComb) {
+    tabsEl.innerHTML = '';
+    srcTabsEl.innerHTML = '';
+    return;
+  }
+
+  // 소스 탭 (통합 모드만)
+  if (isComb) {
+    srcTabsEl.innerHTML =
+      '<button class="tab-btn active" data-src="combined">통합</button>' +
+      '<button class="tab-btn" data-src="naver_news">신문</button>' +
+      '<button class="tab-btn" data-src="youtube">영상 댓글</button>';
+  } else {
+    srcTabsEl.innerHTML = '';
+  }
+
+  function _initPOSTabs(items) {
+    tabsEl.innerHTML = '<button class="tab-btn active" data-pos="ALL">전체</button>' +
+      COL_POS.map(function(p) {
+        return '<button class="tab-btn" data-pos="' + p.key + '">' + p.label + '</button>';
+      }).join('');
+    allItems = items;
+  }
+  _initPOSTabs(allItems);
 
   function drawNetwork(pos) {
     var filtered = pos === 'ALL'
@@ -1001,13 +2037,16 @@ function renderCollocates(neoKey) {
     var currentHeadword = document.getElementById('modalTitle').textContent;
 
     // Build nodes: center + collocates
-    var nodes = [{ x: cx, y: cy, vx: 0, vy: 0, r: 18, label: currentHeadword, pos: 'CENTER', freq: maxFreq, fixed: true }];
+    var minDim = Math.min(w, h);
+    var pad = 40;
+    var usable = minDim - pad * 2;
+    var nodes = [{ x: cx, y: cy, vx: 0, vy: 0, r: 22, label: currentHeadword, pos: 'CENTER', freq: maxFreq, fixed: true }];
     var rng = mulberry32(7);
     for (var i = 0; i < filtered.length; i++) {
       var angle = rng() * Math.PI * 2;
       var normFreq = filtered[i].freq / maxFreq;
-      var baseDist = 50 + normFreq * 40;
-      var dist = baseDist + rng() * 140 + 30;
+      var baseDist = usable * 0.15 + normFreq * usable * 0.08;
+      var dist = baseDist + rng() * usable * 0.12 + usable * 0.04;
       var r = 6 + normFreq * 14;
       nodes.push({
         x: cx + Math.cos(angle) * dist,
@@ -1015,12 +2054,12 @@ function renderCollocates(neoKey) {
         vx: 0, vy: 0, r: r,
         label: filtered[i].form, pos: filtered[i].pos,
         freq: filtered[i].freq, fixed: false,
-        baseDist: baseDist + rng() * 80
+        baseDist: baseDist + rng() * usable * 0.06
       });
     }
 
     // Force simulation
-    var damping = 0.82;
+    var damping = 0.8;
     var settled = false;
     var frame = 0;
 
@@ -1032,7 +2071,7 @@ function renderCollocates(neoKey) {
         var dx = cx - n.x, dy = cy - n.y;
         var d = Math.sqrt(dx * dx + dy * dy) || 1;
         var targetDist = n.baseDist;
-        var force = (d - targetDist) * 0.003;
+        var force = (d - targetDist) * 0.002;
         n.vx += (dx / d) * force;
         n.vy += (dy / d) * force;
 
@@ -1041,9 +2080,9 @@ function renderCollocates(neoKey) {
           if (i === j) continue;
           var ox = n.x - nodes[j].x, oy = n.y - nodes[j].y;
           var od = Math.sqrt(ox * ox + oy * oy) || 1;
-          var minDist = n.r + nodes[j].r + 12;
+          var minDist = n.r + nodes[j].r + 25;
           if (od < minDist) {
-            var push = (minDist - od) * 0.15;
+            var push = (minDist - od) * 0.3;
             n.vx += (ox / od) * push;
             n.vy += (oy / od) * push;
           }
@@ -1052,9 +2091,10 @@ function renderCollocates(neoKey) {
         n.vy *= damping;
         n.x += n.vx;
         n.y += n.vy;
-        // Keep in bounds
-        n.x = Math.max(n.r + 10, Math.min(w - n.r - 10, n.x));
-        n.y = Math.max(n.r + 10, Math.min(h - n.r - 10, n.y));
+        // Keep in bounds (라벨 포함 여유)
+        var bm = n.r + 40;
+        n.x = Math.max(bm, Math.min(w - bm, n.x));
+        n.y = Math.max(bm, Math.min(h - bm, n.y));
       }
     }
 
@@ -1091,7 +2131,7 @@ function renderCollocates(neoKey) {
         // Label
         ctx.fillStyle = '#fff';
         ctx.globalAlpha = 1;
-        ctx.font = (n.fixed ? 'bold 13px' : (n.r > 12 ? '11px' : '9px')) + ' Pretendard';
+        ctx.font = (n.fixed ? 'bold 15px' : (n.r > 14 ? '12px' : '10px')) + ' Pretendard';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         if (n.fixed) {
@@ -1102,7 +2142,7 @@ function renderCollocates(neoKey) {
       }
 
       frame++;
-      if (frame < 120) {
+      if (frame < 200) {
         simulate();
         networkAnimId = requestAnimationFrame(draw);
       } else if (!settled) {
@@ -1111,7 +2151,7 @@ function renderCollocates(neoKey) {
     }
 
     // Run initial simulation steps
-    for (var s = 0; s < 30; s++) simulate();
+    for (var s = 0; s < 100; s++) simulate();
     draw();
 
     // Hover tooltip
@@ -1148,6 +2188,27 @@ function renderCollocates(neoKey) {
     if (networkAnimId) { cancelAnimationFrame(networkAnimId); networkAnimId = null; }
     drawNetwork(btn.dataset.pos);
   };
+  // 소스 탭 클릭 (통합 모드)
+  if (isComb) {
+    srcTabsEl.onclick = function(e) {
+      var btn = e.target.closest('.tab-btn');
+      if (!btn || !btn.dataset.src) return;
+      srcTabsEl.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      activeSource = btn.dataset.src;
+      _initPOSTabs(sourceSets[activeSource]);
+      if (networkAnimId) { cancelAnimationFrame(networkAnimId); networkAnimId = null; }
+      drawNetwork('ALL');
+      tabsEl.onclick = function(e2) {
+        var btn2 = e2.target.closest('.tab-btn');
+        if (!btn2) return;
+        tabsEl.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn2.classList.add('active');
+        if (networkAnimId) { cancelAnimationFrame(networkAnimId); networkAnimId = null; }
+        drawNetwork(btn2.dataset.pos);
+      };
+    };
+  }
 }
 
 /* ── N-GRAM ── */
@@ -1161,27 +2222,64 @@ var NGRAM_TABS = [
 function renderNgrams(neoKey) {
   var tabsEl = document.getElementById('ngramTabs');
   var contentEl = document.getElementById('ngramContent');
-  if (!COLLOCATES || !COLLOCATES[neoKey]) {
+  var srcTabsEl = document.getElementById('ngramSourceTabs');
+  var isComb = !!SRC[currentSource].isCombined;
+
+  // 소스별 데이터 준비
+  var sourceMap = {};
+  if (isComb) {
+    sourceMap['combined'] = [DATA.naver_news.coll, DATA.youtube.coll];
+    sourceMap['naver_news'] = [DATA.naver_news.coll];
+    sourceMap['youtube'] = [DATA.youtube.coll];
+  } else {
+    sourceMap['current'] = [DATA[currentSource].coll];
+  }
+
+  var activeNgramSrc = isComb ? 'combined' : 'current';
+  var collSources = sourceMap[activeNgramSrc];
+
+  // 데이터 존재 확인 (전체 소스 중 하나라도)
+  var anyData = Object.values(sourceMap).some(function(srcs) {
+    return srcs.some(function(c) { return c && c[neoKey]; });
+  });
+  if (!anyData) {
     tabsEl.innerHTML = '';
+    srcTabsEl.innerHTML = '';
     contentEl.innerHTML = '<p class="no-data">N-GRAM 데이터를 불러오는 중...</p>';
     return;
   }
-  var data = COLLOCATES[neoKey];
 
-  tabsEl.innerHTML = NGRAM_TABS.map(function(t, i) {
-    return '<button class="tab-btn' + (i === 0 ? ' active' : '') + '" data-gram="' + t.key + '">' + t.label + '</button>';
-  }).join('');
+  // 소스 탭 (통합 모드만)
+  if (isComb) {
+    srcTabsEl.innerHTML =
+      '<button class="tab-btn active" data-src="combined">통합</button>' +
+      '<button class="tab-btn" data-src="naver_news">신문</button>' +
+      '<button class="tab-btn" data-src="youtube">영상 댓글</button>';
+  } else {
+    srcTabsEl.innerHTML = '';
+  }
+
+  function _initGramTabs() {
+    tabsEl.innerHTML = NGRAM_TABS.map(function(t, i) {
+      return '<button class="tab-btn' + (i === 0 ? ' active' : '') + '" data-gram="' + t.key + '">' + t.label + '</button>';
+    }).join('');
+  }
+  _initGramTabs();
 
   function showGram(gramKey) {
-    // Aggregate across months (skip 전체)
+    var srcs = sourceMap[activeNgramSrc];
     var aggMap = {};
-    Object.keys(data).forEach(function(month) {
-      if (month === '전체') return;
-      var grams = data[month][gramKey] || [];
-      grams.forEach(function(g) {
-        var key = g.ngram;
-        if (!aggMap[key]) aggMap[key] = { ngram: key, freq: 0 };
-        aggMap[key].freq += g.freq;
+    srcs.forEach(function(coll) {
+      if (!coll || !coll[neoKey]) return;
+      var data = coll[neoKey];
+      Object.keys(data).forEach(function(month) {
+        if (month === '전체') return;
+        var grams = data[month][gramKey] || [];
+        grams.forEach(function(g) {
+          var key = g.ngram;
+          if (!aggMap[key]) aggMap[key] = { ngram: key, freq: 0 };
+          aggMap[key].freq += g.freq;
+        });
       });
     });
     var items = Object.values(aggMap).sort(function(a, b) { return b.freq - a.freq; }).slice(0, 30);
@@ -1203,34 +2301,102 @@ function renderNgrams(neoKey) {
     btn.classList.add('active');
     showGram(btn.dataset.gram);
   };
+  // 소스 탭 클릭 (통합 모드)
+  if (isComb) {
+    srcTabsEl.onclick = function(e) {
+      var btn = e.target.closest('.tab-btn');
+      if (!btn || !btn.dataset.src) return;
+      srcTabsEl.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      activeNgramSrc = btn.dataset.src;
+      _initGramTabs();
+      showGram(NGRAM_TABS[0].key);
+      tabsEl.onclick = function(e2) {
+        var btn2 = e2.target.closest('.tab-btn');
+        if (!btn2) return;
+        tabsEl.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn2.classList.add('active');
+        showGram(btn2.dataset.gram);
+      };
+    };
+  }
 }
 
 /* ── Examples ── */
+function _renderExampleItems(items, isYT, re) {
+  return items.map(function(ex) {
+    var date = ex.clean_date ? ex.clean_date.substring(0, 10) : '';
+    var highlighted = (ex.sentence || '').replace(re, '<mark>$1</mark>');
+    var url = ex.url || '';
+    if (isYT) {
+      var userId = ex.user_id || '';
+      var likes = ex.like_count != null ? ex.like_count : 0;
+      var ctype = ex.type || 'comment';
+      return '<div class="example-item">' +
+        '<div class="example-meta example-yt-meta">' +
+          '<span class="example-press">' + userId + '</span>' +
+          '<span class="example-likes">&#9829; ' + likes.toLocaleString() + '</span>' +
+          '<span class="example-type">' + ctype + '</span>' +
+          '<span>' + date + '</span>' +
+        '</div>' +
+        '<a class="example-sentence" href="' + url + '" target="_blank">' + highlighted + '</a>' +
+      '</div>';
+    } else {
+      return '<div class="example-item">' +
+        '<div class="example-meta"><span class="example-press">' + (ex.press || '') + '</span><span>' + date + '</span></div>' +
+        '<a class="example-sentence" href="' + url + '" target="_blank">' + highlighted + '</a>' +
+      '</div>';
+    }
+  }).join('');
+}
+
 function renderExamples(neoKey, headword) {
   var el = document.getElementById('examplesList');
-  if (!EXAMPLES || !EXAMPLES[neoKey]) {
-    el.innerHTML = '<p class="no-data">예문 데이터를 불러오는 중...</p>';
-    return;
-  }
-  var items = EXAMPLES[neoKey];
-  if (items.length === 0) {
-    el.innerHTML = '<p class="no-data">예문이 없습니다.</p>';
-    return;
-  }
-  // Sort by date asc (earliest first)
-  items = items.slice().sort(function(a, b) {
-    return a.clean_date.localeCompare(b.clean_date);
-  });
+  var isComb = !!SRC[currentSource].isCombined;
   var escaped = headword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   var re = new RegExp('(' + escaped + ')', 'gi');
-  el.innerHTML = items.map(function(ex) {
-    var date = ex.clean_date ? ex.clean_date.substring(0, 10) : '';
-    var highlighted = ex.sentence.replace(re, '<mark>$1</mark>');
-    return '<div class="example-item">' +
-      '<div class="example-meta"><span class="example-press">' + ex.press + '</span><span>' + date + '</span></div>' +
-      '<a class="example-sentence" href="' + ex.url + '" target="_blank">' + highlighted + '</a>' +
-    '</div>';
-  }).join('');
+
+  if (isComb) {
+    // 통합: 양쪽 소스의 예문을 모두 표시
+    var nvEx = DATA.naver_news.ex;
+    var ytEx = DATA.youtube.ex;
+    var nvItems = (nvEx && nvEx[neoKey]) ? nvEx[neoKey].slice().sort(function(a, b) { return (a.clean_date || '').localeCompare(b.clean_date || ''); }) : [];
+    var ytItems = (ytEx && ytEx[neoKey]) ? ytEx[neoKey] : [];
+    var html = '';
+    // 신문 말뭉치 용례
+    if (nvItems.length > 0) {
+      html += '<div class="source-divider">신문 말뭉치 용례 (' + nvItems.length + '건)</div>';
+      html += _renderExampleItems(nvItems, false, re);
+    } else {
+      html += '<div class="source-divider">신문 말뭉치 용례</div>';
+      html += '<p class="no-data">신문 말뭉치 용례 없음</p>';
+    }
+    // 영상 댓글 말뭉치 용례
+    if (ytItems.length > 0) {
+      html += '<div class="source-divider">영상 댓글 말뭉치 용례 (' + ytItems.length + '건)</div>';
+      html += _renderExampleItems(ytItems, true, re);
+    } else {
+      html += '<div class="source-divider">영상 댓글 말뭉치 용례</div>';
+      html += '<p class="no-data">영상 댓글 말뭉치 용례 없음</p>';
+    }
+    el.innerHTML = html;
+  } else {
+    var EXAMPLES = DATA[currentSource].ex;
+    var isYT = currentSource === 'youtube';
+    if (!EXAMPLES || !EXAMPLES[neoKey]) {
+      el.innerHTML = '<p class="no-data">예문 데이터를 불러오는 중...</p>';
+      return;
+    }
+    var items = EXAMPLES[neoKey];
+    if (items.length === 0) {
+      el.innerHTML = '<p class="no-data">예문이 없습니다.</p>';
+      return;
+    }
+    if (!isYT) {
+      items = items.slice().sort(function(a, b) { return (a.clean_date || '').localeCompare(b.clean_date || ''); });
+    }
+    el.innerHTML = _renderExampleItems(items, isYT, re);
+  }
 }
 
 function closeModal() {

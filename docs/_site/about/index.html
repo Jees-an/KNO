@@ -7,30 +7,30 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-  <link rel="stylesheet" href="/K-NOVA/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 </head>
 <body>
   <nav class="top-nav">
-    <a href="/K-NOVA/" class="nav-logo">🔭 K-NOVA: 한국어 신어 관측 시스템</a>
+    <a href="/" class="nav-logo">🔭 K-NOVA: 한국어 신어 관측 시스템</a>
     <button class="nav-hamburger" id="navHamburger" aria-label="메뉴 열기" aria-expanded="false">
       <span></span>
       <span></span>
       <span></span>
     </button>
     <div class="nav-links">
-      <a href="/K-NOVA/">홈</a>
-      <a href="/K-NOVA/reports/">신어 관측 보고</a>
-      <a href="/K-NOVA/data.html">신어별 관측 데이터</a>
-      <a href="/K-NOVA/about/">프로젝트 소개</a>
+      <a href="/">홈</a>
+      <a href="/reports/">신어 관측 보고</a>
+      <a href="/data.html">신어별 관측 데이터</a>
+      <a href="/about/">프로젝트 소개</a>
       <a href="https://github.com/Jees-an/K-NOVA" target="_blank">GitHub</a>
     </div>
   </nav>
 
   <main>
     <div class="intro-header">
-  <img src="/K-NOVA/img/K-NOVA.png" alt="K-NOVA" class="intro-logo" />
+  <img src="/img/K-NOVA.png" alt="K-NOVA" class="intro-logo" />
 </div>
 
 <h2 id="프로젝트의-목적">프로젝트의 목적<br /></h2>
@@ -48,7 +48,7 @@
   <li>이에 본 프로젝트에서는 한국어 어휘 체계의 역동성을 관측하기 위해 <span style="color:#7ee8fa; font-size:1.05em; font-weight:500;">‘말뭉치’, ‘거대 언어 모델’, ‘사전학 전문가’의 방법론적 삼각측량(methodological triangulation)에 기반한 신어 수집·분석 파이프라인</span>을 설계·개발했습니다. 신어 조사의 생산성과 효율성, 정확성을 높이면서도, 말뭉치 기반 언어 연구의 재현 가능성과 반증 가능성을 확보하는 것이 목표입니다(안진산 2026a).<br /><br /></li>
 </ul>
 
-<p><img src="/K-NOVA/img/Korean_Neologism_Extraction_Pipeline.png" alt="파이프라인" style="max-width:60%;" /></p>
+<p><img src="/img/Korean_Neologism_Extraction_Pipeline.png" alt="파이프라인" style="max-width:60%;" /></p>
 
 <ul>
   <li>LLM 보조 사전 편찬을 둘러싼 기대와 우려는 모두 일정 부분 사실입니다. 한쪽에서는 LLM의 생산성과 효율성을 기대하는 반면, 다른 한쪽에서는 환각 현상 등의 기술적 한계, 비결정성과 비윤리성 등을 근거로 우려를 표하고 있습니다.<br /><br /></li>
@@ -79,7 +79,7 @@
   <li>안진산(2026b)에서는 이 질문에 대한 실험 결과를 제시합니다.<br /></li>
 </ul>
 
-<p><img src="/K-NOVA/img/example_1.png" alt="산점도" style="max-width:60%;" /></p>
+<p><img src="/img/example_1.png" alt="산점도" style="max-width:60%;" /></p>
 
 <ul>
   <li>오른쪽 상단의 <strong>1유형</strong>은 인간과 LLM의 뜻풀이가 형태적으로도, 의미적으로도 거의 일치하는 항목입니다. ‘절싫중떠(‘절이 싫으면 중이 떠나야지’를 줄여 이르는 말)’가 대표적입니다. 전체의 70% 이상을 차지하는 왼쪽 상단의 <strong>3유형</strong>은 표현은 다르지만 말하고자 하는 바는 통하는 경우입니다. 예컨대 ‘한일믹스어’에 대해 인간은 “한국어와 일본어를 섞은 말”로 간결하게 풀이한 반면, LLM은 “한국어와 일본어의 어휘나 표현을 섞어 만든 말”처럼 부가 정보를 덧붙이는 경향이 있습니다. 물론, LLM은 ‘깊털(기프티콘 털어 먹기)’을 “‘깊은 털이’를 줄여 이르는 말”로 풀이하는 등 형식의 삭감, 삭감 후 결합 등 복합적인 형태론적 기제가 적용된 단어에서는 중의성 해소에 어려움을 겪기도 합니다. 왼쪽 하단의 <strong>4유형</strong>은 LLM의 한계가 뚜렷하게 드러나는 경우입니다. ‘티모시 증후군(뇌의 신경 세포 칼슘 채널 결함으로 인한 희귀 질환)’의 인명 ‘티모시(Timothy)’를 동명의 배우 ‘티모시 샬라메(Timothee Chalamet)’로 착각해 엉뚱한 뜻풀이(특정 인물이나 대상의 말투나 행동, 옷차림 따위를 지나치게 따라 하며 그 인물과 비슷해지려는 심리 상태)를 만들어 낸 것이 대표적인 환각 사례입니다.<br /><br /></li>
@@ -90,7 +90,7 @@
   <li><strong>4유형의 오류를 어떻게 3유형, 나아가 1유형으로 끌어올릴 것인가?</strong><br /></li>
 </ul>
 
-<p><img src="/K-NOVA/img/example_2.png" alt="유사도 분포 변화" style="max-width:80%;" /></p>
+<p><img src="/img/example_2.png" alt="유사도 분포 변화" style="max-width:80%;" /></p>
 
 <ul>
   <li>답은 신뢰할 수 있는 참조 자료에 있습니다. 신어의 출현 맥락이 담긴 고품질 텍스트 데이터와 기존 &lt;신어 DB&gt;를 함께 제공하면, LLM의 형태적 유사도는 +0.044, 의미적 유사도는 +0.081 유의미하게 상승합니다(p&lt;.001). 하지만 참조 자료만으로 모든 오류가 사라지는 것은 아닙니다. ‘티모시 샬라메’와 같은 실수는 여전히 일어날 수 있으니까요. <span style="color:#7ee8fa; font-size:1.05em; font-weight:500;">그렇기 때문에 사전 편찬자가 이 파이프라인의 최종 관문 앞에 서 있는 것입니다.</span>
@@ -119,8 +119,8 @@
 <h3 id="참고문헌">참고문헌</h3>
 
 <ul>
-  <li>안진산(2026a), 「실시간 신어 추출 파이프라인의 설계와 검증」, (<em>forthcoming</em>)</li>
-  <li>안진산(2026b), 「거대언어모델을 활용한 신어 집필의 가능성과 쟁점」, (<em>forthcoming</em>)</li>
+  <li>안진산(2026a), 「실시간 신어 추출 파이프라인의 설계와 검증」, 『한글』 제87권 제1호.</li>
+  <li>안진산(2026b), 「거대언어모델을 활용한 신어 집필의 가능성과 쟁점」, 『한말연구』 제67권.</li>
   <li><a href="https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART003232209">남길임·안진산·이수진(2025), 「말뭉치, LLMs, 인간 전문가의 협업을 통한 한국어 신어의 탐지」, 『한국어학』 108호.</a></li>
   <li><a href="https://product.kyobobook.co.kr/detail/S000218853741">남길임 외(2025), 『신어 2024』, 한국문화사.</a></li>
   <li><a href="https://product.kyobobook.co.kr/detail/S000215101540">남길임 외(2024), 『신어 2023』, 한국문화사.</a></li>
