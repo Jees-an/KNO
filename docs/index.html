@@ -17,28 +17,27 @@ title: KNO
 </div>
 
 <div class="section overview">
-  <h2>🔭 KNO: 한국어 신어 관측 시스템</h2>
-  <p>'NOVA'는 새롭게 나타나는 별, 신성(新星)을 뜻합니다.</p>
-  <p><strong>언어의 새로운 형태와 의미, 신어(新語)</strong> 역시 특정 시점에 출현하여 빠르게 확산 혹은 소멸된다는 점에서 천문학의 신성 현상과 닮아 있습니다.</p>
-  <p>이에 <strong>한국어 신어 관측 시스템</strong>의 이름을 'KNO(Korean Neologism Observatory)'로 명명하게 되었습니다.</p>
+  <h2>KNO: 한국어 신어 관측 시스템</h2>
+  <p><strong>KNO(Korean Neologism Observatory)</strong>는 한국어에 새롭게 출현하는 단어와 표현을 월 단위로 수집·분석하고, 그 사용 양상을 관측하여 공개하는 시스템입니다.</p>
+  <p>2025년 1월부터 가동되어 매월 새롭게 나타나는 신어를 추적하고, 빈도·분포·사용 매체·사용 화자 등의 정량적 지표를 제공합니다.</p>
 </div>
 
 <div class="section">
-  <h2>🏆 가장 높은 빈도로 나타난 신어 <span class="hint-tip">💡 신어를 클릭하면 최초 출현 기사로 이동합니다!</span></h2>
+  <h2>가장 높은 빈도로 나타난 신어 <span class="hint-tip">신어를 클릭하면 최초 출현 기사로 이동합니다.</span></h2>
   <div id="featuredHighFreq" class="featured-neo">
     <div class="empty-state"><p>데이터 로딩 중...</p></div>
   </div>
 </div>
 
 <div class="section">
-  <h2>🎉 가장 최근에 나타난 신어 <span class="hint-tip">💡 신어를 클릭하면 최초 출현 기사로 이동합니다!</span></h2>
+  <h2>가장 최근에 나타난 신어 <span class="hint-tip">신어를 클릭하면 최초 출현 기사로 이동합니다.</span></h2>
   <div id="featuredRecent" class="featured-neo">
     <div class="empty-state"><p>데이터 로딩 중...</p></div>
   </div>
 </div>
 
 <div class="section">
-  <h2>✨ 관측자가 소개하고 싶은 흥미로운 신어 <span class="hint-tip">💡 신어를 클릭하면 최초 출현 기사로 이동합니다!</span></h2>
+  <h2>관측자가 소개하고 싶은 흥미로운 신어 <span class="hint-tip">신어를 클릭하면 최초 출현 기사로 이동합니다.</span></h2>
   <div id="featuredPick" class="featured-neo">
     <div class="empty-state"><p>데이터 로딩 중...</p></div>
   </div>
@@ -48,8 +47,8 @@ title: KNO
 const MONTHS = ['2025년 1월','2025년 2월','2025년 3월','2025년 4월','2025년 5월','2025년 6월','2025년 7월','2025년 8월','2025년 9월','2025년 10월','2025년 11월','2025년 12월'];
 const SECTIONS = ['정치','경제','사회','생활/문화','IT/과학','세계','연예','스포츠'];
 const pieColors = [
-  'rgba(126,232,250,0.7)', 'rgba(240,194,122,0.7)', 'rgba(167,139,250,0.7)', 'rgba(92,224,216,0.7)',
-  'rgba(248,113,113,0.7)', 'rgba(251,191,36,0.7)', 'rgba(52,211,153,0.7)', 'rgba(236,72,153,0.7)'
+  'rgba(30,58,138,0.78)', 'rgba(37,99,235,0.72)', 'rgba(124,58,237,0.72)', 'rgba(14,116,144,0.72)',
+  'rgba(194,65,12,0.72)', 'rgba(202,138,4,0.72)', 'rgba(15,118,110,0.72)', 'rgba(190,18,60,0.72)'
 ];
 
 // 관측자 추천 신어 (수동 설정)
@@ -78,7 +77,7 @@ function renderFeatured(containerId, d) {
 
   const maxVal = Math.max(...monthlyFreq);
   const maxIdx = monthlyFreq.indexOf(maxVal);
-  const maxLabel = '최고 빈도(' + MONTHS[maxIdx] + '): <span style="color:#60a5fa;font-weight:600">' + maxVal.toLocaleString() + '회</span>';
+  const maxLabel = '최고 빈도(' + MONTHS[maxIdx] + '): <span style="color:#1e3a8a;font-weight:600">' + maxVal.toLocaleString() + '회</span>';
 
   container.innerHTML = `
     <div class="featured-neo-header">
@@ -87,12 +86,12 @@ function renderFeatured(containerId, d) {
     </div>
     <div class="featured-neo-charts">
       <div class="featured-chart-box" style="position:relative">
-        <h4>📈 월별 상대빈도</h4>
+        <h4>월별 상대빈도</h4>
         <div style="position:absolute;top:0.8rem;right:1rem;font-size:0.75rem;color:var(--text-secondary);text-align:right">${maxLabel}</div>
         <canvas id="${containerId}ChartTF"></canvas>
       </div>
       <div class="featured-chart-box">
-        <h4>📊 주제별 분포</h4>
+        <h4>주제별 분포</h4>
         <canvas id="${containerId}ChartPMW"></canvas>
       </div>
     </div>
@@ -105,10 +104,10 @@ function renderFeatured(containerId, d) {
       labels: MONTHS,
       datasets: [{
         data: monthlyFreq,
-        backgroundColor: 'rgba(126,232,250,0.15)',
-        borderColor: '#7ee8fa',
+        backgroundColor: 'rgba(30,58,138,0.10)',
+        borderColor: '#1e3a8a',
         borderWidth: 2,
-        pointBackgroundColor: '#7ee8fa',
+        pointBackgroundColor: '#1e3a8a',
         pointRadius: 3,
         tension: 0.3,
         fill: true,
@@ -123,7 +122,7 @@ function renderFeatured(containerId, d) {
         tooltip: {
           displayColors: false,
           bodyColor: '#fff',
-          backgroundColor: 'rgba(17,24,39,0.9)',
+          backgroundColor: 'rgba(26,37,64,0.92)',
           callbacks: {
             title: () => '',
             label: ctx => ctx.label + ': ' + ctx.raw.toLocaleString()
@@ -131,8 +130,8 @@ function renderFeatured(containerId, d) {
         }
       },
       scales: {
-        x: { ticks: { color: '#8896b0', font: { size: 10 }, maxRotation: 90, minRotation: 90 }, grid: { color: 'rgba(30,45,74,0.5)' } },
-        y: { ticks: { color: '#8896b0', font: { size: 10 } }, grid: { color: 'rgba(30,45,74,0.5)' }, beginAtZero: true }
+        x: { ticks: { color: '#5a6478', font: { size: 10 }, maxRotation: 90, minRotation: 90 }, grid: { color: 'rgba(221,226,234,0.9)' } },
+        y: { ticks: { color: '#5a6478', font: { size: 10 } }, grid: { color: 'rgba(221,226,234,0.9)' }, beginAtZero: true }
       }
     }
   });
@@ -149,7 +148,7 @@ function renderFeatured(containerId, d) {
       datasets: [{
         data: pmwData,
         backgroundColor: pieColors,
-        borderColor: 'rgba(17,24,39,0.8)',
+        borderColor: '#ffffff',
         borderWidth: 2,
       }]
     },
@@ -165,7 +164,7 @@ function renderFeatured(containerId, d) {
           align: 'center',
           maxWidth: isMobile ? 280 : undefined,
           labels: {
-            color: '#fff',
+            color: '#1a2540',
             font: { size: isMobile ? 10 : 11 },
             padding: isMobile ? 10 : 12,
             boxWidth: isMobile ? 10 : 12,

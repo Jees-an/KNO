@@ -13,7 +13,7 @@
 </head>
 <body>
   <nav class="top-nav">
-    <a href="/" class="nav-logo">🔭 KNO: 한국어 신어 관측 시스템</a>
+    <a href="/" class="nav-logo">KNO: 한국어 신어 관측 시스템</a>
     <button class="nav-hamburger" id="navHamburger" aria-label="메뉴 열기" aria-expanded="false">
       <span></span>
       <span></span>
@@ -40,9 +40,9 @@
     <p class="report-summary">2025년 8월 최초 출현 단어/구 총 52건 (네이버 뉴스 기준)</p>
     
     <div class="report-meta">
-      <span class="tag">📅 2025.08.01.~2025.08.31.</span>
-      <span class="tag fmt-eok" data-total-words="122117553">📂 신문/영상 댓글</span>
-      <span class="tag">✨ 신어 52개 관측</span>
+      <span class="tag">2025.08.01.~2025.08.31.</span>
+      <span class="tag fmt-eok" data-total-words="122117553">신문/영상 댓글</span>
+      <span class="tag">신어 52개 관측</span>
     </div>
   </header>
 
@@ -232,7 +232,7 @@ document.querySelectorAll('.fmt-pct').forEach(function(el) {
 document.querySelectorAll('.fmt-eok').forEach(function(el) {
   var w = parseInt(el.getAttribute('data-total-words'));
   if (!isNaN(w)) {
-    el.textContent = '📂 신문/영상 댓글 ' + (w / 100000000).toFixed(2) + '억 어절';
+    el.textContent = '신문/영상 댓글 ' + (w / 100000000).toFixed(2) + '억 어절';
   }
 });
 </script>

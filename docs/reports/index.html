@@ -4,7 +4,7 @@ title: 신어 관측 보고
 ---
 
 <div class="page-header">
-  <h1>📡 신어 관측 보고</h1>
+  <h1>신어 관측 보고</h1>
   <p>연구의 절차적 투명성을 위해 KNO 신어 관측 결과를 시간순으로 기록합니다.</p>
 </div>
 
@@ -67,9 +67,9 @@ title: 신어 관측 보고
 <ul class="report-list">
   <li>
     <a href="{{ '/reports/cumulative/' | relative_url }}" class="report-card cumulative-card">
-      <span class="card-date">📅 {{ first_period }} ~ {{ last_period }}</span>
+      <span class="card-date">{{ first_period }} ~ {{ last_period }}</span>
       <div class="cumulative-title-row">
-        <div class="card-title">📊 누적 관측 결과</div>
+        <div class="card-title">누적 관측 결과</div>
         <div class="summary-neo-badge">
           <span class="neo-badge-count fmt-num">{{ cum_final_neo }}</span>
           <span class="neo-badge-unit">개 신어 관측!</span>
@@ -119,9 +119,9 @@ title: 신어 관측 보고
       <div class="card-summary">{{ report.summary }}</div>
       {% endif %}
       <div class="card-tags">
-        {% if report.period %}<span class="tag">📅 {{ report.period }}</span>{% endif %}
-        {% if report.genre %}<span class="tag fmt-eok" data-total-words="{{ r_total_words }}">📂 {{ report.genre }}</span>{% endif %}
-        {% if report.neologism_count %}<span class="tag">✨ 신어 {{ report.neologism_count }}개 관측!</span>{% endif %}
+        {% if report.period %}<span class="tag">{{ report.period }}</span>{% endif %}
+        {% if report.genre %}<span class="tag fmt-eok" data-total-words="{{ r_total_words }}">{{ report.genre }}</span>{% endif %}
+        {% if report.neologism_count %}<span class="tag">신어 {{ report.neologism_count }}개 관측!</span>{% endif %}
       </div>
     </a>
   </li>
@@ -129,7 +129,7 @@ title: 신어 관측 보고
 </ul>
 {% else %}
 <div class="empty-state">
-  <p>🔭 아직 관측 보고가 없습니다. 곧 첫 번째 보고가 등록됩니다.</p>
+  <p>아직 관측 보고가 없습니다. 곧 첫 번째 보고가 등록됩니다.</p>
 </div>
 {% endif %}
 
@@ -139,7 +139,7 @@ document.querySelectorAll('.fmt-eok').forEach(function(el) {
   if (!isNaN(w)) {
     // 카드 태그(.tag) 안에서는 접두사 포함, 배너에서는 값만
     if (el.classList.contains('tag')) {
-      el.textContent = '📂 신문/영상 댓글 ' + (w / 100000000).toFixed(2) + '억 어절';
+      el.textContent = '신문/영상 댓글 ' + (w / 100000000).toFixed(2) + '억 어절';
     } else {
       el.textContent = (w / 100000000).toFixed(2) + '억 어절';
     }
