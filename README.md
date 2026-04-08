@@ -1,15 +1,15 @@
-# 💫 K-NOVA: Korean Neologism Observatory and Visual Analytics
-- 🔭 [한국어 신어 관측 결과 바로가기](https://jees-an.github.io/K-NOVA/)
+# 💫 KNO: Korean Neologism Observatory and Visual Analytics
+- 🔭 [한국어 신어 관측 결과 바로가기](https://jees-an.github.io/KNO/)
 
 ## 1. 개요
 
-![K-NOVA](/docs/img/K-NOVA.png)
+![KNO](/docs/img/KNO.png)
 
 'NOVA'는 새롭게 나타나는 별, 신성(新星)을 뜻합니다.
 
 **언어의 새로운 형태와 의미, 신어(新語)** 역시 특정 시점에 출현하여 빠르게 확산되거나 소멸된다는 점에서 천문학의 신성 현상과 닮아 있습니다.
 
-이에 **한국어 신어 관측 시스템**의 이름을 'K-NOVA(Korean Neologism Observatory and Visual Analytics)'로 명명하게 되었습니다.
+이에 **한국어 신어 관측 시스템**의 이름을 'KNO(Korean Neologism Observatory and Visual Analytics)'로 명명하게 되었습니다.
 
 ---
 

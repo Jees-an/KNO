@@ -1,7 +1,7 @@
-title: K-NOVA
+title: KNO
 description: Korean Neologism Observatory and Visual Analytics
 url: "https://jees-an.github.io"
-baseurl: "/K-NOVA"
+baseurl: "/KNO"
 
 markdown: kramdown
 permalink: /reports/:year/:month/:title/

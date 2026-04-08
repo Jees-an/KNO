@@ -1,10 +1,10 @@
 ---
 layout: default
-title: K-NOVA 소개
+title: KNO 소개
 ---
 
 <div class="intro-header">
-  <img src="{{ '/img/K-NOVA.png' | relative_url }}" alt="K-NOVA" class="intro-logo">
+  <img src="{{ '/img/KNO.png' | relative_url }}" alt="KNO" class="intro-logo">
 </div>
 
 ## 프로젝트의 목적<br>
