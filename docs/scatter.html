@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>신어 사용자 범위 × 사용자당 반복 강도</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+<style>
+:root {
+  --bg: #ffffff; --fg: #1a1a1a;
+  --label-bg: rgba(255,255,255,0.92);
+  --label-border: rgba(0,0,0,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: Pretendard, system-ui, sans-serif; background: var(--bg); color: var(--fg); padding: 20px; }
+h1 { text-align:center; font-size:1.5rem; margin-bottom:4px; }
+.subtitle { text-align:center; font-size:0.88rem; color:#1a1a1a; margin-bottom:16px; }
+.chart-wrap { position:relative; width:100%; max-width:1100px; margin:0 auto; }
+canvas { width:100%!important; height:560px!important; }
+@media (max-width:600px) { canvas { height:360px!important; } }
+.stats { text-align:center; font-size:0.85rem; color:#1a1a1a; margin-top:10px; }
+</style>
+</head>
+<body>
+<h1>2025년 신어의 사용자 범위 &times; 사용자당 반복 강도</h1>
+<p class="subtitle">&lt;유튜브 말뭉치&gt;(2025.01.01.~2025.12.31., 약 12억 어절, 신어 380개, 신어 사용 화자 105,795명)</p>
+<div class="chart-wrap"><canvas id="chart"></canvas></div>
+<p class="stats">회귀선: y = 0.0328x + 0.0296</p>
+
+<script>
+const RAW = [{"name":"케케크롱","cat":"인간","freq":1019,"speakers":233,"ratio":4.37,"x":2.3674,"y":0.6408},{"name":"벽돌투표지","cat":"정치와 행정","freq":108,"speakers":29,"ratio":3.72,"x":1.4624,"y":0.571},{"name":"낭만추","cat":"삶","freq":33,"speakers":10,"ratio":3.3,"x":1.0,"y":0.5185},{"name":"금관외교","cat":"정치와 행정","freq":16,"speakers":5,"ratio":3.2,"x":0.699,"y":0.5051},{"name":"가치잡이","cat":"삶","freq":3,"speakers":1,"ratio":3.0,"x":0.0,"y":0.4771},{"name":"김병기방지법","cat":"정치와 행정","freq":3,"speakers":1,"ratio":3.0,"x":0.0,"y":0.4771},{"name":"중국심기경호법","cat":"정치와 행정","freq":19,"speakers":7,"ratio":2.71,"x":0.8451,"y":0.4337},{"name":"가성비남친","cat":"인간","freq":10,"speakers":4,"ratio":2.5,"x":0.6021,"y":0.3979},{"name":"배추경제론","cat":"정치와 행정","freq":5,"speakers":2,"ratio":2.5,"x":0.301,"y":0.3979},{"name":"윤어게인","cat":"정치와 행정","freq":84713,"speakers":34534,"ratio":2.45,"x":4.5382,"y":0.3897},{"name":"공문서위조처","cat":"정치와 행정","freq":17,"speakers":7,"ratio":2.43,"x":0.8451,"y":0.3854},{"name":"내란견","cat":"정치와 행정","freq":15222,"speakers":6452,"ratio":2.36,"x":3.8097,"y":0.3728},{"name":"내란좀비","cat":"정치와 행정","freq":2671,"speakers":1130,"ratio":2.36,"x":3.0531,"y":0.3736},{"name":"가세연방지법","cat":"정치와 행정","freq":57,"speakers":25,"ratio":2.28,"x":1.3979,"y":0.3579},{"name":"반중시위금지법","cat":"정치와 행정","freq":199,"speakers":91,"ratio":2.19,"x":1.959,"y":0.3398},{"name":"내란좀비당","cat":"정치와 행정","freq":311,"speakers":144,"ratio":2.16,"x":2.1584,"y":0.3344},{"name":"빈티지져스","cat":"인간","freq":34,"speakers":17,"ratio":2.0,"x":1.2304,"y":0.301},{"name":"온라인입틀막법","cat":"정치와 행정","freq":4,"speakers":2,"ratio":2.0,"x":0.301,"y":0.301},{"name":"가짜내성","cat":"보건·의학","freq":2,"speakers":1,"ratio":2.0,"x":0.0,"y":0.301},{"name":"괴짜경제론","cat":"경제생활","freq":2,"speakers":1,"ratio":2.0,"x":0.0,"y":0.301},{"name":"반윤찬탄","cat":"정치와 행정","freq":2,"speakers":1,"ratio":2.0,"x":0.0,"y":0.301},{"name":"이재꼼","cat":"정치와 행정","freq":2,"speakers":1,"ratio":2.0,"x":0.0,"y":0.301},{"name":"쿠폰플레이션","cat":"경제생활","freq":2,"speakers":1,"ratio":2.0,"x":0.0,"y":0.301},{"name":"배급견","cat":"정치와 행정","freq":28476,"speakers":14459,"ratio":1.97,"x":4.1601,"y":0.2943},{"name":"화짱조","cat":"인간","freq":9745,"speakers":5009,"ratio":1.95,"x":3.6998,"y":0.289},{"name":"윤두머리","cat":"정치와 행정","freq":660,"speakers":338,"ratio":1.95,"x":2.5289,"y":0.2906},{"name":"빤스수괴","cat":"정치와 행정","freq":2056,"speakers":1065,"ratio":1.93,"x":3.0273,"y":0.2857},{"name":"계몽절","cat":"정치와 행정","freq":139,"speakers":75,"ratio":1.85,"x":1.8751,"y":0.268},{"name":"경량문명","cat":"사회생활","freq":34,"speakers":19,"ratio":1.79,"x":1.2788,"y":0.2527},{"name":"손틀막","cat":"정치와 행정","freq":30,"speakers":17,"ratio":1.76,"x":1.2304,"y":0.2467},{"name":"스캠산업","cat":"사회생활","freq":17,"speakers":10,"ratio":1.7,"x":1.0,"y":0.2304},{"name":"셰셰정권","cat":"정치와 행정","freq":229,"speakers":137,"ratio":1.67,"x":2.1367,"y":0.2231},{"name":"달스코","cat":"경제생활","freq":87,"speakers":52,"ratio":1.67,"x":1.716,"y":0.2235},{"name":"계엄포비아","cat":"정치와 행정","freq":5,"speakers":3,"ratio":1.67,"x":0.4771,"y":0.2218},{"name":"쪼개기쿠폰","cat":"경제생활","freq":5,"speakers":3,"ratio":1.67,"x":0.4771,"y":0.2218},{"name":"계몽령","cat":"정치와 행정","freq":25473,"speakers":15332,"ratio":1.66,"x":4.1856,"y":0.2205},{"name":"앞브","cat":"사회생활","freq":2046,"speakers":1232,"ratio":1.66,"x":3.0906,"y":0.2203},{"name":"계엄팔이","cat":"정치와 행정","freq":64,"speakers":39,"ratio":1.64,"x":1.5911,"y":0.2151},{"name":"배추총리","cat":"정치와 행정","freq":368,"speakers":226,"ratio":1.63,"x":2.3541,"y":0.2117},{"name":"삼통분립","cat":"정치와 행정","freq":8,"speakers":5,"ratio":1.6,"x":0.699,"y":0.2041},{"name":"프리윤","cat":"정치와 행정","freq":57,"speakers":36,"ratio":1.58,"x":1.5563,"y":0.1996},{"name":"셰셰정당","cat":"정치와 행정","freq":17,"speakers":11,"ratio":1.55,"x":1.0414,"y":0.1891},{"name":"김수현방지법","cat":"정치와 행정","freq":84,"speakers":55,"ratio":1.53,"x":1.7404,"y":0.1839},{"name":"잘사니즘","cat":"사회생활","freq":760,"speakers":502,"ratio":1.51,"x":2.7007,"y":0.1801},{"name":"조공관세","cat":"경제생활","freq":18,"speakers":12,"ratio":1.5,"x":1.0792,"y":0.1761},{"name":"계몽좀비","cat":"정치와 행정","freq":12,"speakers":8,"ratio":1.5,"x":0.9031,"y":0.1761},{"name":"다카이치노믹스","cat":"경제생활","freq":3,"speakers":2,"ratio":1.5,"x":0.301,"y":0.1761},{"name":"더티코어","cat":"의생활","freq":3,"speakers":2,"ratio":1.5,"x":0.301,"y":0.1761},{"name":"조방원테마","cat":"경제생활","freq":3,"speakers":2,"ratio":1.5,"x":0.301,"y":0.1761},{"name":"중국비판금지법","cat":"정치와 행정","freq":3,"speakers":2,"ratio":1.5,"x":0.301,"y":0.1761},{"name":"계엄내란당","cat":"정치와 행정","freq":345,"speakers":233,"ratio":1.48,"x":2.3674,"y":0.1705},{"name":"검열계엄","cat":"정치와 행정","freq":19,"speakers":13,"ratio":1.46,"x":1.1139,"y":0.1648},{"name":"비상계몽","cat":"정치와 행정","freq":832,"speakers":579,"ratio":1.44,"x":2.7627,"y":0.1574},{"name":"따소물","cat":"식생활","freq":26,"speakers":18,"ratio":1.44,"x":1.2553,"y":0.1597},{"name":"딱풀공문","cat":"정치와 행정","freq":134,"speakers":95,"ratio":1.41,"x":1.9777,"y":0.1494},{"name":"준찍명","cat":"정치와 행정","freq":65,"speakers":46,"ratio":1.41,"x":1.6628,"y":0.1502},{"name":"내란본당","cat":"정치와 행정","freq":66,"speakers":47,"ratio":1.4,"x":1.6721,"y":0.1474},{"name":"AI정신병","cat":"보건·의학","freq":7,"speakers":5,"ratio":1.4,"x":0.699,"y":0.1461},{"name":"계급통","cat":"사회생활","freq":7,"speakers":5,"ratio":1.4,"x":0.699,"y":0.1461},{"name":"내란무새","cat":"정치와 행정","freq":1026,"speakers":738,"ratio":1.39,"x":2.8681,"y":0.1431},{"name":"내란부부","cat":"정치와 행정","freq":302,"speakers":217,"ratio":1.39,"x":2.3365,"y":0.1435},{"name":"스캠보디아","cat":"사회생활","freq":73,"speakers":53,"ratio":1.38,"x":1.7243,"y":0.139},{"name":"내란방탄당","cat":"정치와 행정","freq":15,"speakers":11,"ratio":1.36,"x":1.0414,"y":0.1347},{"name":"운샌들","cat":"의생활","freq":4,"speakers":3,"ratio":1.33,"x":0.4771,"y":0.1249},{"name":"테토녀룩","cat":"의생활","freq":4,"speakers":3,"ratio":1.33,"x":0.4771,"y":0.1249},{"name":"리만배터리","cat":"경제생활","freq":165,"speakers":125,"ratio":1.32,"x":2.0969,"y":0.1206},{"name":"쿠팡게이트","cat":"경제생활","freq":29,"speakers":22,"ratio":1.32,"x":1.3424,"y":0.12},{"name":"섬꾸","cat":"문화","freq":400,"speakers":305,"ratio":1.31,"x":2.4843,"y":0.1178},{"name":"불구리짬뽕","cat":"식생활","freq":31,"speakers":24,"ratio":1.29,"x":1.3802,"y":0.1112},{"name":"법치내란","cat":"정치와 행정","freq":27,"speakers":21,"ratio":1.29,"x":1.3222,"y":0.1091},{"name":"서윗영포티","cat":"인간","freq":461,"speakers":359,"ratio":1.28,"x":2.5551,"y":0.1086},{"name":"바이브코딩","cat":"사회생활","freq":341,"speakers":267,"ratio":1.28,"x":2.4265,"y":0.1062},{"name":"파란윤석열","cat":"정치와 행정","freq":222,"speakers":174,"ratio":1.28,"x":2.2405,"y":0.1058},{"name":"어뢰배트","cat":"문화","freq":329,"speakers":261,"ratio":1.26,"x":2.4166,"y":0.1006},{"name":"노쇼경제학","cat":"경제생활","freq":204,"speakers":163,"ratio":1.25,"x":2.2122,"y":0.0974},{"name":"셰셰정부","cat":"정치와 행정","freq":200,"speakers":160,"ratio":1.25,"x":2.2041,"y":0.0969},{"name":"길막돌","cat":"인간","freq":95,"speakers":76,"ratio":1.25,"x":1.8808,"y":0.0969},{"name":"시추놀이","cat":"사회생활","freq":15,"speakers":12,"ratio":1.25,"x":1.0792,"y":0.0969},{"name":"남편덧","cat":"삶","freq":5,"speakers":4,"ratio":1.25,"x":0.6021,"y":0.0969},{"name":"내란수면장애","cat":"정치와 행정","freq":5,"speakers":4,"ratio":1.25,"x":0.6021,"y":0.0969},{"name":"내란수비대","cat":"정치와 행정","freq":5,"speakers":4,"ratio":1.25,"x":0.6021,"y":0.0969},{"name":"주택완박","cat":"정치와 행정","freq":5,"speakers":4,"ratio":1.25,"x":0.6021,"y":0.0969},{"name":"중량문명","cat":"사회생활","freq":5,"speakers":4,"ratio":1.25,"x":0.6021,"y":0.0969},{"name":"탈퇴런","cat":"경제생활","freq":5,"speakers":4,"ratio":1.25,"x":0.6021,"y":0.0969},{"name":"중국산택갈이","cat":"경제생활","freq":307,"speakers":248,"ratio":1.24,"x":2.3945,"y":0.0927},{"name":"보컬총사령관","cat":"문화","freq":67,"speakers":54,"ratio":1.24,"x":1.7324,"y":0.0937},{"name":"한남산성","cat":"정치와 행정","freq":26,"speakers":21,"ratio":1.24,"x":1.3222,"y":0.0928},{"name":"어넓골좁","cat":"인간","freq":59,"speakers":48,"ratio":1.23,"x":1.6812,"y":0.0896},{"name":"고당대통","cat":"보건·의학","freq":27,"speakers":22,"ratio":1.23,"x":1.3424,"y":0.0889},{"name":"링겔이모","cat":"인간","freq":16,"speakers":13,"ratio":1.23,"x":1.1139,"y":0.0902},{"name":"노쇼경제","cat":"경제생활","freq":56,"speakers":46,"ratio":1.22,"x":1.6628,"y":0.0854},{"name":"셰셰정책","cat":"정치와 행정","freq":28,"speakers":23,"ratio":1.22,"x":1.3617,"y":0.0854},{"name":"스윗영포티","cat":"인간","freq":2528,"speakers":2095,"ratio":1.21,"x":3.3212,"y":0.0816},{"name":"원스코","cat":"경제생활","freq":17,"speakers":14,"ratio":1.21,"x":1.1461,"y":0.0843},{"name":"귀주톱","cat":"문화","freq":268,"speakers":224,"ratio":1.2,"x":2.3502,"y":0.0779},{"name":"힙레안무","cat":"문화","freq":48,"speakers":40,"ratio":1.2,"x":1.6021,"y":0.0792},{"name":"고봉밥패치","cat":"경제생활","freq":42,"speakers":35,"ratio":1.2,"x":1.5441,"y":0.0792},{"name":"내란성질병","cat":"정치와 행정","freq":12,"speakers":10,"ratio":1.2,"x":1.0,"y":0.0792},{"name":"애플인간","cat":"인간","freq":6,"speakers":5,"ratio":1.2,"x":0.699,"y":0.0792},{"name":"엑셀부부","cat":"인간","freq":6,"speakers":5,"ratio":1.2,"x":0.699,"y":0.0792},{"name":"파면정식","cat":"정치와 행정","freq":6,"speakers":5,"ratio":1.2,"x":0.699,"y":0.0792},{"name":"카톡계엄령","cat":"정치와 행정","freq":216,"speakers":182,"ratio":1.19,"x":2.2601,"y":0.0744},{"name":"확통런","cat":"교육","freq":134,"speakers":113,"ratio":1.19,"x":2.0531,"y":0.074},{"name":"젠지스테어","cat":"인간","freq":114,"speakers":96,"ratio":1.19,"x":1.9823,"y":0.0746},{"name":"모찌피스","cat":"문화","freq":25,"speakers":21,"ratio":1.19,"x":1.3222,"y":0.0757},{"name":"밥그릇투표","cat":"정치와 행정","freq":25,"speakers":21,"ratio":1.19,"x":1.3222,"y":0.0757},{"name":"딱풀영장","cat":"정치와 행정","freq":97,"speakers":82,"ratio":1.18,"x":1.9138,"y":0.073},{"name":"쉰스타","cat":"문화","freq":26,"speakers":22,"ratio":1.18,"x":1.3424,"y":0.0726},{"name":"카톡계엄","cat":"정치와 행정","freq":355,"speakers":303,"ratio":1.17,"x":2.4814,"y":0.0688},{"name":"짱북송","cat":"정치와 행정","freq":75,"speakers":64,"ratio":1.17,"x":1.8062,"y":0.0689},{"name":"키세스시위대","cat":"정치와 행정","freq":42,"speakers":36,"ratio":1.17,"x":1.5563,"y":0.0669},{"name":"짭벤져스","cat":"인간","freq":21,"speakers":18,"ratio":1.17,"x":1.2553,"y":0.0669},{"name":"피서농성","cat":"정치와 행정","freq":14,"speakers":12,"ratio":1.17,"x":1.0792,"y":0.0669},{"name":"경조사재테크","cat":"경제생활","freq":7,"speakers":6,"ratio":1.17,"x":0.7782,"y":0.0669},{"name":"배추경제학","cat":"정치와 행정","freq":7,"speakers":6,"ratio":1.17,"x":0.7782,"y":0.0669},{"name":"사형경제학","cat":"경제생활","freq":7,"speakers":6,"ratio":1.17,"x":0.7782,"y":0.0669},{"name":"컨텍스트엔지니어","cat":"인간","freq":7,"speakers":6,"ratio":1.17,"x":0.7782,"y":0.0669},{"name":"영포티폰","cat":"사회생활","freq":125,"speakers":108,"ratio":1.16,"x":2.0334,"y":0.0635},{"name":"야차룰","cat":"사회생활","freq":2780,"speakers":2420,"ratio":1.15,"x":3.3838,"y":0.0602},{"name":"네포키즈","cat":"인간","freq":76,"speakers":66,"ratio":1.15,"x":1.8195,"y":0.0613},{"name":"뼈장","cat":"식생활","freq":76,"speakers":66,"ratio":1.15,"x":1.8195,"y":0.0613},{"name":"빤스농성","cat":"정치와 행정","freq":53,"speakers":46,"ratio":1.15,"x":1.6628,"y":0.0615},{"name":"노쇼경제론","cat":"경제생활","freq":38,"speakers":33,"ratio":1.15,"x":1.5185,"y":0.0613},{"name":"허거덩거덩스","cat":"인간","freq":145,"speakers":127,"ratio":1.14,"x":2.1038,"y":0.0576},{"name":"행번방사건","cat":"정치와 행정","freq":84,"speakers":74,"ratio":1.14,"x":1.8692,"y":0.055},{"name":"응원봉세대","cat":"인간","freq":24,"speakers":21,"ratio":1.14,"x":1.3222,"y":0.058},{"name":"랜선강아지","cat":"동식물","freq":8,"speakers":7,"ratio":1.14,"x":0.8451,"y":0.058},{"name":"재회굿","cat":"사회생활","freq":8,"speakers":7,"ratio":1.14,"x":0.8451,"y":0.058},{"name":"에겐남","cat":"인간","freq":7208,"speakers":6388,"ratio":1.13,"x":3.8054,"y":0.0524},{"name":"키세스단","cat":"정치와 행정","freq":398,"speakers":352,"ratio":1.13,"x":2.5465,"y":0.0533},{"name":"차원달라병","cat":"문화","freq":161,"speakers":142,"ratio":1.13,"x":2.1523,"y":0.0545},{"name":"킹룡","cat":"동식물","freq":124,"speakers":110,"ratio":1.13,"x":2.0414,"y":0.052},{"name":"익충라이팅","cat":"사회생활","freq":115,"speakers":102,"ratio":1.13,"x":2.0086,"y":0.0521},{"name":"팬티수괴","cat":"정치와 행정","freq":68,"speakers":60,"ratio":1.13,"x":1.7782,"y":0.0544},{"name":"테토남","cat":"인간","freq":8772,"speakers":7842,"ratio":1.12,"x":3.8944,"y":0.0487},{"name":"하룰라라","cat":"삶","freq":2616,"speakers":2343,"ratio":1.12,"x":3.3698,"y":0.0479},{"name":"두쫀쿠","cat":"식생활","freq":1158,"speakers":1036,"ratio":1.12,"x":3.0154,"y":0.0483},{"name":"울세이너","cat":"인간","freq":185,"speakers":165,"ratio":1.12,"x":2.2175,"y":0.0497},{"name":"셰셰대통령","cat":"정치와 행정","freq":108,"speakers":96,"ratio":1.12,"x":1.9823,"y":0.0512},{"name":"개딸임명식","cat":"정치와 행정","freq":84,"speakers":75,"ratio":1.12,"x":1.8751,"y":0.0492},{"name":"나작스","cat":"문화","freq":37,"speakers":33,"ratio":1.12,"x":1.5185,"y":0.0497},{"name":"호텔경제학자","cat":"경제생활","freq":29,"speakers":26,"ratio":1.12,"x":1.415,"y":0.0474},{"name":"기롯삼한엘","cat":"문화","freq":19,"speakers":17,"ratio":1.12,"x":1.2304,"y":0.0483},{"name":"테토녀","cat":"인간","freq":4460,"speakers":4022,"ratio":1.11,"x":3.6044,"y":0.0449},{"name":"두바이쫀득쿠키","cat":"식생활","freq":402,"speakers":362,"ratio":1.11,"x":2.5587,"y":0.0455},{"name":"교토화법","cat":"인간","freq":165,"speakers":149,"ratio":1.11,"x":2.1732,"y":0.0443},{"name":"내란성스트레스","cat":"정치와 행정","freq":68,"speakers":61,"ratio":1.11,"x":1.7853,"y":0.0472},{"name":"에토녀","cat":"인간","freq":31,"speakers":28,"ratio":1.11,"x":1.4472,"y":0.0442},{"name":"푸세식언론","cat":"사회생활","freq":30,"speakers":27,"ratio":1.11,"x":1.4314,"y":0.0458},{"name":"인간GPT","cat":"인간","freq":21,"speakers":19,"ratio":1.11,"x":1.2788,"y":0.0435},{"name":"깨볶행","cat":"삶","freq":20,"speakers":18,"ratio":1.11,"x":1.2553,"y":0.0458},{"name":"치맥브라더스","cat":"경제생활","freq":10,"speakers":9,"ratio":1.11,"x":0.9542,"y":0.0458},{"name":"뉴년기","cat":"삶","freq":219,"speakers":200,"ratio":1.09,"x":2.301,"y":0.0394},{"name":"깐부회동","cat":"경제생활","freq":66,"speakers":60,"ratio":1.1,"x":1.7782,"y":0.0414},{"name":"속옷수괴","cat":"정치와 행정","freq":22,"speakers":20,"ratio":1.1,"x":1.301,"y":0.0414},{"name":"쉬었음세대","cat":"인간","freq":22,"speakers":20,"ratio":1.1,"x":1.301,"y":0.0414},{"name":"이밍아웃","cat":"삶","freq":11,"speakers":10,"ratio":1.1,"x":1.0,"y":0.0414},{"name":"현지공화국","cat":"정치와 행정","freq":11,"speakers":10,"ratio":1.1,"x":1.0,"y":0.0414},{"name":"에겐녀","cat":"인간","freq":1737,"speakers":1590,"ratio":1.09,"x":3.2014,"y":0.0384},{"name":"실압근","cat":"인간","freq":458,"speakers":419,"ratio":1.09,"x":2.6222,"y":0.0387},{"name":"아들맘상","cat":"인간","freq":175,"speakers":161,"ratio":1.09,"x":2.2068,"y":0.0362},{"name":"쌉티","cat":"인간","freq":145,"speakers":133,"ratio":1.09,"x":2.1239,"y":0.0375},{"name":"키세스군단","cat":"정치와 행정","freq":142,"speakers":130,"ratio":1.09,"x":2.1139,"y":0.0383},{"name":"노차이니즈존","cat":"사회생활","freq":48,"speakers":44,"ratio":1.09,"x":1.6435,"y":0.0378},{"name":"빵택시","cat":"식생활","freq":36,"speakers":33,"ratio":1.09,"x":1.5185,"y":0.0378},{"name":"미지근톤","cat":"의생활","freq":25,"speakers":23,"ratio":1.09,"x":1.3617,"y":0.0362},{"name":"연프재질","cat":"인간","freq":24,"speakers":22,"ratio":1.09,"x":1.3424,"y":0.0378},{"name":"저숭라라","cat":"삶","freq":547,"speakers":508,"ratio":1.08,"x":2.7059,"y":0.0321},{"name":"마초맘","cat":"인간","freq":106,"speakers":98,"ratio":1.08,"x":1.9912,"y":0.0341},{"name":"올드포티","cat":"인간","freq":81,"speakers":75,"ratio":1.08,"x":1.8751,"y":0.0334},{"name":"딸깍승","cat":"문화","freq":27,"speakers":25,"ratio":1.08,"x":1.3979,"y":0.0334},{"name":"검은봉투법","cat":"정치와 행정","freq":26,"speakers":24,"ratio":1.08,"x":1.3802,"y":0.0348},{"name":"육회칼빔면","cat":"식생활","freq":13,"speakers":12,"ratio":1.08,"x":1.0792,"y":0.0348},{"name":"AI딸깍","cat":"정보·기술","freq":489,"speakers":457,"ratio":1.07,"x":2.6599,"y":0.0294},{"name":"막맏즈","cat":"인간","freq":47,"speakers":44,"ratio":1.07,"x":1.6435,"y":0.0286},{"name":"주진우방지법","cat":"정치와 행정","freq":32,"speakers":30,"ratio":1.07,"x":1.4771,"y":0.028},{"name":"딥시크쇼크","cat":"정보·기술","freq":31,"speakers":29,"ratio":1.07,"x":1.4624,"y":0.029},{"name":"노멀휴먼","cat":"인간","freq":29,"speakers":27,"ratio":1.07,"x":1.4314,"y":0.031},{"name":"테겐녀","cat":"인간","freq":16,"speakers":15,"ratio":1.07,"x":1.1761,"y":0.028},{"name":"테토력","cat":"인간","freq":239,"speakers":225,"ratio":1.06,"x":2.3522,"y":0.0262},{"name":"얼굴주사위","cat":"인간","freq":189,"speakers":178,"ratio":1.06,"x":2.2504,"y":0.026},{"name":"수컷녀","cat":"인간","freq":56,"speakers":53,"ratio":1.06,"x":1.7243,"y":0.0239},{"name":"언럭키비키","cat":"사회생활","freq":38,"speakers":36,"ratio":1.06,"x":1.5563,"y":0.0235},{"name":"환율오적","cat":"경제생활","freq":19,"speakers":18,"ratio":1.06,"x":1.2553,"y":0.0235},{"name":"지금조방원","cat":"경제생활","freq":17,"speakers":16,"ratio":1.06,"x":1.2041,"y":0.0263},{"name":"딸아빠상","cat":"인간","freq":153,"speakers":146,"ratio":1.05,"x":2.1644,"y":0.0203},{"name":"난임로그","cat":"문화","freq":64,"speakers":61,"ratio":1.05,"x":1.7853,"y":0.0209},{"name":"에토남","cat":"인간","freq":58,"speakers":55,"ratio":1.05,"x":1.7404,"y":0.0231},{"name":"미꼰","cat":"인간","freq":23,"speakers":22,"ratio":1.05,"x":1.3424,"y":0.0193},{"name":"편법재판소","cat":"정치와 행정","freq":21,"speakers":20,"ratio":1.05,"x":1.301,"y":0.0212},{"name":"느좋좋","cat":"인간","freq":20,"speakers":19,"ratio":1.05,"x":1.2788,"y":0.0223},{"name":"두바이수건케이크","cat":"식생활","freq":20,"speakers":19,"ratio":1.05,"x":1.2788,"y":0.0223},{"name":"탈팡운동","cat":"경제생활","freq":20,"speakers":19,"ratio":1.05,"x":1.2788,"y":0.0223},{"name":"감다죽","cat":"삶","freq":1052,"speakers":1008,"ratio":1.04,"x":3.0035,"y":0.0186},{"name":"밥플릭스","cat":"삶","freq":159,"speakers":153,"ratio":1.04,"x":2.1847,"y":0.0167},{"name":"테무인간","cat":"인간","freq":94,"speakers":90,"ratio":1.04,"x":1.9542,"y":0.0189},{"name":"상견례프리빠꾸상","cat":"인간","freq":48,"speakers":46,"ratio":1.04,"x":1.6628,"y":0.0185},{"name":"시장통오더","cat":"문화","freq":29,"speakers":28,"ratio":1.04,"x":1.4472,"y":0.0152},{"name":"막나귀","cat":"삶","freq":28,"speakers":27,"ratio":1.04,"x":1.4314,"y":0.0158},{"name":"퉁퉁이창법","cat":"문화","freq":27,"speakers":26,"ratio":1.04,"x":1.415,"y":0.0164},{"name":"드럼통정치","cat":"정치와 행정","freq":25,"speakers":24,"ratio":1.04,"x":1.3802,"y":0.0177},{"name":"주사게이트","cat":"사회생활","freq":24,"speakers":23,"ratio":1.04,"x":1.3617,"y":0.0185},{"name":"에겐력","cat":"인간","freq":283,"speakers":275,"ratio":1.03,"x":2.4393,"y":0.0125},{"name":"딸깍게임","cat":"사회생활","freq":73,"speakers":71,"ratio":1.03,"x":1.8513,"y":0.0121},{"name":"한남동대첩","cat":"정치와 행정","freq":33,"speakers":32,"ratio":1.03,"x":1.5051,"y":0.0134},{"name":"행정내란","cat":"정치와 행정","freq":30,"speakers":29,"ratio":1.03,"x":1.4624,"y":0.0147},{"name":"느좋조합","cat":"인간","freq":130,"speakers":127,"ratio":1.02,"x":2.1038,"y":0.0101},{"name":"혼문지킴이","cat":"문화","freq":50,"speakers":49,"ratio":1.02,"x":1.6902,"y":0.0088},{"name":"나이존","cat":"의생활","freq":160,"speakers":158,"ratio":1.01,"x":2.1987,"y":0.0055},{"name":"냥굿즈","cat":"문화","freq":72,"speakers":71,"ratio":1.01,"x":1.8513,"y":0.0061},{"name":"김현지방지법","cat":"정치와 행정","freq":56,"speakers":56,"ratio":1.0,"x":1.7482,"y":0.0},{"name":"위쑤시개","cat":"식생활","freq":48,"speakers":48,"ratio":1.0,"x":1.6812,"y":0.0},{"name":"테겐남","cat":"인간","freq":41,"speakers":41,"ratio":1.0,"x":1.6128,"y":0.0},{"name":"랜선생님","cat":"인간","freq":34,"speakers":34,"ratio":1.0,"x":1.5315,"y":0.0},{"name":"한플루언서","cat":"인간","freq":25,"speakers":25,"ratio":1.0,"x":1.3979,"y":0.0},{"name":"헌법도망소","cat":"정치와 행정","freq":24,"speakers":24,"ratio":1.0,"x":1.3802,"y":0.0},{"name":"키세스부대","cat":"정치와 행정","freq":22,"speakers":22,"ratio":1.0,"x":1.3424,"y":0.0},{"name":"엄껌시기","cat":"삶","freq":20,"speakers":20,"ratio":1.0,"x":1.301,"y":0.0},{"name":"바캉스농성","cat":"정치와 행정","freq":19,"speakers":19,"ratio":1.0,"x":1.2788,"y":0.0},{"name":"여친재질","cat":"인간","freq":19,"speakers":19,"ratio":1.0,"x":1.2788,"y":0.0},{"name":"썬번메이크업","cat":"의생활","freq":17,"speakers":17,"ratio":1.0,"x":1.2304,"y":0.0},{"name":"관세폭력","cat":"정치와 행정","freq":15,"speakers":15,"ratio":1.0,"x":1.1761,"y":0.0},{"name":"채포자","cat":"인간","freq":13,"speakers":13,"ratio":1.0,"x":1.1139,"y":0.0},{"name":"고모재질","cat":"인간","freq":12,"speakers":12,"ratio":1.0,"x":1.0792,"y":0.0},{"name":"관식이병","cat":"문화","freq":12,"speakers":12,"ratio":1.0,"x":1.0792,"y":0.0},{"name":"쉰스타그램","cat":"문화","freq":12,"speakers":12,"ratio":1.0,"x":1.0792,"y":0.0},{"name":"뻥사니즘","cat":"사회생활","freq":11,"speakers":11,"ratio":1.0,"x":1.0414,"y":0.0},{"name":"샤넬부적","cat":"사회생활","freq":11,"speakers":11,"ratio":1.0,"x":1.0414,"y":0.0},{"name":"광속노화","cat":"의생활","freq":10,"speakers":10,"ratio":1.0,"x":1.0,"y":0.0},{"name":"찬탄표","cat":"정치와 행정","freq":10,"speakers":10,"ratio":1.0,"x":1.0,"y":0.0},{"name":"키세스전사","cat":"정치와 행정","freq":10,"speakers":10,"ratio":1.0,"x":1.0,"y":0.0},{"name":"대치맘룩","cat":"의생활","freq":9,"speakers":9,"ratio":1.0,"x":0.9542,"y":0.0},{"name":"밈친자","cat":"인간","freq":8,"speakers":8,"ratio":1.0,"x":0.9031,"y":0.0},{"name":"바코드앞머리","cat":"의생활","freq":8,"speakers":8,"ratio":1.0,"x":0.9031,"y":0.0},{"name":"솔로재질","cat":"인간","freq":8,"speakers":8,"ratio":1.0,"x":0.9031,"y":0.0},{"name":"요정귀필러","cat":"의생활","freq":8,"speakers":8,"ratio":1.0,"x":0.9031,"y":0.0},{"name":"이중성핑","cat":"인간","freq":8,"speakers":8,"ratio":1.0,"x":0.9031,"y":0.0},{"name":"장경태방지법","cat":"정치와 행정","freq":8,"speakers":8,"ratio":1.0,"x":0.9031,"y":0.0},{"name":"폰틀막","cat":"정치와 행정","freq":8,"speakers":8,"ratio":1.0,"x":0.9031,"y":0.0},{"name":"AI와이프","cat":"사회생활","freq":7,"speakers":7,"ratio":1.0,"x":0.8451,"y":0.0},{"name":"내란사병","cat":"정치와 행정","freq":7,"speakers":7,"ratio":1.0,"x":0.8451,"y":0.0},{"name":"마성강","cat":"경제생활","freq":7,"speakers":7,"ratio":1.0,"x":0.8451,"y":0.0},{"name":"아우라파밍","cat":"인간","freq":7,"speakers":7,"ratio":1.0,"x":0.8451,"y":0.0},{"name":"에테남","cat":"인간","freq":7,"speakers":7,"ratio":1.0,"x":0.8451,"y":0.0},{"name":"은박요정","cat":"정치와 행정","freq":7,"speakers":7,"ratio":1.0,"x":0.8451,"y":0.0},{"name":"저당고단","cat":"식생활","freq":7,"speakers":7,"ratio":1.0,"x":0.8451,"y":0.0},{"name":"코어가즘","cat":"인간","freq":7,"speakers":7,"ratio":1.0,"x":0.8451,"y":0.0},{"name":"틱톡난민","cat":"문화","freq":7,"speakers":7,"ratio":1.0,"x":0.8451,"y":0.0},{"name":"행번방사태","cat":"정치와 행정","freq":7,"speakers":7,"ratio":1.0,"x":0.8451,"y":0.0},{"name":"링거아줌마","cat":"인간","freq":6,"speakers":6,"ratio":1.0,"x":0.7782,"y":0.0},{"name":"연금계엄","cat":"정치와 행정","freq":6,"speakers":6,"ratio":1.0,"x":0.7782,"y":0.0},{"name":"재벌수저","cat":"인간","freq":6,"speakers":6,"ratio":1.0,"x":0.7782,"y":0.0},{"name":"키세스요정","cat":"정치와 행정","freq":6,"speakers":6,"ratio":1.0,"x":0.7782,"y":0.0},{"name":"AI망상","cat":"보건·의학","freq":5,"speakers":5,"ratio":1.0,"x":0.699,"y":0.0},{"name":"내란게이트","cat":"정치와 행정","freq":5,"speakers":5,"ratio":1.0,"x":0.699,"y":0.0},{"name":"동물성보수","cat":"정치와 행정","freq":5,"speakers":5,"ratio":1.0,"x":0.699,"y":0.0},{"name":"두바이김밥","cat":"식생활","freq":5,"speakers":5,"ratio":1.0,"x":0.699,"y":0.0},{"name":"레이지베이트","cat":"사회생활","freq":5,"speakers":5,"ratio":1.0,"x":0.699,"y":0.0},{"name":"물소떼전략","cat":"정치와 행정","freq":5,"speakers":5,"ratio":1.0,"x":0.699,"y":0.0},{"name":"분노미끼","cat":"사회생활","freq":5,"speakers":5,"ratio":1.0,"x":0.699,"y":0.0},{"name":"웹툰재질","cat":"인간","freq":5,"speakers":5,"ratio":1.0,"x":0.699,"y":0.0},{"name":"유죄사람","cat":"인간","freq":5,"speakers":5,"ratio":1.0,"x":0.699,"y":0.0},{"name":"윤네버","cat":"정치와 행정","freq":5,"speakers":5,"ratio":1.0,"x":0.699,"y":0.0},{"name":"이재명가족험담금지법","cat":"정치와 행정","freq":5,"speakers":5,"ratio":1.0,"x":0.699,"y":0.0},{"name":"전광판피셜","cat":"사회생활","freq":5,"speakers":5,"ratio":1.0,"x":0.699,"y":0.0},{"name":"파파돈","cat":"정치와 행정","freq":5,"speakers":5,"ratio":1.0,"x":0.699,"y":0.0},{"name":"홍보핑","cat":"인간","freq":5,"speakers":5,"ratio":1.0,"x":0.699,"y":0.0},{"name":"가짜노동시간","cat":"사회생활","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"깐부회담","cat":"경제생활","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"리버스내추럴사이클","cat":"문화","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"마라카레","cat":"식생활","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"명치주의","cat":"정치와 행정","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"방콕병","cat":"삶","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"사법세탁소","cat":"정치와 행정","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"삼봉오란","cat":"식생활","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"에겐녀룩","cat":"의생활","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"인중오목술","cat":"보건·의학","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"초이스재킹","cat":"사회생활","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"콘친자","cat":"인간","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"타코트레이드","cat":"경제생활","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"핢핣","cat":"인간","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"호텔외교학","cat":"정치와 행정","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"호텔정치학","cat":"정치와 행정","freq":4,"speakers":4,"ratio":1.0,"x":0.6021,"y":0.0},{"name":"개딸주권정부","cat":"정치와 행정","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"고야금","cat":"문화","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"긁수저","cat":"인간","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"내란성증후군","cat":"정치와 행정","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"대딸깍시대","cat":"사회생활","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"반탄론자","cat":"인간","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"설거지상장","cat":"경제생활","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"스칸트","cat":"의생활","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"어부바니트","cat":"의생활","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"우정혼","cat":"삶","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"죄인주권정부","cat":"정치와 행정","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"청년근심주택","cat":"주생활","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"탈안미경중","cat":"정치와 행정","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"퇴마돌","cat":"인간","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"하루살이경제학","cat":"경제생활","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"호텔외교론","cat":"정치와 행정","freq":3,"speakers":3,"ratio":1.0,"x":0.4771,"y":0.0},{"name":"게이연프","cat":"문화","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"고씨룩","cat":"의생활","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"금융계급제","cat":"경제생활","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"까까갑","cat":"정치와 행정","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"내란정당해산법","cat":"정치와 행정","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"내복수괴","cat":"정치와 행정","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"덕자금","cat":"문화","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"멍치원","cat":"문화","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"백보킹","cat":"문화","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"비트코인테크","cat":"경제생활","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"스니크플레이션","cat":"경제생활","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"자막장사","cat":"경제생활","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"질러노믹스","cat":"경제생활","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"초음속노화","cat":"의생활","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"티라노자세","cat":"삶","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"현백키즈","cat":"인간","freq":2,"speakers":2,"ratio":1.0,"x":0.301,"y":0.0},{"name":"AG시대","cat":"정보·기술","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"AI지상주의","cat":"사회생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"감성수발","cat":"삶","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"개딸매체","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"개딸주권주의","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"거구단","cat":"교육","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"계란외교","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"과일인사","cat":"삶","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"굴종시트","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"그림공천","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"기분경제","cat":"경제생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"김하늘법","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"내란범보호위원회","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"내란사적","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"내란옹호위원회","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"내로남극","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"노쇼주도성장론","cat":"경제생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"다크샤워","cat":"삶","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"다크샤워링","cat":"삶","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"대포족","cat":"인간","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"뜨개식물","cat":"문화","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"롱텐트","cat":"사회생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"루트뷰티","cat":"의생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"마틀막","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"멍플스테이","cat":"문화","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"묘생승리","cat":"동식물","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"무속소비","cat":"경제생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"무자격오적","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"미나리다리","cat":"인간","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"미디어꼰대","cat":"인간","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"밭친자","cat":"인간","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"부동산내란정책","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"빈집벨트","cat":"주생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"사전투표그램","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"서브과외","cat":"교육","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"센스부심","cat":"인간","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"송민호방지법","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"수세식언론","cat":"사회생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"술스라이팅","cat":"사회생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"쉐이크김치","cat":"식생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"스텔스페미니즘","cat":"사회생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"스토킹국감","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"역금융치료","cat":"경제생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"역덕질","cat":"문화","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"유심런","cat":"사회생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"유죄보이스","cat":"인간","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"유혹비","cat":"경제생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"이북카세","cat":"식생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"장례테크","cat":"경제생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"재코타","cat":"사회생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"정서적연봉","cat":"사회생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"주반야대","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"짬채밥","cat":"식생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"청년불안주택","cat":"주생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"체포텐트","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"캐멕중","cat":"사회생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"쿠폰주도경제","cat":"경제생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"패닉통장","cat":"경제생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"표팔이마케팅","cat":"정치와 행정","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"피닉돌","cat":"인간","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"필러포비아","cat":"사회생활","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"혀수저","cat":"인간","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"화장실캠핑","cat":"삶","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0},{"name":"흥머니","cat":"인간","freq":1,"speakers":1,"ratio":1.0,"x":0.0,"y":0.0}];
+const COLORS = {"정치와 행정": "#3C3489", "인간": "#1D9E75", "경제생활": "#BA7517", "사회생활": "#D85A30", "문화": "#D4537E", "삶": "#639922", "의생활": "#85B7EB", "식생활": "#F0997B", "보건·의학": "#E24B4A", "주생활": "#888780", "교육": "#534AB7", "동식물": "#97C459", "정보·기술": "#378ADD", "자연": "#5DCAA5"};
+const LABELS = new Set(["윤어게인", "배급견", "계몽령", "내란견", "화짱조", "테토남", "에겐남", "내란좀비", "빤스수괴", "케케크롱", "벽돌투표지", "앞브", "내란무새", "비상계몽", "스윗영포티", "에겐녀", "하룰라라", "야차룰", "감다죽", "두쫀쿠", "AI딸깍", "바이브코딩", "잘사니즘", "내란좀비당", "섬꾸", "낭만추", "금관외교", "셰셰정권", "가치잡이", "김병기방지법", "중국심기경호법", "가성비남친", "배추경제론", "공문서위조처", "가세연방지법", "빈티지져스", "쿠폰플레이션", "이재꼼"]);
+const SLOPE = 0.032823;
+const INTERCEPT = 0.029641;
+
+const isDark = false;
+const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)';
+const tickColor = isDark ? '#aaa' : '#555';
+const labelTextColor = isDark ? '#e8e8e4' : '#1a1a1a';
+const labelBg = isDark ? 'rgba(26,26,26,0.88)' : 'rgba(255,255,255,0.92)';
+const labelBorder = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)';
+
+// group by category
+const catMap = {};
+RAW.forEach(d => {
+  if (!catMap[d.cat]) catMap[d.cat] = [];
+  catMap[d.cat].push(d);
+});
+
+const datasets = Object.entries(catMap).map(([cat, items]) => ({
+  label: cat,
+  data: items.map(d => ({ x: d.x, y: d.y, _meta: d })),
+  backgroundColor: COLORS[cat] || '#999',
+  borderColor: isDark ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.7)',
+  borderWidth: 1.2,
+  pointRadius: items.map(d => Math.max(4, Math.min(12, 2.5 + Math.log10(d.freq) * 1.5))),
+  pointHoverRadius: 10,
+}));
+
+// regression & baseline plugin
+const regressionPlugin = {
+  id: 'regressionLine',
+  beforeDatasetsDraw(chart) {
+    const ctx = chart.ctx;
+    const xS = chart.scales.x, yS = chart.scales.y;
+    ctx.save();
+    // baseline y=0
+    ctx.setLineDash([6, 4]);
+    ctx.strokeStyle = 'rgba(128,128,128,0.5)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(xS.left, yS.getPixelForValue(0));
+    ctx.lineTo(xS.right, yS.getPixelForValue(0));
+    ctx.stroke();
+    // OLS
+    ctx.setLineDash([]);
+    ctx.strokeStyle = '#E24B4A';
+    ctx.lineWidth = 2;
+    const x0 = xS.min, x1 = xS.max;
+    ctx.beginPath();
+    ctx.moveTo(xS.getPixelForValue(x0), yS.getPixelForValue(SLOPE*x0+INTERCEPT));
+    ctx.lineTo(xS.getPixelForValue(x1), yS.getPixelForValue(SLOPE*x1+INTERCEPT));
+    ctx.stroke();
+    ctx.restore();
+  }
+};
+
+// label plugin
+const labelPlugin = {
+  id: 'scatterLabels',
+  afterDatasetsDraw(chart) {
+    const ctx = chart.ctx;
+    ctx.save();
+    const placed = [];
+    const items = [];
+
+    RAW.forEach(d => {
+      if (!LABELS.has(d.name)) return;
+      const ds = chart.data.datasets.find(ds2 => ds2.label === d.cat);
+      if (!ds || ds.hidden) return;
+      const dsIdx = chart.data.datasets.indexOf(ds);
+      const ptIdx = ds.data.findIndex(p => p._meta.name === d.name);
+      if (ptIdx < 0) return;
+      const meta = chart.getDatasetMeta(dsIdx);
+      const pt = meta.data[ptIdx];
+      if (!pt) return;
+      items.push({ name: d.name, px: pt.x, py: pt.y, y: d.y });
+    });
+    items.sort((a, b) => b.y - a.y);
+
+    ctx.font = '500 14px Pretendard, system-ui, sans-serif';
+
+    items.forEach(item => {
+      const tw = ctx.measureText(item.name).width;
+      const bw = tw + 12, bh = 24;
+      const dirs = [
+        [1,-1],[1,0],[1,1],[2,-1],[2,0],[2,1],
+        [-1,-1],[-1,0],[-1,1],[-2,-1],[-2,0],[-2,1],
+        [0,-2],[0,2],[3,0],[-3,0]
+      ];
+      let bestX = null, bestY = null;
+      for (const [dx, dy] of dirs) {
+        const cx = item.px + dx * 24;
+        const cy = item.py + dy * 20;
+        const r = { l: cx - bw/2, t: cy - bh/2, r: cx + bw/2, b: cy + bh/2 };
+        if (r.l < chart.chartArea.left || r.t < chart.chartArea.top ||
+            r.r > chart.chartArea.right || r.b > chart.chartArea.bottom) continue;
+        const overlap = placed.some(p =>
+          !(r.r < p.l - 2 || r.l > p.r + 2 || r.b < p.t - 2 || r.t > p.b + 2));
+        if (!overlap) { bestX = cx; bestY = cy; placed.push(r); break; }
+      }
+      if (bestX === null) return;
+
+      // leader line
+      ctx.beginPath();
+      ctx.moveTo(item.px, item.py);
+      ctx.lineTo(bestX, bestY);
+      ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // box
+      const bx = bestX - bw/2, by = bestY - bh/2;
+      ctx.fillStyle = labelBg;
+      ctx.strokeStyle = labelBorder;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.roundRect(bx, by, bw, bh, 4);
+      ctx.fill();
+      ctx.stroke();
+
+      // text
+      ctx.fillStyle = labelTextColor;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(item.name, bestX, bestY);
+    });
+    ctx.restore();
+  }
+};
+
+new Chart(document.getElementById('chart'), {
+  type: 'scatter',
+  data: { datasets },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 600 },
+    scales: {
+      x: {
+        title: { display:true, text:'사용자 범위 (log\u2081\u2080 화자 수)', font:{ size:14, weight:'bold' }, color:tickColor },
+        min: -0.3, max: 4.8,
+        ticks: {
+          callback: v => ({0:'1',1:'10',2:'100',3:'1K',4:'10K'})[v] || '',
+          color: tickColor, font: { size: 13 },
+        },
+        grid: { color: gridColor },
+      },
+      y: {
+        title: { display:true, text:'사용자당 반복 강도 (log\u2081\u2080 화자당 빈도)', font:{ size:14, weight:'bold' }, color:tickColor },
+        min: -0.05, max: 0.72,
+        ticks: {
+          callback: v => v === 0 ? '1.0x' : (Math.pow(10,v)).toFixed(1)+'x',
+          stepSize: 0.1, color: tickColor, font: { size: 12 },
+        },
+        grid: { color: gridColor },
+      },
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const d = ctx.raw._meta;
+            const pos = d.y > (SLOPE*d.x+INTERCEPT) ? '\u25B2 회귀선 위' : '\u25BC 회귀선 아래';
+            return [
+              d.name + ' (' + d.cat + ')',
+              '빈도: ' + d.freq.toLocaleString() + '  |  화자: ' + d.speakers.toLocaleString(),
+              '화자당 ' + d.ratio.toFixed(2) + '회  |  ' + pos,
+            ];
+          },
+        },
+        bodyFont: { size: 13 },
+        titleFont: { size: 0 },
+        displayColors: false,
+        padding: 12,
+        cornerRadius: 6,
+        backgroundColor: isDark ? 'rgba(40,40,40,0.95)' : 'rgba(255,255,255,0.97)',
+        bodyColor: isDark ? '#e8e8e4' : '#1a1a1a',
+        borderColor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)',
+        borderWidth: 1,
+      },
+      legend: {
+        position: 'bottom',
+        labels: {
+          font: { size: 12.5 },
+          usePointStyle: true,
+          pointStyle: 'circle',
+          padding: 16,
+          color: tickColor,
+        },
+      },
+    },
+  },
+  plugins: [regressionPlugin, labelPlugin],
+});
+</script>
+</body>
+</html>
